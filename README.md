@@ -27,7 +27,7 @@ Transactions
 
 Stocks
 
-    *user id
+    *portfolio id
     *symbol
     *shares
     *price bought at
