@@ -49,3 +49,16 @@ Displaying trend of what happend to the stocks user actually bought
 ##Schedules
 Devon not available after noon on sunday
 Benny not available Saturday after 2pm
+
+
+##postgres setup how-to
+
+sudo su postgres
+###You should now be at the postgres user bash prompt
+psql
+###You should now be in the psql prompt -> postgres=#
+CREATE ROLE bears WITH login password 'bears';
+ALTER ROLE bears WITH superuser createdb createrole;
+\q
+exit
+###Should be good to go
