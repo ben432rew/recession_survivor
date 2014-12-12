@@ -34,6 +34,7 @@ Stocks
     *date bought at
 
 Portfolios (Final Scores):
+
     *user id
     *final score
     *date played
