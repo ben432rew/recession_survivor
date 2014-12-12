@@ -12,7 +12,7 @@ Every round shown how their stocks changed, user given choice of buying or selli
 
 End of year all stocks are sold, display final balance
 
-Need to store all the data from first day of every month in database because if there are many users on a real web app, making a bunch of api calls is a no-no
+Need to store all the data from first day of every month in database because if there are many users on a real web app, making a bunch of api calls is a no-no.  Here's an api we could pull the data from: [Quandl](https://www.quandl.com/WIKI)
 
 ####Database schema:
 Users (we'll use the django user built-in)
@@ -40,3 +40,5 @@ Portfolios (Final Scores):
 Add more years to be available to play
 
 Every round, should be shown actual financial articles related to the stock they purchased from the prior month
+
+Show high scores of all portfolios
