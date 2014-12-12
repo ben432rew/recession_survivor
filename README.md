@@ -17,8 +17,8 @@ Need to store all the data from first day of every month in database because if 
 ####Database schema:
 Users (we'll use the django user built-in)
 
-Transaction History
-    *user id
+Transactions
+    *portfolio id
     *symbol
     *number of shares
     *date
