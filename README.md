@@ -18,6 +18,7 @@ Need to store all the data from first day of every month in database because if 
 Users (we'll use the django user built-in)
 
 Transactions
+
     *portfolio id
     *symbol
     *number of shares
@@ -25,6 +26,7 @@ Transactions
     *account change
 
 Stocks
+
     *user id
     *symbol
     *shares
