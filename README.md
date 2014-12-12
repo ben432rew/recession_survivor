@@ -47,7 +47,10 @@ Displaying trend of what happend to the stocks user actually bought
 
 
 ##Schedules
+Billy and Adolfo are available on slack 24/7
+
 Devon not available after noon on sunday
+
 Benny not available Saturday after 2pm
 
 
