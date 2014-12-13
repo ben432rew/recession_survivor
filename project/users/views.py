@@ -4,19 +4,25 @@ from django.contrib.auth.models import User
 
 class Index(View):
     def get(self, request):
-        pass
+        return render( request, 'users/index.html' )
 
-class Sign_up(View):
+class Create(View):
     def get(self, request):
-        pass
+        return render( request, 'users/create.html' )
 
     def post(self, request):
         pass
 
 class Login(View):
     def get(self, request):
-        pass
+        return render( request, 'users/login.html' )
 
     def post(self, request):
-        pass    
+        pass
+
+class Welcome(View):
+    pass
+
+class Logout(View):
+    pass
         
