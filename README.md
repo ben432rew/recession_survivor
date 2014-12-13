@@ -4,7 +4,7 @@ Putting the fun back in recession
 ---------------------------------
 
 ##Basic Functionality
-Year is 2008, player starts with $100,000
+Year is 2008, player starts with $10,000
 
 Plays 12 Rounds
 
@@ -47,6 +47,8 @@ Every round, should be shown actual financial articles related to the stock they
 Show high scores of all portfolios
 
 Displaying trend of what happend to the stocks user actually bought
+
+Different amounts of starting money
 
 
 ##Schedules
