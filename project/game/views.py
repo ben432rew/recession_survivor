@@ -7,9 +7,9 @@ class Index(View):
         return render( request, 'game/index.html' )
 
 class Welcome(View):
-    #check if the user has any unfinished games
     def get(self, request):
         pass
+        #tell view if user has any unfinished games
 
 class Start(View):
     def get(self, request):
