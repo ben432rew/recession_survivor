@@ -3,12 +3,13 @@
 {% block content %}
 	<fieldset>
 		<legend>new user</legend>
-		<form method="post">
-			<lable>user name:</lable><br />
-			<input type="text" name="user_name" /><br />
+		{% if error %}
+			{{ error }}
+		{% endif %}
+		<form action="/users/create" method="post">
 
-			<label>password:</label><br />
-			<input type="password" name="password" /><br />
+			{%csrf_token%}
+			{{ form.as_p }}
 
 			<input type="submit" value="log in" />
 		</form>
