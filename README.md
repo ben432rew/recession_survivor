@@ -37,8 +37,6 @@ pip3 install requests
 
 pip3 install bcrypt
 
-go into the django shell and run: "from portfolio import seed" to get data in db
-
 ####postgres setup how-to
 
 sudo su postgres
@@ -56,3 +54,9 @@ ALTER ROLE bears WITH superuser createdb createrole;
 \q
 
 exit
+
+now run createdb h_trader
+
+go into the django shell and run: "from portfolio import seed" to get data in db
+
+run pip3 freeze > requirements
