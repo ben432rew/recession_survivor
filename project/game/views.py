@@ -18,4 +18,3 @@ class Endgame(View):
         histor = None
         final = None
         return render( request, 'game/endgame.html', {"final":final, "history":history})
-

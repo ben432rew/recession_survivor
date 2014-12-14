@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from portfolio.models import Portfolio
 from django.views.generic import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from users.forms import UserForm
 
 class Index(View):
@@ -18,8 +18,7 @@ class Create(View):
         form = UserForm(request.POST)
         if form.is_valid():
             new_user = User.objects.create_user(**form.cleaned_data)
-            login(new_user)
-            return redirect('users/' + str(new_user.id))
+            return redirect('/users/login.html', {'error':"signup a success! now please login"})
         else:
             return render(request, 'users/create.html', {'error':"Not a valid name or password"})
 
@@ -29,9 +28,10 @@ class Login(View):
         return render( request, 'users/login.html', {'form':UserForm()} )
 
     def post(self, request):
-        username = request.POST["user_name"]
-        password = request.POST["password"]
-        user = authenticate(username='john', password='secret')
+        form = UserForm(request.POST)        
+        # username = request.POST["user_name"]
+        # password = request.POST["password"]
+        user = authenticate(**form.cleaned_data)
         if user is not None:
             login(request, user)
             return redirect('users/' + str(new_user.id))
