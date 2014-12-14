@@ -51,14 +51,6 @@ Displaying trend of what happend to the stocks user actually bought
 Different amounts of starting money
 
 
-##Schedules
-Billy and Adolfo are available on slack 24/7
-
-Devon not available after noon on sunday
-
-Benny not available Saturday after 2pm
-
-
 ##postgres setup how-to
 
 sudo su postgres
@@ -78,3 +70,18 @@ ALTER ROLE bears WITH superuser createdb createrole;
 exit
 
 Should be good to go
+
+
+##Setup instructions
+
+clone repository
+
+set up venv
+
+pip3 install django-toolbelt
+
+pip3 install requests
+
+pip3 install bcrypt
+
+go into the django shell and run: "from portfolio import seed"
