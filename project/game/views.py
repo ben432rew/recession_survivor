@@ -3,9 +3,9 @@ from django.views.generic import View
 
 
 class Welcome(View):
-    #check if the user has any unfinished games
     def get(self, request):
         pass
+        #tell view if user has any unfinished games
 
 class Start(View):
     def get(self, request):
