@@ -31,11 +31,7 @@ clone repository
 
 set up venv
 
-pip3 install django-toolbelt
-
-pip3 install requests
-
-pip3 install bcrypt
+pip3 install -r /path/to/requirements.txt
 
 ####postgres setup how-to
 
@@ -58,5 +54,3 @@ exit
 now run createdb h_trader
 
 go into the django shell and run: "from portfolio import seed" to get data in db
-
-run pip3 freeze > requirements
