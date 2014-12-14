@@ -26,7 +26,7 @@ class Create(View):
 
 class Login(View):
     def get(self, request):
-        return render( request, 'users/login.html' )
+        return render( request, 'users/login.html', {'form':UserForm()} )
 
     def post(self, request):
         username = request.POST["user_name"]

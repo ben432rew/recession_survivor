@@ -2,16 +2,20 @@
 
 {% block content %}
 	<fieldset>
-		<legend>Log in</legend>
-		<form method="post">
-			<lable>user name:</lable><br />
-			<input type="text" name="user_name" /><br />
 
-			<label>password:</label><br />
-			<input type="password" name="password" /><br />
+		<legend>Log in</legend>
+
+		{% if error %}
+			{{ error }}
+		{% endif %}
+		<form action="/users/login" method="post">
+
+			{%csrf_token%}
+			{{ form.as_p }}
 
 			<input type="submit" value="log in" />
 		</form>
+
 	</fieldset>
 
 {% endblock %}
