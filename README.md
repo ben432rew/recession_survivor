@@ -31,26 +31,26 @@ clone repository
 
 set up venv
 
-pip3 install -r /path/to/requirements.txt
+`pip3 install -r /path/to/requirements.txt`
 
 ####postgres setup how-to
 
-sudo su postgres
+`sudo su postgres`
 
 You should now be at the postgres user bash prompt
 
-psql
+`psql`
 
 You should now be in the psql prompt -> postgres=#
 
-CREATE ROLE bears WITH login password 'bears';
+`CREATE ROLE bears WITH login password 'bears';`
 
-ALTER ROLE bears WITH superuser createdb createrole;
+`ALTER ROLE bears WITH superuser createdb createrole;`
 
-\q
+`\q`
 
-exit
+`exit`
 
-now run createdb h_trader
+now run `createdb h_trader`
 
-go into the django shell and run: "from portfolio import seed" to get data in db
+go into the django shell and run: `from portfolio import seed` to get data in db
