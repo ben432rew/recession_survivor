@@ -41,7 +41,11 @@ class Login(View):
 
 class Welcome(View):
     def get(self, request):
-        return render(request, 'users/welcome.html', {'user':request.user})
+        unfinished = Portfolio.objects.filter(user=request.user, final_score=None)
+        if len(unfinished) == 0:
+            return render(request, 'users/welcome.html', {'user':request.user, 'unfinished':None})
+        else:
+            return render(request, 'users/welcome.html', {'user':request.user, 'unfinished':unfinished[0]})
 
 
 class Games_history(View):
