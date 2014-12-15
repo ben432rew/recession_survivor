@@ -10,7 +10,7 @@ class Index(View):
             return render('/users/login/?error={}'.format("You must sign in first"))
         unfinished = Portfolio.objects.filter(user=request.user, final_score=0)
         if len(unfinished) == 0:
-            return render(request, 'game/index.html', {'user':request.user, 'unfinished':None, 'stock':Stock_list() })
+            pass
         else:
             return render(request, 'game/index.html', {'user':request.user, 'unfinished':unfinished[0]})
 
