@@ -47,7 +47,8 @@ class Sell_shares(View):
         symbol = request.POST['symbol']
         shares = int(request.POST['shares'])
         date = request.POST['date']
-        price = Stock.objects.get(symbol=symbol, date=date).price
+        stock = Stock.objects.get(symbol=symbol, date=date)
+        price = stock.price
         balance = request.session['balance'] + (shares * price)
         request.session['balance'] = balance        
         portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
