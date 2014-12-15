@@ -31,12 +31,15 @@ class Login(View):
         form = UserForm(request.POST)        
         # username = request.POST["user_name"]
         # password = request.POST["password"]
-        user = authenticate(**form.cleaned_data)
-        if user is not None:
-            login(request, user)
-            return redirect('users/' + str(new_user.id))
+        if form.is_valid():
+            user = authenticate(**form.cleaned_data)
+            if user is not None:
+                login(request, user)
+                return redirect('users/' + str(new_user.id))
+            else:
+                return render(request, 'users/login.html', {"error":"incorrect username/password combination"})
         else:
-            return render(request, 'users/login.html', {"error":"incorrect username/password combination"})
+            return render(request, 'users/login.html', {"error":"??"})
 
 
 class Welcome(View):
