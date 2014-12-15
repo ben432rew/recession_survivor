@@ -26,7 +26,7 @@ class Display_owned(View):
         owned = Portfolio.objects.select_related('Stock_owned').filter(user=request.user)
         return render( request, 'game/round.html', {"game_round":game_round, "stock_owned":owned, 'user':request.session.user}))
 
-
+#lot of overlap Buy_stock and Sell_shares, NOT DRY
 class Buy_stock(View):
     def post(self, request):
         balance = request.POST['balance']
@@ -34,10 +34,22 @@ class Buy_stock(View):
         shares = int(request.POST['shares'])
         date = request.POST['date']
         price = float(request.POST['price'])
-        t = Transaction.objects.create(symbol=symbol, number_of_shares=shares, date_created=date, )
+        portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
+        t = Transaction.objects.create(symbol=symbol, number_of_shares=shares, date_created=date, account_change=(shares * price * -1), portfolio=portfolio)
+        s = Stock_owned.objects.create(symbol=symbol, amount=shares, date_bought=date, price_bought=price, portfolio=portfolio)
         return render( request, 'game/round.html', {"game_round":game_round, "stock_owned":owned, 'user':request.session.user}))
 
 
 class Sell_shares(View):
     def post(self, request):
-        return render( request, 'game/round.html', {"game_round":game_round, "stock_owned":owned, 'user':request.session.user}))
+        balance = request.POST['balance']
+        symbol = request.POST['symbol']
+        shares = int(request.POST['shares'])
+        date = request.POST['date']
+        price = float(request.POST['price'])
+        portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
+        t = Transaction.objects.create(symbol=symbol, number_of_shares=shares, date_created=date, account_change=(shares * price), portfolio=portfolio)
+        #this function will break if there are more than one entry for that stock, which is likely
+        s = Stock_owned.objects.get(symbol=symbol)
+        s.amount -= shares
+        return render( request, 'game/round.html', {"game_round":game_round, "stock_owned":owned, 'user':request.session.user}))        

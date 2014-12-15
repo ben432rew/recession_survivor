@@ -22,7 +22,6 @@ class Stock_owned(models.Model):
 	amount = models.IntegerField()
 	price_bought = models.FloatField()
 	date_bought = models.DateField()
-	name = models.CharField(max_length=50)
 	portfolio = models.ForeignKey('Portfolio')
 
 
