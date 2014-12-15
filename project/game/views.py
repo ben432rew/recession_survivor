@@ -3,10 +3,11 @@ from django.shortcuts import render
 from portfolio.models import Stock, Portfolio, Stock_owned, Portfolio
 from portfolio.forms import Stock_list
 
+
 class Index(View):
     def get(self, request):
-        print( Stock_list() ,"wtf")
-        return render(request, 'game/index.html', {'user':request.user, 'unfinished':None, 'form': Stock_list() })
+        if not request.user.is_authenticated():
+            return render('/users/login/?error={}'.format("You must sign in first"))
         unfinished = Portfolio.objects.filter(user=request.user, final_score=0)
         if len(unfinished) == 0:
             pass
@@ -16,6 +17,8 @@ class Index(View):
 
 class Games_history(View):
     def get(self, request):
+        if not request.user.is_authenticated():
+            return render('/users/login/?error={}'.format("You must sign in first"))        
         portfolios = Portfolio.objects.filter(user = request.user).order_by(date_played)
         return render(request, 'game/history.html', {'user':request.user, 'portfolios':portfolios})
 
@@ -23,7 +26,7 @@ class Games_history(View):
 class High_scores(View):
     def get(self, request):
         scores = Portfolio.objects.all().order_by(final_score)[:9]
-        return render(request, 'users/highscores.html', {'scores':scores})
+        return render(request, 'game/highscores.html', {'scores':scores})
 
 
 class Round(View):
@@ -31,6 +34,8 @@ class Round(View):
     def get(self, request):
         #june 2009 and june 2008 exist in the db now, deleting june 2009 for easy querying
         extras = Stock.objects.filter(date__month=6, date__year=2009).delete()
+        if not request.user.is_authenticated():
+            return render('/users/login/?error={}'.format("You must sign in first"))        
         p = Portfolio.objects.create(user=request.user, balance=10000)        
         request.session['game_round'] = 0
         request.session['balance'] = 10000        

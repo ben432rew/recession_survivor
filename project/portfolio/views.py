@@ -14,7 +14,7 @@ class Find_stock_by_name(View):
 class Display_all(View):
     def get(self, request):
         game_round = request.session['game_round']        
-        all_stocks = Stock.objects.filter(date__month=(date__month=(request.session['game_round'] + 6) % 12)
+        all_stocks = Stock.objects.filter(date__month(request.session['game_round'] + 6) % 12)
         return render( request, 'game/round.html', {"game_round":game_round, "all_stocks":all_stocks, 'user':request.session.user}))
 
 
@@ -47,13 +47,15 @@ class Sell_shares(View):
         symbol = request.POST['symbol']
         shares = int(request.POST['shares'])
         date = request.POST['date']
-        price = Stock.objects.get(symbol=symbol, date=date).price
+        stock = Stock.objects.get(symbol=symbol, date=date)
+        price = stock.price
         balance = request.session['balance'] + (shares * price)
         request.session['balance'] = balance        
         portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
         t = Transaction.objects.create(symbol=symbol, number_of_shares=shares, date_created=date, account_change=(shares * price), portfolio=portfolio)
         #this function will break if there are more than one entry for that stock, which is likely
-        s = Stock_owned.objects.get(symbol=symbol)
-        s.amount -= shares
+        s = Stock_owned.objects.get(symbol=symbol, portfolio=portfolio)
+        for shares in s:
+            if 
         s.save()
         return redirect( 'game/round.html')

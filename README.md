@@ -14,11 +14,9 @@ End of year all stocks are sold, display final balance
 
 
 ##Feature Upgrades
-Add more years to be available to play
+Add more years to be available to play (Great Depression?)
 
 Every round, should be shown actual financial articles related to the stock they purchased from the prior month
-
-Show high scores of all portfolios
 
 Displaying trend of what happend to the stocks user actually bought
 

@@ -5,6 +5,7 @@ from django.views.generic import View
 from django.shortcuts import render, redirect
 from users.forms import UserForm
 
+
 class Index(View):
     def get(self, request):
         return render( request, 'users/index.html' )
