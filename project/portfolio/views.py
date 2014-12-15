@@ -5,10 +5,9 @@ from portfolio.models import Portfolio, Stock
 class Find_stock_by_name(symbol):
     
     def post(self, request):
-        user_obj = request.user
         # untested and unsure how to get current game stocks 
-        info = Portfolio.objects.select_related('Stock_owned').filter(user=user_obj)
-        current = info
+        owned = Portfolio.objects.select_related('Stock_owned').filter(user=request.user)
+        
         return render( request, 'game/round.html', {"current":current}))
         #show all the users' current stocks owned
 
