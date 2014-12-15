@@ -1,0 +1,11 @@
+{% extends "game/base.html" %}
+
+{% block content %}
+	<h3>{{ user }}</h3>
+	<h3>{{ balance }}</h3>
+	<p>
+	{% for score in scores %}
+		<h4>{{ score }}</h4>
+	{% endfor %}
+	</p>
+{% endblock %}

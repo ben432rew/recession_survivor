@@ -26,7 +26,7 @@ class Games_history(View):
 class High_scores(View):
     def get(self, request):
         scores = Portfolio.objects.all().order_by(final_score)[:9]
-        return render(request, 'users/highscores.html', {'scores':scores})
+        return render(request, 'game/highscores.html', {'scores':scores})
 
 
 class Round(View):
