@@ -3,6 +3,7 @@ from django.shortcuts import render
 from portfolio.models import Stock, Portfolio, Stock_owned, Portfolio
 from portfolio.forms import Stock_list
 
+
 class Index(View):
     def get(self, request):
         unfinished = Portfolio.objects.filter(user=request.user, final_score=0)
