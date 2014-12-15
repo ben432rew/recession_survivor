@@ -19,23 +19,6 @@ class ModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return str(obj.ticker)
 
-class Stock_list(forms.Form):
-	
-		# items = []
-		# a = Stock.objects.all()
-		# for x in a:
-		# 	items.append(x)
-		
+class Stock_list(forms.Form):		
 		fields = ModelChoiceField(queryset=Stock.objects.all().distinct(),to_field_name="ticker")
-
-
-	# class Meta:
-		# model = Stock
-		# print(Stock.objects.all())
-		# to_field_name="ticker"
-		# print( (Stock.objects.all()[0]).ticker )
-		# , to_field_name="ticker"
-
-		# stock_fields = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                             # choices=a)
 	

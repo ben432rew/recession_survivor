@@ -1,5 +1,5 @@
 from django.views.generic import View
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from portfolio.models import Stock, Portfolio, Stock_owned, Portfolio
 from portfolio.forms import Stock_list
 
@@ -7,10 +7,10 @@ from portfolio.forms import Stock_list
 class Index(View):
     def get(self, request):
         if not request.user.is_authenticated():
-            return render('/users/login/?error={}'.format("You must sign in first"))
+            return redirect('/users/login/?error={}'.format("You must sign in first"))
         unfinished = Portfolio.objects.filter(user=request.user, final_score=0)
         if len(unfinished) == 0:
-            pass
+            return render(request, 'game/index.html', {'user':request.user, 'unfinished':None , "form" : Stock_list()})
         else:
             return render(request, 'game/index.html', {'user':request.user, 'unfinished':unfinished[0]})
 

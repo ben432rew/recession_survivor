@@ -35,7 +35,7 @@ class Login(View):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/users/' + str(user.id))
+            return redirect('/game/')
         else:
             return render(request, 'users/login.html', {"error":"incorrect username/password combination"})
 
