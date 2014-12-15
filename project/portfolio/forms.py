@@ -1,6 +1,7 @@
 from portfolio.models import *
 from django.forms import ModelForm
 from game.models import Stock
+from django import forms
 
 
 class Portfolio(ModelForm):
@@ -17,5 +18,5 @@ class Stock_owned(ModelForm):
 class Stock(ModelForm):
 	stock_arr = Stock.objects.all()
 	class Meta:
-		field = forms.ModelChoiceField(queryset=stock_arr, to_field_name="ticker")
+		field = forms.ModelChoiceField(queryset=Stock.objects.all(), to_field_name="ticker")
 	
