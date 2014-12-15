@@ -54,7 +54,8 @@ class Sell_shares(View):
         portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
         t = Transaction.objects.create(symbol=symbol, number_of_shares=shares, date_created=date, account_change=(shares * price), portfolio=portfolio)
         #this function will break if there are more than one entry for that stock, which is likely
-        s = Stock_owned.objects.get(symbol=symbol)
-        s.amount -= shares
+        s = Stock_owned.objects.get(symbol=symbol, portfolio=portfolio)
+        for shares in s:
+            if 
         s.save()
         return redirect( 'game/round.html')
