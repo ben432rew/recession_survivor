@@ -29,16 +29,12 @@ class Login(View):
         return render( request, 'users/login.html', {'form':UserForm(), 'error': error } )
 
     def post(self, request):
-        form = UserForm(request.POST)        
         username = request.POST["username"]
         password = request.POST["password"]
-        # print(dir(form.is_valid()), "\n", request.POST, "\n", dir(form))
-        # user = authenticate(**form)
         user = authenticate(username=username, password=password)
-        print(username, password, user)
         if user is not None:
             login(request, user)
-            return redirect('users/' + str(user.id))
+            return redirect('/users/' + str(user.id))
         else:
             return render(request, 'users/login.html', {"error":"incorrect username/password combination"})
 
