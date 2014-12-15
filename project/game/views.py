@@ -1,7 +1,11 @@
 from django.views.generic import View
 from django.shortcuts import render
 from portfolio.models import Stock, Portfolio
+from portfolio.forms import Stock
 
+class Index( View ):
+    def get( sefl, request ):
+        return render( request, 'game/index.html')
 
 class Round(View):
     #first time the round will be called by a GET, every time after will be a POST
