@@ -4,14 +4,16 @@ from django.shortcuts import render
 
 class Round(View):
     def get(self, request):
-        #how do we save game round info and score and pass it around?
-        game_round = request.session["game_round"]
-        if game_round == 12:
-            return redirect('game/endgame.html')
+        if 'game_round' in request.session.keys():
+            if request.session['game_round'] == 12:
+                return redirect('game/endgame.html')
+            else:
+                request.session['game_round'] += 1
+                return render( request, 'game/round.html')
         else:
-            game_round ++ 1
-            request.session["game_round"] = game_round
-            return render( request, 'game/round.html', {"game_round":game_round})
+            request.session['game_round'] = 1
+            return redirect('game/round.html')
+
 
 class Endgame(View):
     def get(self, request):
