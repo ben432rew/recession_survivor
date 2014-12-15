@@ -3,10 +3,34 @@ from django.shortcuts import render
 from portfolio.models import Stock, Portfolio, Stock_owned
 from portfolio.forms import Stock_list
 
+<<<<<<< HEAD
 # class Index( View ):
 #     def get( self, request ):
 #         print(Stock_list, 'yugo')
 #         return render( request, 'game/index.html', { 'stock': Stock_list() })
+=======
+
+class Index(View):
+    def get(self, request):
+        unfinished = Portfolio.objects.filter(user=request.user, final_score=None)
+        if len(unfinished) == 0:
+            return render(request, 'users/welcome.html', {'user':request.user, 'unfinished':None, 'stock':Stock_list() })
+        else:
+            return render(request, 'users/welcome.html', {'user':request.user, 'unfinished':unfinished[0]})
+
+
+class Games_history(View):
+    def get(self, request):
+        pass
+        #show games history of user
+
+
+class High_scores(View):
+    def get(self, request):
+        #need to change this to only get top ten
+        scores = Portfolio.objects.all()
+        return render(request, 'users/highscores.html', {'scores':scores})
+>>>>>>> a555808ca1ecef4e106464d04ee4c15386bde173
 
 
 class Round(View):
@@ -37,5 +61,7 @@ class Endgame(View):
             balance += (current_priced_stock.price * stock.amount)
             current_priced_stock.delete()
         portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
+        portfolio.final_score = balance
+        portfolio.save()
         trans = Transaction.objects.filter(portfolio=portfolio).order_by(date_created)
         return render( request, 'game/endgame.html', {"balance":balance, "history":trans})
