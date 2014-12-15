@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Portfolio(models.Model):
-	final_score = models.FloatField(default=None)
+	final_score = models.FloatField(default=0)
 	date_played = models.DateField(auto_now=True)
 	user = models.ForeignKey(User)
 	balance = models.FloatField()
