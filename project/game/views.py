@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 
 class Round(View):
-    def get(self, request):
+    def post(self, request):
         if 'game_round' in request.session.keys():
             if request.session['game_round'] == 12:
                 return redirect('game/endgame.html')
