@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from game.views import Round, Endgame, Index, Welcome, Games_history, High_scores
+from game.views import Round, Endgame, Index, Games_history, High_scores
 
 urlpatterns = patterns('',
     # Examples:
