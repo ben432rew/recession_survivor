@@ -4,8 +4,8 @@ from portfolio.models import Portfolio, Stock, Transaction, Stock_owned
 
 class Find_stock_by_name(View):
     def get(self, request):
-        symbol = request.POST["symbol"]
-        stock = Stock.objects.get(symbol=symbol)
+        symbol = request.GET.get["symbol"]
+        stock = Stock.objects.get(symbol=symbol, date__month=(request.session['game_round'] + 6) % 12)
         game_round = request.session['game_round']
         return render( request, 'game/round.html', {"game_round":game_round, 'user':request.session.user, 'price':stock.price, 'date':stock.date, 'symbol':stock.symbol}))
 
@@ -13,10 +13,7 @@ class Find_stock_by_name(View):
 class Display_all(View):
     def get(self, request):
         game_round = request.session['game_round']        
-        if request.session['game_round'] > 6:
-            all_stocks = Stock.objects.filter(date__month=(request.session['game_round'] - 6))
-        else:
-            all_stocks = Stock.objects.filter(date__month=(request.session['game_round'] + 6))
+        all_stocks = Stock.objects.filter(date__month=(date__month=(request.session['game_round'] + 6) % 12)
         return render( request, 'game/round.html', {"game_round":game_round, "all_stocks":all_stocks, 'user':request.session.user}))
 
 
@@ -33,7 +30,8 @@ class Buy_stock(View):
         symbol = request.POST['symbol']
         shares = int(request.POST['shares'])
         date = request.POST['date']
-        price = Stock.objects.get(symbol=symbol, date=date).price
+        stock = Stock.objects.get(symbol=symbol, date=date)
+        price = stock.price
         balance = request.session['balance'] - (shares * price)
         request.session['balance'] = balance
         portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
