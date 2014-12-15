@@ -18,28 +18,30 @@ class Create(View):
         form = UserForm(request.POST)
         if form.is_valid():
             new_user = User.objects.create_user(**form.cleaned_data)
-            return redirect('/users/login.html', {'error':"signup a success! now please login"})
+            return redirect('/users/login/?error={}'.format("signup a success! now please login") )
         else:
-            return render(request, 'users/create.html', {'error':"Not a valid name or password"})
+            return render(request, 'users/create.html', {'error':"Not a valid name or password", 'form':UserForm(request.POST) } )
 
 
 class Login(View):
     def get(self, request):
-        return render( request, 'users/login.html', {'form':UserForm()} )
+        error = request.GET.get( 'error', None )
+        return render( request, 'users/login.html', {'form':UserForm(), 'error': error } )
 
     def post(self, request):
         form = UserForm(request.POST)        
-        # username = request.POST["user_name"]
-        # password = request.POST["password"]
-        if form.is_valid():
-            user = authenticate(**form.cleaned_data)
-            if user is not None:
-                login(request, user)
-                return redirect('users/' + str(new_user.id))
-            else:
-                return render(request, 'users/login.html', {"error":"incorrect username/password combination"})
+        username = request.POST["username"]
+        password = request.POST["password"]
+        # print(dir(form.is_valid()), "\n", request.POST, "\n", dir(form))
+        # user = authenticate(**form)
+        user = authenticate(username=username, password=password)
+        print(username, password, user)
+        if user is not None:
+            login(request, user)
+            return redirect('users/' + str(user.id))
         else:
-            return render(request, 'users/login.html', {"error":"??"})
+            return render(request, 'users/login.html', {"error":"incorrect username/password combination"})
+
 
 
 class Welcome(View):

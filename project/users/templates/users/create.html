@@ -4,7 +4,7 @@
 	<fieldset>
 		<legend>new user</legend>
 		{% if error %}
-			{{ error }}
+			<h2>{{ error }}</h2>
 		{% endif %}
 		<form action="/users/create" method="post">
 
