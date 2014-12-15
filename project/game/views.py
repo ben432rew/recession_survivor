@@ -9,10 +9,10 @@ class Round(View):
                 return redirect('game/endgame.html')
             else:
                 request.session['game_round'] += 1
-                return render( request, 'game/round.html')
+                return render( request, 'game/round.html', {'user':request.user})
         else:
             request.session['game_round'] = 1
-            return redirect('game/round.html')
+            return render(request, 'game/round.html', {'user':request.user})
 
 
 class Endgame(View):
