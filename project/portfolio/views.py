@@ -54,4 +54,5 @@ class Sell_shares(View):
         #this function will break if there are more than one entry for that stock, which is likely
         s = Stock_owned.objects.get(symbol=symbol)
         s.amount -= shares
+        s.save()
         return redirect( 'game/round.html')
