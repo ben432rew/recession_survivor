@@ -1,11 +1,12 @@
 from django.views.generic import View
 from django.shortcuts import render
 from portfolio.models import Stock, Portfolio, Stock_owned
+from portfolio.forms import Stock_list
 
-
-class Index( View ):
-    def get( sefl, request ):
-        return render( request, 'game/index.html')
+# class Index( View ):
+#     def get( self, request ):
+#         print(Stock_list, 'yugo')
+#         return render( request, 'game/index.html', { 'stock': Stock_list() })
 
 
 class Round(View):

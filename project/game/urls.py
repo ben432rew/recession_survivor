@@ -6,8 +6,8 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'bennys_first.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-
-    url( r'^$', Index.as_view() ),
+    print(Round(),"wtf")
+    url( r'^ $', Index.as_view() ),
     url(r'^round', Round.as_view() ),
     url(r'^endgame', Endgame.as_view() ),
 )
