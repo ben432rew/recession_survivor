@@ -14,6 +14,7 @@ class Round(View):
             request.session['game_round'] = 1
             return redirect('game/round.html')
 
+
 class Endgame(View):
     def get(self, request):
         #show final score, game history
