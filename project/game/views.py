@@ -3,6 +3,11 @@ from django.shortcuts import render
 from portfolio.models import Stock, Portfolio, Stock_owned
 
 
+class Index( View ):
+    def get( sefl, request ):
+        return render( request, 'game/index.html')
+
+
 class Round(View):
     #first time the round will be called by a GET, every time after will be a POST
     def get(self, request):
