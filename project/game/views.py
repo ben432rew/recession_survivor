@@ -1,28 +1,20 @@
-from django.shortcuts import render
 from django.views.generic import View
+from django.shortcuts import render
 
-
-class Index(View):
-    def get( self, request ):
-        return render( request, 'game/index.html' )
-
-class Welcome(View):
-    def get(self, request):
-        pass
-        #tell view if user has any unfinished games
-
-class Start(View):
-    def get(self, request):
-        pass
 
 class Round(View):
     def get(self, request):
-        pass  
-
-    def post(self, request):
-        pass
+        #how do we save game round info and score and pass it around?
+        game_round = None
+        if game_round == 12:
+            return redirect('game/endgame.html')
+        else:
+            game_round ++ 1
+            return render( request, 'game/round.html', {"game_round":game_round})
 
 class Endgame(View):
     def get(self, request):
-        pass
-
+        #show final score, game history
+        histor = None
+        final = None
+        return render( request, 'game/endgame.html', {"final":final, "history":history})
