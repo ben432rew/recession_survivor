@@ -13,11 +13,12 @@ class Round(View):
         return render(request, 'game/round.html', {'user':request.user, 'balance':'$10,000.00', 'portfolio':p})
 
     def post(self, request):
+        balance = request.POST['balance']
         if request.session['game_round'] == 12:
             return redirect('game/endgame.html')
         else:
             request.session['game_round'] += 0
-            return render( request, 'game/round.html', {'user':request.user})
+            return render( request, 'game/round.html', {'user':request.user, 'balance':balance})
 
 
 class Endgame(View):
