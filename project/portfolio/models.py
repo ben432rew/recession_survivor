@@ -4,7 +4,7 @@ from django.db import models
 
 class Portfolio(models.Model):
 	final_score = models.FloatField(default=None)
-	date_played = models.DateTimeField(auto_now=True)
+	date_played = models.DateField(auto_now=True)
 	user = models.ForeignKey(User)
 	balance = models.FloatField()
 
@@ -12,7 +12,7 @@ class Portfolio(models.Model):
 class Transcation(models.Model):
 	symbol = models.CharField(max_length=50)
 	number_of_shares = models.IntegerField()
-	date_created = models.DateTimeField(auto_now_add=True)
+	date_created = models.DateField(auto_now_add=True)
 	account_change = models.FloatField()
 	portfolio = models.ForeignKey('Portfolio')
 

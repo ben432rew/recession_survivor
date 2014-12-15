@@ -1,6 +1,6 @@
 from django.views.generic import View
 from django.shortcuts import render
-from portfolio.models import Portfolio, Stock
+from portfolio.models import Portfolio, Stock, Transaction, Stock_owned
 
 class Find_stock_by_name(View):
     def get(self, request):
@@ -29,13 +29,15 @@ class Display_owned(View):
 
 class Buy_stock(View):
     def post(self, request):
-        current = None
+        balance = request.POST['balance']
+        symbol = request.POST['symbol']
+        shares = int(request.POST['shares'])
+        date = request.POST['date']
+        price = float(request.POST['price'])
+        t = Transaction.objects.create(symbol=symbol, number_of_shares=shares, date_created=date, )
         return render( request, 'game/round.html', {"game_round":game_round, "stock_owned":owned, 'user':request.session.user}))
-        #buy shares of a stock
 
 
 class Sell_shares(View):
     def post(self, request):
-        current = None
         return render( request, 'game/round.html', {"game_round":game_round, "stock_owned":owned, 'user':request.session.user}))
-        #sell shares of a stock

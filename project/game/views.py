@@ -9,7 +9,7 @@ class Round(View):
         #june 2009 and june 2008 exist in the db now, deleting june 2009 for easy querying
         extras = Stock.objects.filter(date__month=6, date__year=2009).delete()
         request.session['game_round'] = 0
-        return render(request, 'game/round.html', {'user':request.user})
+        return render(request, 'game/round.html', {'user':request.user, 'balance':'$10,000.00'})
 
     def post(self, request):
         if request.session['game_round'] == 12:
