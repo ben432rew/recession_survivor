@@ -3,6 +3,12 @@ from django.shortcuts import render
 from portfolio.models import Stock, Portfolio, Stock_owned, Portfolio
 from portfolio.forms import Stock_list
 
+<<<<<<< HEAD
+# class Index( View ):
+#     def get( self, request ):
+#         print(Stock_list, 'yugo')
+#         return render( request, 'game/index.html', { 'stock': Stock_list() })
+=======
 
 class Index(View):
     def get(self, request):
@@ -24,6 +30,7 @@ class High_scores(View):
         #need to change this to only get top ten
         scores = Portfolio.objects.all()
         return render(request, 'users/highscores.html', {'scores':scores})
+>>>>>>> a555808ca1ecef4e106464d04ee4c15386bde173
 
 
 class Round(View):
