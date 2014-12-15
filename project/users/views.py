@@ -39,29 +39,6 @@ class Login(View):
             return render(request, 'users/login.html', {"error":"incorrect username/password combination"})
 
 
-
-class Welcome(View):
-    def get(self, request):
-        unfinished = Portfolio.objects.filter(user=request.user, final_score=None)
-        if len(unfinished) == 0:
-            return render(request, 'users/welcome.html', {'user':request.user, 'unfinished':None})
-        else:
-            return render(request, 'users/welcome.html', {'user':request.user, 'unfinished':unfinished[0]})
-
-
-class Games_history(View):
-    def get(self, request):
-        pass
-        #show games history of user
-
-
-class High_scores(View):
-    def get(self, request):
-        #need to change this to only get top ten
-        scores = Portfolio.objects.all()
-        return render(request, 'users/highscores.html', {'scores':scores})
-
-
 class Logout(View):
     def get(self, request):
         logout(request)
