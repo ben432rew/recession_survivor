@@ -4,6 +4,8 @@ from portfolio.models import Portfolio, Stock
 
 class Find_stock_by_name(View):
     def get(self, request):
+        symbol = request.POST["symbol"]
+        stock = Stock.objects.get(symbol=symbol)
         game_round = request.session['game_round']
         return render( request, 'game/round.html', {"game_round":game_round, 'user':request.session.user}))
 
