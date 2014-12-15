@@ -36,5 +36,7 @@ class Endgame(View):
             balance += (current_priced_stock.price * stock.amount)
             current_priced_stock.delete()
         portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
+        portfolio.final_score = balance
+        portfolio.save()
         trans = Transaction.objects.filter(portfolio=portfolio).order_by(date_created)
         return render( request, 'game/endgame.html', {"balance":balance, "history":trans})
