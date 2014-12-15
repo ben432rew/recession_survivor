@@ -5,9 +5,11 @@ from portfolio.forms import Stock_list
 
 class Index(View):
     def get(self, request):
+        print( Stock_list() ,"wtf")
+        return render(request, 'game/index.html', {'user':request.user, 'unfinished':None, 'form': Stock_list() })
         unfinished = Portfolio.objects.filter(user=request.user, final_score=0)
         if len(unfinished) == 0:
-            return render(request, 'game/index.html', {'user':request.user, 'unfinished':None, 'stock':Stock_list() })
+            pass
         else:
             return render(request, 'game/index.html', {'user':request.user, 'unfinished':unfinished[0]})
 
