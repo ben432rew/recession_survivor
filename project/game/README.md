@@ -1,5 +1,5 @@
 # Game app
----
+
 ## Start Game
 Start game will only take optional arguments of starting balance(float), starting date(datetime) and a start portfolio(portfolio object).
 The html view will allow the player to pick starting variables like; starting balance, starting date, and pick/ build a portfolio.
