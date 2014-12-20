@@ -30,6 +30,9 @@ From here the player can goto the start game, or view the hi-scores.
 This will not take any arguments, or output anything besides data to be rendered to the player
 This will just display the top 10 games, and maybe the users top game.
 
+## Buy and Sell
+These will be simple abstract functions to there portfolio equals, but first there wil be a check to make sure the player has enough money to buy, and owns the stock they wish to sell.
+
 ## Other
 At the moment, I can not think of anything else that the Game app will need.
 Please comment on this file if there anything that needs to be added, more clear or incorrect.
