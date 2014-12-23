@@ -13,15 +13,16 @@ class Index(View):
 
 class Signup(View):
     def get(self, request):
-        return render( request, 'users/create.html', {'form':UserCreationForm()} )
+        return render( request, 'users/signup.html', {'form':UserCreationForm()} )
 
     def post(self, request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            new_user = User.objects.create_user(**form.cleaned_data)
+            cd = form.cleaned_data
+            a = User.objects.create_user( username=cd.get('username'), password=cd.get('password1'))
             return redirect('/users/login/?error={}'.format("signup a success! now please login") )
         else:
-            return render(request, 'users/create.html', {'error':"Not a valid name or password", 'form':UserCreationForm(request.POST) } )
+            return render(request, 'users/signup.html', {'error':"Not a valid name or password", 'form':UserCreationForm(request.POST) } )
 
 
 class Login(View):
@@ -30,8 +31,8 @@ class Login(View):
         return render( request, 'users/login.html', {'error': error } )
 
     def post(self, request):
-        username = request.POST["username"]
-        password = request.POST["password"]
+        username = request.POST["username_l"]
+        password = request.POST["password_l"]
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)

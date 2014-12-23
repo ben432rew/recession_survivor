@@ -6,5 +6,5 @@ urlpatterns = patterns('',
     url(r'^game/', include('game.urls', namespace = 'game')),
     url(r'^portfolio/', include('portfolio.urls', namespace = 'portfolio')),    
     url(r'^users/', include('users.urls', namespace = 'users')),
-    url(r'^/$', include('users.urls', namespace = 'users')),
+    url(r'^$', include('users.urls', namespace = 'users')),
 )
