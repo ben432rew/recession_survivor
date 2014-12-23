@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from users.views import Find_stock_by_name, Display_all, Display_owned, Buy_stock, Sell_shares
+from portfolio.views import Find_stock_by_name, Display_all, Display_owned, Buy_stock, Sell_shares
 
 urlpatterns = patterns('',
     url(r'^displayall', Display_all.as_view() ),

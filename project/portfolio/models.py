@@ -9,7 +9,7 @@ class Portfolio(models.Model):
 	balance = models.FloatField()
 
 
-class Transcation(models.Model):
+class Transaction(models.Model):
 	symbol = models.CharField(max_length=50)
 	number_of_shares = models.IntegerField()
 	date_created = models.DateField(auto_now_add=True)

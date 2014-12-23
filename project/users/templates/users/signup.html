@@ -2,11 +2,11 @@
 
 {% block content %}
 	<fieldset>
-		<legend>new user</legend>
+		<legend>Signup</legend>
 		{% if error %}
 			<h2>{{ error }}</h2>
 		{% endif %}
-		<form action="/users/create" method="post">
+		<form action="/users/signup" method="post">
 
 			{% csrf_token %}
 			{{ form.as_p }}

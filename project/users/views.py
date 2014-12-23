@@ -1,9 +1,9 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from portfolio.models import Portfolio
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from users.forms import UserForm
 
 
 class Index(View):
@@ -11,23 +11,23 @@ class Index(View):
         return render( request, 'users/index.html' )
 
 
-class Create(View):
+class Signup(View):
     def get(self, request):
-        return render( request, 'users/create.html', {'form':UserForm()} )
+        return render( request, 'users/create.html', {'form':UserCreationForm()} )
 
     def post(self, request):
-        form = UserForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = User.objects.create_user(**form.cleaned_data)
             return redirect('/users/login/?error={}'.format("signup a success! now please login") )
         else:
-            return render(request, 'users/create.html', {'error':"Not a valid name or password", 'form':UserForm(request.POST) } )
+            return render(request, 'users/create.html', {'error':"Not a valid name or password", 'form':UserCreationForm(request.POST) } )
 
 
 class Login(View):
     def get(self, request):
         error = request.GET.get( 'error', None )
-        return render( request, 'users/login.html', {'form':UserForm(), 'error': error } )
+        return render( request, 'users/login.html', {'error': error } )
 
     def post(self, request):
         username = request.POST["username"]
@@ -44,3 +44,27 @@ class Logout(View):
     def get(self, request):
         logout(request)
         return redirect( 'users/index.html')
+
+
+class Welcome(View):
+    def get(self, request):
+        pass
+
+
+class ChangePass(View):
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        pass
+
+
+class HighScores(View):
+    def get(self, request):
+        pass
+
+
+class MyHistory(View):
+    def get(self, request):
+        pass
+
