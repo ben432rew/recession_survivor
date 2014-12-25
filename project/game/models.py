@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from portfolio.models import Portfolio
 from django.db import models
 
 
@@ -22,9 +23,9 @@ class Transaction(models.Model):
     number_of_shares = models.IntegerField()
     date_created = models.DateField(auto_now_add=True)
     account_change = models.FloatField()
-    portfolio = models.ForeignKey('Portfolio')
+    portfolio = models.ForeignKey(Portfolio)
 
 
 class snippet(models.Model):
-    stock = models.ForeignKey('Stock')
+    stock = models.ForeignKey(Stock)
     snippet = models.TextField()

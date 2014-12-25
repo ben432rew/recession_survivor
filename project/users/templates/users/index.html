@@ -1,8 +1,16 @@
-{% extends "game/base.html" %}
+{% extends "users/base.html" %}
 
 {% block content %}
 
-		<h2><a href="/users/login">Log In</a></h2>
-		<h2><a href="/users/signup">Signup</a></h2>
+	<!-- here they're be two buttons, one for signup and one for login that will appear and disappear as needed -->
+        <h2><a href="/users/login" class="btn">Log In</a></h2>
+        <h2><a href="/users/signup" class="btn">Signup</a></h2>
+    <!-- there will also be two modals, for signup and login that will appear and disappear as needed -->
+    <div>
+        <!-- signup modal -->
+    </div>
+    <div>
+        <!-- login  modal -->
+    </div>
 
 {% endblock %}

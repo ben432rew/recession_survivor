@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+    <title>Recession Survivor</title>
+</head>
+<body>
+    <header>
+    {% block header %}
+        <nav class='navbar navbar-default navbar-static-top'>
+          <div class="container-fluid">
+            <h1 class='text-center'>Recession Survivor</h1>
+            here's where the ticker should go
+          </div>
+        </nav>    
+    {% endblock %}
+    </header>
+    <main>
+    {% block content %}
+    {% endblock %}
+    </main>
+</body>
+</html>
