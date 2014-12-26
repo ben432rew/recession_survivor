@@ -1,0 +1,6 @@
+{% if posts%}
+{%for post in posts%}
+<p> <a href="/blog/post/{{ post.slug }}" class="ajax" > {{ post.title }} </a></p>
+{%endfor%}
+{% endif %}
+{# #}
