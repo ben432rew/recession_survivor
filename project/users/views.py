@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 
 class Index(View):
     def get(self, request):
-        return render( request, 'users/index.html', {'form':UserCreationForm(), 'error': error } )
+        return render( request, 'users/index.html', {'form':UserCreationForm() } )
 
 
 class Signup(View):
@@ -23,10 +23,6 @@ class Signup(View):
 
 
 class Login(View):
-    def get(self, request):
-        error = request.GET.get( 'error', None )
-        return render( request, 'users/login.html', {'error': error } )
-
     def post(self, request):
         username = request.POST["username_l"]
         password = request.POST["password_l"]
