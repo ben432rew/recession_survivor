@@ -3,21 +3,24 @@
 <head>
     {% load staticfiles %}
     <title>Recession Survivor</title>
+    <link src="{%static "users/assets/css/bootstrap.css"%}" rel="stylesheet">
+    <script src="{%static "users/django_ajax.js"%}"></script>
+    <script src="{%static "users/users.js"%}"></script> 
 </head>
 <body>
     <header>
-    {% block header %}
-        <nav class='navbar navbar-default navbar-static-top'>
-          <div class="container-fluid">
-            <h1 class='text-center'>Recession Survivor</h1>
-            here's where the ticker should go
-          </div>
-        </nav>    
-    {% endblock %}
+        {% block header %}
+            <nav class='navbar navbar-default navbar-static-top'>
+              <div class="container-fluid">
+                <h1 class='text-center'>Historical Trader</h1>
+                here's where the ticker will go
+              </div>
+            </nav>    
+        {% endblock %}
     </header>
     <main>
-    {% block content %}
-    {% endblock %}
+        {% block content %}
+        {% endblock %}
     </main>
 </body>
 </html>

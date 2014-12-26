@@ -1,6 +1,7 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from portfolio.models import Portfolio, Stock, Transaction, Stock_owned
+from portfolio.models import Portfolio
+from game.models import *
 
 
 class Find_stock_by_name(View):
@@ -21,8 +22,8 @@ class Display_all(View):
 class Display_owned(View):
     def get(self, request):
         game_round = request.session['game_round']
-        owned = Portfolio.objects.select_related('Stock_owned').filter(user=request.user)
-        return render( request, 'game/round.html', {"game_round":game_round, "stock_owned":owned, 'user':request.session.user})
+        owned = Portfolio.objects.select_related('Portfolio').filter(user=request.user)
+        return render( request, 'game/round.html', {"game_round":game_round, "portfolio":portfolio, 'user':request.session.user})
 
 #lot of overlap Buy_stock and Sell_shares, NOT DRY
 class Buy_stock(View):
@@ -37,7 +38,7 @@ class Buy_stock(View):
         request.session['balance'] = balance
         portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
         t = Transaction.objects.create(symbol=symbol, number_of_shares=shares, date_created=date, account_change=(shares * price * -1), portfolio=portfolio)
-        s = Stock_owned.objects.create(symbol=symbol, amount=shares, date_bought=date, price_bought=price, portfolio=portfolio)
+        s = Portfolio.objects.create(symbol=symbol, amount=shares, date_bought=date, price_bought=price, portfolio=portfolio)
         return redirect( 'game/round.html')
 
 
@@ -54,7 +55,7 @@ class Sell_shares(View):
         portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
         t = Transaction.objects.create(symbol=symbol, number_of_shares=shares, date_created=date, account_change=(shares * price), portfolio=portfolio)
         #this function will break if there are more than one entry for that stock, which is likely
-        s = Stock_owned.objects.get(symbol=symbol, portfolio=portfolio)
+        s = Portfolio.objects.get(symbol=symbol, portfolio=portfolio)
         s.amount -= shares 
         s.save()
         return redirect( 'game/round.html')

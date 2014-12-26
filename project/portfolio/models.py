@@ -1,4 +1,3 @@
-from game.models import Whole_Game
 from django.db import models
 
 
@@ -7,4 +6,4 @@ class Portfolio(models.Model):
 	amount = models.IntegerField()
 	price_bought = models.FloatField()
 	date_bought = models.DateField()
-	game = models.ForeignKey(Whole_Game)
+	game = models.ForeignKey('game.Whole_Game')
