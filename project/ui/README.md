@@ -76,6 +76,7 @@ For this magic to work, the template file's for each page must be set correctly;
 {% endblock %}
 ``` 
 Lets break down the template above:
+
 1. `{% extends base_template|default:"ui/base.html" %}`
 	* This loads the template to extend from. If the `request.context_dict.base_tempalte` is set then it will be used. If not then the default value will be used. The behavior will change shortly, but dont worry about that, the rest of template is much more important.
 2. `{% block title %}Login - {% endblock %}`
