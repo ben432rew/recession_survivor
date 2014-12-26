@@ -60,9 +60,3 @@ class ChangePass(View):
 class HighScores(View):
     def get(self, request):
         pass
-
-
-class MyHistory(View):
-    def get(self, request):
-        pass
-

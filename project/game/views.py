@@ -64,3 +64,8 @@ class Endgame(View):
         whole_game.save()
         trans = Transaction.objects.filter(whole_game=whole_game).order_by(date_created)
         return render( request, 'game/endgame.html', {"balance":balance, "history":trans})
+
+
+class MyHistory(View):
+    def get(self, request):
+        pass
