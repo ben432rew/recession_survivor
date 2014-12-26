@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load staticfiles %}
+	<title>Recession Survivor</title>
+</head>
+<body>
+	<header>
+	{% block header %}
+		<h1>Recession Survivor</h1>
+		<nav>
+			<a href="/users/">Home</a> | <a href="/users/login">Log in</a>
+		</nav>
+		<hr />
+	{% endblock %}
+	</header>
+	<main>
+	{% block content %}
+	{% endblock %}
+	</main>
+</body>
+</html>

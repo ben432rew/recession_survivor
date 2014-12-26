@@ -12,60 +12,32 @@ Every round shown how their stocks changed, user given choice of buying or selli
 
 End of year all stocks are sold, display final balance
 
-Need to store all the data from first day of every month in database because if there are many users on a real web app, making a bunch of api calls is a no-no.  Here's an api we could pull the data from: [Quandl](https://www.quandl.com/WIKI)
-
-####Database schema:
-Users (we'll use the django user built-in)
-
-Transactions
-
-    *portfolio id
-    *symbol
-    *number of shares
-    *date
-    *account change
-
-Stocks
-
-    *portfolio id
-    *symbol
-    *shares
-    *price bought at
-    *date bought at
-
-Portfolios (Final Scores):
-
-    *user id
-    *final score
-    *date played
 
 ##Feature Upgrades
-Add more years to be available to play
+Add more years to be available to play (Great Depression?)
 
 Every round, should be shown actual financial articles related to the stock they purchased from the prior month
-
-Show high scores of all portfolios
 
 Displaying trend of what happend to the stocks user actually bought
 
 Different amounts of starting money
 
 
-##Schedules
-Billy and Adolfo are available on slack 24/7
+##Setup instructions
 
-Devon not available after noon on sunday
+clone repository
 
-Benny not available Saturday after 2pm
+set up venv
 
+`pip3 install -r requirements.txt`
 
-##postgres setup how-to
+####postgres setup how-to
 
-sudo su postgres
+`sudo su postgres`
 
 You should now be at the postgres user bash prompt
 
-psql
+`psql`
 
 You should now be in the psql prompt -> postgres=#
 
@@ -118,3 +90,4 @@ Stock Outputs-
 get_price: stock price
 get_general_finance_statements: prevelant info
 get_snippets_for_stock/date: sinppets
+

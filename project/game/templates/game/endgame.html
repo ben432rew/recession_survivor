@@ -1,0 +1,10 @@
+{% extends "game/base.html" %}
+
+{% block content %}
+	<h3>{{ balance }}</h3>
+	<p>
+	{% for tran in trans %}
+		<h4>{{ tran }}</h4>
+	{% endfor %}
+	</p>
+{% endblock %}
