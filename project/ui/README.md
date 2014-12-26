@@ -90,3 +90,12 @@ Lets break down the template above:
 
 
 For the view.py files, no changes are needed.
+
+## AJAX links
+
+For a link to tiger a AJAX load call, it must be set up correcly.
+```html
+<a href="/users/login" class="ajax">Log in</a>
+```
+
+All this is needed is a regular HTML `<a href>` with a the class set to AJAX. When one of these links is clicked jQuery will stop the link from firing and do an AJAX to the reference( href attribute ) value for the HTML content to load and change the address's bar URL and page title to correct values to allow for proper history, bookmarking and URL sharing.
