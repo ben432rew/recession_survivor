@@ -1,8 +1,38 @@
-{% extends "game/base.html" %}
+{% extends "users/base.html" %}
 
 {% block content %}
 
-		<h2><a href="/users/login">log in</a></h2>
-		<h2><a href="/users/create">create</a></h2>
+    <div id="buttons">
+        <h2 id="login_button" class="btn">Log In</h2>
+        <h2 id="signup_button" class="btn">Signup</h2>
+    </div>
+    <div id="signup">
+        <fieldset>
+            <legend>Signup</legend>
+            {% if error %}
+                <h2>{{ error }}</h2>
+            {% endif %}
+            <form action="/users/signup" method="post">
+
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <input type="submit" value="sign up" />
+            </form>
+        </fieldset>
+    </div>
+    <div id="login">
+        <fieldset>
+            <legend>Log in</legend>
+            {% if error %}
+                <h2>{{ error }}</h2>
+            {% endif %}
+            <form action="/users/login" method="post">
+                <p>Username: <input type="text" name = "username_l"></p>
+                {% csrf_token %}
+                <p>Password: <input type="text" name = "password_l"></p>
+            </form>
+        </fieldset>
+    </div>
 
 {% endblock %}

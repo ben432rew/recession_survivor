@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+    <title>Recession Survivor</title>
+    <script src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src = "http://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src = "http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
+    <link src="{%static "users/assets/css/bootstrap.css"%}" rel="stylesheet">
+    <script src="{%static "users/django_ajax.js"%}"></script>
+    <script src="{%static "users/users.js"%}"></script> 
+</head>
+<body>
+    <header>
+        {% block header %}
+            <nav class='navbar navbar-default navbar-static-top'>
+              <div class="container-fluid">
+                <h1 class='text-center'>Historical Trader</h1>
+                here's where the ticker will go
+              </div>
+            </nav>    
+        {% endblock %}
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>
