@@ -8,13 +8,10 @@ from django.shortcuts import render, redirect
 
 class Index(View):
     def get(self, request):
-        return render( request, 'users/index.html' )
+        return render( request, 'users/index.html', {'form':UserCreationForm(), 'error': error } )
 
 
 class Signup(View):
-    def get(self, request):
-        return render( request, 'users/signup.html', {'form':UserCreationForm()} )
-
     def post(self, request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
