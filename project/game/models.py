@@ -7,8 +7,7 @@ class Stock(models.Model):
     symbol = models.CharField(max_length=50)
     price = models.FloatField()
     date = models.DateField()
-    name = models.CharField(max_length=50)
-    volume = models.FloatField()
+    # volume = models.FloatField()
 
 
 class Whole_Game(models.Model):

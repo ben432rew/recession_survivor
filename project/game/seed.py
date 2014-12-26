@@ -1,5 +1,5 @@
 import requests
-import game
+from game.models import Stock
 
 tickers = ['GOOGL', 'MSFT', 'FB', 'YHOO', 'ORCL', 'IBM', 'AAPL', 'BBY', 'HPQ', 'AMZN', 'GE', 'XOM', 'CVX',
  'C', 'ED', 'CL', 'WSM', 'PG', 'K', 'HSY', 'DIS', 'COH', 'ALL', 'GIS', 'KWR', 'CAG', 'KO', 'PEP', 'M', 'WHR',
@@ -7,7 +7,7 @@ tickers = ['GOOGL', 'MSFT', 'FB', 'YHOO', 'ORCL', 'IBM', 'AAPL', 'BBY', 'HPQ', '
 
 def seed():
 	for ticker in tickers:
-		r = requests.get("https://www.quandl.com/api/v1/datasets/WIKI/"+ ticker +".json?auth_token=M-1QA4sjxLA99bD7QjbN&trim_start=2000-01-01&trim_end=2014-12-31&column=4&collapse=daily")
+		r = requests.get("https://www.quandl.com/api/v1/datasets/WIKI/"+ ticker +".json?auth_token=M-1QA4sjxLA99bD7QjbN&trim_start=2008-06-01&trim_end=2009-06-01&column=4&collapse=monthly")
 		mydata = r.json()
 		ticker = mydata['code']
 		print(ticker)
@@ -15,6 +15,6 @@ def seed():
 			date = entry[0]
 			price = entry[1]
 			print(price, date)
-			Stock.objects.create(price=price, date=date, ticker=ticker)
+			Stock.objects.create(price=price, date=date, symbol=ticker)
 
 seed()
