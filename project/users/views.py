@@ -1,9 +1,10 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 from portfolio.models import Portfolio
 from django.views.generic import View
-from django.shortcuts import render, redirect
+from game.models import Whole_Game
 
 
 class Index(View):
@@ -49,7 +50,8 @@ class Welcome(View):
         if request.user.is_anonymous():
             return redirect( '/')
         else:
-            return render( request, 'users/welcome.html')
+            scores = Whole_Game.objects.all().order_by('final_score')[:9]
+            return render( request, 'users/welcome.html', {'highscores':scores})
 
 
 class ChangePass(View):
@@ -57,9 +59,4 @@ class ChangePass(View):
         pass
 
     def post(self, request):
-        pass
-
-
-class HighScores(View):
-    def get(self, request):
         pass

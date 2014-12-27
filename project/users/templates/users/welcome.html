@@ -5,9 +5,20 @@
 {% block header %}<a href="/users/changepassword">Change my password</a><a href="/users/logout" class="btn">Logout</a>{% endblock %}
 
 {% block content %}
-<ol>
-    <li>all time high scores list</li>
-    <li>my games history</li>
-    <li>Continue a previous game/start a new one</li>
-</ol>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3> High Scores: </h3>
+            {% for score in highscores %}
+                <p> score </p>
+            {% endfor %}
+        </div>
+        <div class="col-md-4">
+            <a href="#" class="btn">Continue a previous game/start a new one</a>
+        </div>
+        <div class="col-md-4">
+            My Games history:
+        </div>
+    </div>
+</div>
 {% endblock %}

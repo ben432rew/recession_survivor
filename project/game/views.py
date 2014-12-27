@@ -24,12 +24,6 @@ class Games_history(View):
         return render(request, 'game/history.html', {'user':request.user, 'whole_games':whole_games})
 
 
-class High_scores(View):
-    def get(self, request):
-        scores = Whole_Game.objects.all().order_by(final_score)[:9]
-        return render(request, 'game/highscores.html', {'scores':scores})
-
-
 class Round(View):
     #first time the round will be called by a GET, every time after will be a POST
     def get(self, request):
