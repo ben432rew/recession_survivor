@@ -1,12 +1,15 @@
-{% extends "users/base.html" %}
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}User Home - {% endblock %}
 
 {% block content %}
-
+    {% load staticfiles %}
+    <script src="{%static "users/users.js"%}"></script> 
     <div id="buttons">
         <h2 id="login_button" class="btn">Log In</h2>
         <h2 id="signup_button" class="btn">Signup</h2>
     </div>
-    <div id="signup">
+    <div id="signup" class="views">
         <fieldset>
             <legend>Signup</legend>
             {% if error %}
@@ -21,7 +24,7 @@
             </form>
         </fieldset>
     </div>
-    <div id="login">
+    <div id="login" class="views">
         <fieldset>
             <legend>Log in</legend>
             {% if error %}
