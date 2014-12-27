@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User, AnonymousUser
 from portfolio.models import Portfolio
 from django.views.generic import View
 from django.shortcuts import render, redirect
@@ -8,8 +8,11 @@ from django.shortcuts import render, redirect
 
 class Index(View):
     def get(self, request):
-        request.context_dict[ 'form' ] = UserCreationForm()
-        return render( request, 'users/index.html', request.context_dict )
+        if request.user.is_anonymous():
+            request.context_dict[ 'form' ] = UserCreationForm()
+            return render( request, 'users/index.html', request.context_dict )
+        else:
+            return redirect('/users/welcome')
 
 
 class Signup(View):
@@ -38,12 +41,15 @@ class Login(View):
 class Logout(View):
     def get(self, request):
         logout(request)
-        return redirect( 'users/index.html')
+        return redirect( '/')
 
 
 class Welcome(View):
     def get(self, request):
-        return render( request, 'users/welcome.html')
+        if request.user.is_anonymous():
+            return redirect( '/')
+        else:
+            return render( request, 'users/welcome.html')
 
 
 class ChangePass(View):
