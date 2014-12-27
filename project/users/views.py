@@ -17,9 +17,9 @@ class Signup(View):
         if form.is_valid():
             cd = form.cleaned_data
             a = User.objects.create_user( username=cd.get('username'), password=cd.get('password1'))
-            return redirect('/users/login/?error={}'.format("signup a success! now please login") )
+            return redirect('/?error={}'.format("signup a success! now please login") )
         else:
-            return render(request, 'users/signup.html', {'error':"Not a valid name or password", 'form':UserCreationForm(request.POST) } )
+            return render(request, '/users/index.html', {'error':"Not a valid name or password", 'form':UserCreationForm(request.POST) } )
 
 
 class Login(View):
@@ -29,9 +29,9 @@ class Login(View):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/game/')
+            return redirect('/users/welcome')
         else:
-            return render(request, 'users/login.html', {"error":"incorrect username/password combination"})
+            return render(request, '/users/index.html', {"error":"incorrect username/password combination"})
 
 
 class Logout(View):
@@ -42,7 +42,7 @@ class Logout(View):
 
 class Welcome(View):
     def get(self, request):
-        pass
+        return render( request, 'users/welcome.html')
 
 
 class ChangePass(View):
