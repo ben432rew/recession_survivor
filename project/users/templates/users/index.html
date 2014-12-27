@@ -7,15 +7,15 @@
     <script src="{%static "users/index.js"%}"></script> 
     
     <div id="buttons">
-        <h2 id="login_button" class="btn">Log In</h2>
-        <h2 id="signup_button" class="btn">Signup</h2>
+        <h2 id="login_button" class="btn btn-primary">Log In</h2>
+        <h2 id="signup_button" class="btn btn-primary">Signup</h2>
+        {% if error %}
+            <h2>{{ error }}</h2>
+        {% endif %}
     </div>
     <div id="signup_modal" class="views">
         <fieldset>
             <legend>Signup</legend>
-            {% if error %}
-                <h2>{{ error }}</h2>
-            {% endif %}
             <form action="/users/signup" method="post">
 
                 {% csrf_token %}

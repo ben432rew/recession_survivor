@@ -8,10 +8,10 @@
     {% load staticfiles %}
     <script src="{%static "users/usershome.js"%}"></script> 
 
+    {% if error %}
+        <h2>{{ error }}</h2>
+    {% endif %}
     <div class="container">
-        {% if error %}
-            <h2>{{ error }}</h2>
-        {% endif %}    
         <div class="row" id="main">
             <div class="col-md-4">
                 <h3> High Scores: </h3>
