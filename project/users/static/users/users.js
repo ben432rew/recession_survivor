@@ -2,11 +2,11 @@ $(document).ready(function(){
     $("#signup").hide()
     $("#login").hide()
     $('#signup_button').on('click', function(e) {
-        $("#buttons").hide()
+        $( ".views" ).hide()
         $("#signup").show()
     })
     $('#login_button').on('click', function(e) {
-        $("#buttons").hide()
+        $( ".views" ).hide()
         $("#login").show()
     })    
 })

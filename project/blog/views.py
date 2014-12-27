@@ -18,22 +18,16 @@ class IndexView(View):
     template = 'blog/index.html'
 
     def get( self, request ):
-        # posts = Post.objects.all()
-        context_dict = {}
-        if request.is_ajax():
-            context_dict['base_template'] = "ui/ajax.html"
 
-        return render( request, self.template , context_dict )
+        return render( request, self.template , request.context_dict )
 
 class BlogPostView(View):
     template = 'blog/blog.html'
 
     def get(self,request):
-        context_dict = {}
-        if request.is_ajax():
-            context_dict['base_template'] = "ui/ajax.html"
-        context_dict['form'] = PostForm()
-        return render( request, self.template, context_dict )
+
+        request.context_dict['form'] = PostForm()
+        return render( request, self.template, request.context_dict )
     
     def post(self,request):
         data = PostForm(request.POST)
@@ -46,9 +40,6 @@ class BlogDisplayView(View):
     template = 'blog/display.html'
     
     def get( self, request, slug ):
-        context_dict = {}
-        if request.is_ajax():
-            context_dict['base_template'] = "ui/ajax.html"
 
-        context_dict['post'] = Post.objects.get(slug=slug)
-        return render( request, self.template, context_dict )
+        request.context_dict['post'] = Post.objects.get(slug=slug)
+        return render( request, self.template, request.context_dict )

@@ -8,7 +8,8 @@ from django.shortcuts import render, redirect
 
 class Index(View):
     def get(self, request):
-        return render( request, 'users/index.html', {'form':UserCreationForm() } )
+        request.context_dict[ 'form' ] = UserCreationForm()
+        return render( request, 'users/index.html', request.context_dict )
 
 
 class Signup(View):
