@@ -36,7 +36,7 @@ class Login(View):
             login(request, user)
             return redirect('/users/welcome')
         else:
-            return render(request, '/users/index.html', {"error":"incorrect username/password combination"})
+            return render(request, 'users/index.html', {"error":"incorrect username/password combination"})
 
 
 class Logout(View):
@@ -58,4 +58,12 @@ class Welcome(View):
 
 class ChangePass(View):
     def post(self, request):
-        return redirect ('/users/welcome')
+        user = authenticate(username=request.user.username, password=request.POST["old_password"])
+        if request.POST['new_password1'] != request.POST['new_password2']:
+            return redirect ('/users/welcome/?error={}'.format("new passwords don't match"))
+        if user is not None:
+            user.set_password(request.POST['new_password1'])
+            user.save()
+            return redirect ('/users/welcome')
+        else:
+            return redirect ('/users/welcome/?error={}'.format("incorrect password"))
