@@ -58,4 +58,10 @@ class Welcome(View):
 
 class ChangePass(View):
     def post(self, request):
-        return redirect ('/users/welcome')
+        user = authenticate(username=request.user.username, password=request.POST["old_password"])
+        if user is not None:
+            user.set_password(request.POST['new_password1'])
+            user.save()
+            return redirect ('/users/welcome')
+        else:
+            return redirect ('/users/welcome/?error={}'.format("incorrect password"))
