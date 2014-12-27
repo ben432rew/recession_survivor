@@ -50,8 +50,10 @@ class Welcome(View):
         if request.user.is_anonymous():
             return redirect( '/')
         else:
+            game = Whole_Game.objects.filter(final_score=0)
+            saved_game = True if len(game) > 0 else False
             scores = Whole_Game.objects.all().order_by('final_score')[:9]
-            return render( request, 'users/welcome.html', {'highscores':scores})
+            return render( request, 'users/welcome.html', {'highscores':scores, 'saved_game':saved_game})
 
 
 class ChangePass(View):

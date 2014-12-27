@@ -14,7 +14,11 @@
             {% endfor %}
         </div>
         <div class="col-md-4">
-            <a href="/game" class="btn">Start a new game</a>
+            {% if saved_game %}
+                <a href="/game" class="btn">Continue Saved Game</a>
+            {% else %}
+                <a href="/game" class="btn">Start a new game</a>
+            {% endif %}
         </div>
         <div class="col-md-4">
             My Games history:
