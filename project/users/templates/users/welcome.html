@@ -1,7 +1,12 @@
-{% extends "users/base.html" %}
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}{{user}}'s Home - {% endblock %}
 
 {% block content %}
-
-WELCOME TO THE WELCOME PAGE
-
+<ol>
+    <li>all time high scores list</li>
+    <li>my games history</li>
+    <li>Continue a previous game/start a new one</li>
+    <li>Change my password</li>
+</ol>
 {% endblock %}
