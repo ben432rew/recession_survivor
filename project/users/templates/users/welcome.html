@@ -2,12 +2,12 @@
 
 {% block title %}{{user}}'s Home - {% endblock %}
 
+{% block header %}<a href="/users/changepassword">Change my password</a><a href="/users/logout" class="btn">Logout</a>{% endblock %}
+
 {% block content %}
 <ol>
     <li>all time high scores list</li>
     <li>my games history</li>
     <li>Continue a previous game/start a new one</li>
-    <li>Change my password</li>
-    <a href="/users/logout" class="btn">Logout</a>
 </ol>
 {% endblock %}
