@@ -8,4 +8,6 @@ urlpatterns = patterns('',
     url(r'^login', Login.as_view() ),
     url(r'^logout', Logout.as_view() ),
     url(r'^welcome', Welcome.as_view() ),
+    url(r'^changepassword', ChangePass.as_view() ),
+    url(r'^highscroes', HighScores.as_view() ),
 )
