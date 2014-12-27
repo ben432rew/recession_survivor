@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, AnonymousUser
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.shortcuts import render, redirect
 from portfolio.models import Portfolio
 from django.views.generic import View
@@ -53,12 +53,9 @@ class Welcome(View):
             game = Whole_Game.objects.filter(final_score=0)
             saved_game = True if len(game) > 0 else False
             scores = Whole_Game.objects.all().order_by('final_score')[:9]
-            return render( request, 'users/welcome.html', {'highscores':scores, 'saved_game':saved_game})
+            return render( request, 'users/welcome.html', {'highscores':scores, 'saved_game':saved_game, 'form':PasswordChangeForm(request.user)})
 
 
 class ChangePass(View):
-    def get(self, request):
-        pass
-
     def post(self, request):
-        pass
+        return redirect ('/users/welcome')

@@ -29,7 +29,11 @@
         </div>
         <div class="row">
             <div id="change_pass_modal">
-            am i hidden?
+                <form action="/users/changepassword" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="change password" />
+            </form>
             </div>
         </div>
     </div>
