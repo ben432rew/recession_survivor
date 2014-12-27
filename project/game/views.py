@@ -24,12 +24,6 @@ class Games_history(View):
         return render(request, 'game/history.html', {'user':request.user, 'whole_games':whole_games})
 
 
-class High_scores(View):
-    def get(self, request):
-        scores = Whole_Game.objects.all().order_by(final_score)[:9]
-        return render(request, 'game/highscores.html', {'scores':scores})
-
-
 class Round(View):
     #first time the round will be called by a GET, every time after will be a POST
     def get(self, request):
@@ -64,8 +58,3 @@ class Endgame(View):
         whole_game.save()
         trans = Transaction.objects.filter(whole_game=whole_game).order_by(date_created)
         return render( request, 'game/endgame.html', {"balance":balance, "history":trans})
-
-
-class MyHistory(View):
-    def get(self, request):
-        pass

@@ -1,15 +1,19 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.shortcuts import render, redirect
 from portfolio.models import Portfolio
 from django.views.generic import View
-from django.shortcuts import render, redirect
+from game.models import Whole_Game
 
 
 class Index(View):
     def get(self, request):
-        request.context_dict[ 'form' ] = UserCreationForm()
-        return render( request, 'users/index.html', request.context_dict )
+        if request.user.is_anonymous():
+            request.context_dict[ 'form' ] = UserCreationForm()
+            return render( request, 'users/index.html', request.context_dict )
+        else:
+            return redirect('/users/welcome')
 
 
 class Signup(View):
@@ -38,22 +42,20 @@ class Login(View):
 class Logout(View):
     def get(self, request):
         logout(request)
-        return redirect( 'users/index.html')
+        return redirect( '/')
 
 
 class Welcome(View):
     def get(self, request):
-        return render( request, 'users/welcome.html')
+        if request.user.is_anonymous():
+            return redirect( '/')
+        else:
+            game = Whole_Game.objects.filter(final_score=0)
+            saved_game = True if len(game) > 0 else False
+            scores = Whole_Game.objects.all().order_by('final_score')[:9]
+            return render( request, 'users/welcome.html', {'highscores':scores, 'saved_game':saved_game, 'form':PasswordChangeForm(request.user)})
 
 
 class ChangePass(View):
-    def get(self, request):
-        pass
-
     def post(self, request):
-        pass
-
-
-class HighScores(View):
-    def get(self, request):
-        pass
+        return redirect ('/users/welcome')

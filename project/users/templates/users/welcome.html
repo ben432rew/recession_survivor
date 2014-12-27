@@ -2,11 +2,39 @@
 
 {% block title %}{{user}}'s Home - {% endblock %}
 
-{% block content %}
-<ol>
-    <li>all time high scores list</li>
-    <li>my games history</li>
-    <li>Continue a previous game/start a new one</li>
-    <li>Change my password</li>
-</ol>
+{% block header %}<buttton class="btn" id="change_pass_btn">Change my password</button><a href="/users/logout" class="btn">Logout</a>{% endblock %}
+
+{% block content %}    
+    {% load staticfiles %}
+    <script src="{%static "users/usershome.js"%}"></script> 
+
+    <div class="container">
+        <div class="row" id="main">
+            <div class="col-md-4">
+                <h3> High Scores: </h3>
+                {% for score in highscores %}
+                    <p> score </p>
+                {% endfor %}
+            </div>
+            <div class="col-md-4">
+                {% if saved_game %}
+                    <a href="/game" class="btn">Continue Saved Game</a>
+                {% else %}
+                    <a href="/game" class="btn">Start a new game</a>
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                My Games history:
+            </div>
+        </div>
+        <div class="row">
+            <div id="change_pass_modal">
+                <form action="/users/changepassword" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="change password" />
+            </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
