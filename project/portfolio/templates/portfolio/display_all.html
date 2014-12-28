@@ -5,7 +5,7 @@
 {% block content %}
 <ul>
 {% for portfolio in portfolios %}
-    <li>{{ portfolio.title }} - {{ portfolio.user.username }}</li>
+    <li><a href="/portfolio/{{ portfolio.slug }}/manage" class="ajax">{{ portfolio.title }}</a> - {{ portfolio.user.username }}</li>
 {% empty %}
     <li>You do not seem to have any portfolios, <a href="/portfolio/create" class="ajax">creat one?</a></li>
 {% endfor %}

@@ -3,7 +3,10 @@
 {% block title %}{{user}}'s Home - {% endblock %}
 
 
-{% block header %}<buttton class="btn" id="change_pass_btn">Change my password</button><a href="/users/logout" class="btn">Logout</a>{% endblock %}
+{% block header %}
+<buttton class="btn" id="change_pass_btn">Change my password</button>
+<a href="/users/logout" class="btn">Logout</a>
+{% endblock %}
 
 {% block content %}    
     {% load staticfiles %}
@@ -19,9 +22,9 @@
             </div>
             <div class="col-md-4">
                 {% if saved_game %}
-                    <a href="/game" class="btn">Continue Saved Game</a>
+                    <a href="/game" class="btn ajax">Continue Saved Game</a>
                 {% else %}
-                    <a href="/game" class="btn">Start a new game</a>
+                    <a href="/game" class="btn ajax">Start a new game</a>
                 {% endif %}
             </div>
             <div class="col-md-4">

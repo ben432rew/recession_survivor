@@ -1,55 +1,96 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from portfolio.models import Portfolio
-from portfolio.forms import create_form
+from portfolio.models import Portfolio, Holding
+from portfolio.forms import portfolio_form
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+from pprint import pprint as print
 
 ## nothing about game belongs in this file
 
+class Index( View ):
+    def get( self, request ):
+        return render( request, 'portfolio/index.html', request.context_dict )
+
 class Create( View ):
     def get( self, request ):
-        request.context_dict[ 'form' ] = create_form()
+        request.context_dict[ 'form' ] = portfolio_form()
+        
         return render( request, 'portfolio/create.html', request.context_dict )
 
     def post( self, request ):
-        form = create_form( request.POST )
+        form = portfolio_form( request.POST )
+        
         if form.is_valid():
             data = form.cleaned_data
             data[ 'user' ] = User.objects.get( id=request.user.id )
-            data[ 'slug' ] = slugify( request.POST['title'] )
+            data[ 'slug' ] = slugify( request.POST[ 'title' ] )
             data = Portfolio.objects.create( **data )
 
             return redirect( '/portfolio/{}'.format( data.slug ) )
 
-        request.context_dict[ 'form' ] = create_form( request.POST )
+        request.context_dict[ 'form' ] = portfolio_form( request.POST )
         request.context_dict[ 'error' ] = "Please review each field"
+        
         return render( request, 'portfolio/create.html', request.context_dict )
 
 class Edit( View ):
     def get( self, request, slug ):
         request[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
+        request[ 'form' ] = portfolio_form( request.POST )
+        
         return render( request, 'portfolio/edit.html', request.context_dict )
 
     def post( self, request, slug ):
-        form = create_form( request.POST )
+        form = portfolio_form( request.POST )
         if form.is_valid():
             data = form.cleaned_data
-            data[ 'slug' ] = slugify( request.POST['title'] )
+            data[ 'slug' ] = slugify( request.POST[ 'title' ] )
             data = Post.objects.update( **data )
 
             return redirect( '/portfolio/{}'.format( data.slug ) )
 
-        request.context_dict[ 'form' ] = create_form( request.POST )
+        request.context_dict[ 'form' ] = portfolio_form( request.POST )
         request.context_dict[ 'error' ] = "Please review each field"
+        
         return render( request, 'portfolio/create.html', request.context_dict )
 
 class Display_all( View ):
     def get( self, request ):
         get_user = request.GET.get( 'user_id', request.user.id )
         request.context_dict[ 'portfolios' ] = Portfolio.objects.filter( user = User.objects.get( id=request.user.id ) )
-        print( request.context_dict['portfolios'] )
+        
         return render( request, 'portfolio/display_all.html', request.context_dict )
+
+class Manage( View ):
+    def get( self, request, slug ):
+        print( request )
+        request.context_dict[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
+        request.context_dict[ 'stocks' ] = Holding.objects.filter( portfolio=request.context_dict[ 'portfolio' ] )
+        request.context_dict[ 'slug' ] = slug
+        
+        return render( request, 'portfolio/manage.html', request.context_dict )
+
+class Holding_add( View ):
+    def get( self, request, slug ):
+        request.context_dict[ 'form' ] = holding_form()
+        
+        return render( request, 'portfolio/holding_add.html', request.context_dict )
+
+    def post( self, request, slug ):
+        form = holding_form( request.POST )
+
+        if form.is_valid():
+            request
+            data = form.cleaned_data
+            data[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
+            data = Post.objects.update( **data )
+
+            return redirect( '/portfolio/{}'.format( data.slug ) )
+
+        request.context_dict[ 'form' ] = form
+
+        return render( request, 'portfolio/Holding_add.html', request.context_dict )
 
 class Find_stock_by_name(View):
     def get(self, request):

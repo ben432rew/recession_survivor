@@ -2,10 +2,16 @@ from portfolio.models import *
 from django.forms import ModelForm
 from django import forms
 
-class create_form( ModelForm ):
+class portfolio_form( ModelForm ):
 	class Meta:
 		model = Portfolio
 		fields = ('title', 'description')
+
+class holding_form( ModelForm ):
+	class Meta:
+		model = Holding
+		fields = ( 'symbol', 'price', 'shares', 'date' )
+
 
 # class Portfolio(ModelForm):
 # 	# how do i get the current user id to get all their portfolios

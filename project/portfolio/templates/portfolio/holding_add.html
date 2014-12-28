@@ -1,9 +1,9 @@
 {% extends base_template|default:"ui/base.html" %}
 
-{% block title %}Create portfolio - {% endblock %}
+{% block title %}Add holding - {% endblock %}
 
 {% block content %}
-<form action="\portfolio\create" method="POST">
+<form action="\portfolio\{{ slug }}\add" method="POST">
 {%csrf_token%}
 {{ form.as_p }}
 <p>
