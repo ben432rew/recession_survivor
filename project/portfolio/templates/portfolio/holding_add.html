@@ -1,0 +1,14 @@
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}Add holding - {% endblock %}
+
+{% block content %}
+<form action="/portfolio/{{ slug }}/manage/add" method="POST">
+<h2 class="error_message">{{ error }}</h2>
+{%csrf_token%}
+{{ form.as_p }}
+<p>
+	<input type="submit" value="create" />
+</p>
+</form>
+{% endblock %}

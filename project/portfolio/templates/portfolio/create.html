@@ -1,0 +1,13 @@
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}Create portfolio - {% endblock %}
+
+{% block content %}
+<form action="\portfolio\create" method="POST">
+{%csrf_token%}
+{{ form.as_p }}
+<p>
+	<input type="submit" value="create" />
+</p>
+</form>
+{% endblock %}

@@ -1,10 +1,8 @@
-{% extends "game/base.html" %}
+{% extends base_template|default:"ui/base.html" %}
 
+{% block title %}Game - {% endblock %}
+
+{% load partials%}
 {% block content %}
-<h1>anything</h1>
-	
-	<form>
-		{{ form.as_p }}
-	</form>
-
+<h1> Comming soon!</h1>
 {% endblock %}

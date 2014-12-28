@@ -1,6 +1,5 @@
 {% if posts%}
 {%for post in posts%}
-<p> <a href="/blog/post/{{ post.slug }}" class="ajax" > {{ post.title }} </a></p>
+<p> <a href="/blog/post/{{ post.slug }}" class="ajax" > {{ post.title }},  By {{ post.user_id.username }} in {{ post.category }}</a></p>
 {%endfor%}
 {% endif %}
-{# #}
