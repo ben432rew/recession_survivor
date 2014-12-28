@@ -1,7 +1,16 @@
 from portfolio.models import *
 from django.forms import ModelForm
-from game.models import Stock
 from django import forms
+
+class portfolio_form( ModelForm ):
+	class Meta:
+		model = Portfolio
+		fields = ('title', 'description')
+
+class holding_form( ModelForm ):
+	class Meta:
+		model = Holding
+		fields = ( 'symbol', 'price', 'shares', 'date' )
 
 
 # class Portfolio(ModelForm):
@@ -15,10 +24,10 @@ from django import forms
 # 	class Meta:
 # 		model = Stock_owned
 
-class ModelChoiceField(forms.ModelChoiceField):
-    def label_from_instance(self, obj):
-        return str(obj.ticker)
+# class ModelChoiceField(forms.ModelChoiceField):
+#     def label_from_instance(self, obj):
+#         return str(obj.ticker)
 
-class Stock_list(forms.Form):		
-		fields = ModelChoiceField(queryset=Stock.objects.all().distinct(),to_field_name="ticker")
-	
+# class Stock_list(forms.Form):		
+# 		fields = ModelChoiceField(queryset=Stock.objects.all().distinct(),to_field_name="ticker")
+# 	

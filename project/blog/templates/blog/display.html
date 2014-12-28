@@ -3,9 +3,11 @@
 {% block title %}{{ post.title}} - {% endblock %}
 
 {% block content %}
-<p>
+
 <h3>{{ post.title}}</h3>
 <h4>{{ post.created_at }}</h4>
-{{post.content}}
+<p>
+	{{ post.content }}
 </p>
+<h4>By {{ post.user_id.username }} in {{ post.category }}</h4>
 {% endblock %}

@@ -1,8 +1,99 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from portfolio.models import Portfolio
-from game.models import *
+from portfolio.models import Portfolio, Holding
+from portfolio.forms import portfolio_form, holding_form
+from django.utils.text import slugify
+from django.contrib.auth.models import User
+from pprint import pprint as print
 
+## nothing about game belongs in this file
+
+class Index( View ):
+    def get( self, request ):
+        
+        return render( request, 'portfolio/index.html', request.context_dict )
+
+class Create( View ):
+    def get( self, request ):
+        request.context_dict[ 'form' ] = portfolio_form()
+        
+        return render( request, 'portfolio/create.html', request.context_dict )
+
+    def post( self, request ):
+        form = portfolio_form( request.POST )
+        
+        if form.is_valid():
+            data = form.cleaned_data
+            data[ 'user' ] = User.objects.get( id=request.user.id )
+            data[ 'slug' ] = slugify( request.POST[ 'title' ] )
+            data = Portfolio.objects.create( **data )
+
+            return redirect( '/portfolio/{}'.format( data.slug ) )
+
+        request.context_dict[ 'form' ] = portfolio_form( request.POST )
+        request.context_dict[ 'error' ] = "Please review each field"
+        
+        return render( request, 'portfolio/create.html', request.context_dict )
+
+class Edit( View ):
+    def get( self, request, slug ):
+        request[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
+        request[ 'form' ] = portfolio_form( request.POST )
+        
+        return render( request, 'portfolio/edit.html', request.context_dict )
+
+    def post( self, request, slug ):
+        form = portfolio_form( request.POST )
+        if form.is_valid():
+            data = form.cleaned_data
+            data[ 'slug' ] = slugify( request.POST[ 'title' ] )
+            data = Post.objects.update( **data )
+
+            return redirect( '/portfolio/{}'.format( data.slug ) )
+
+        request.context_dict[ 'form' ] = portfolio_form( request.POST )
+        request.context_dict[ 'error' ] = "Please review each field"
+        
+        return render( request, 'portfolio/create.html', request.context_dict )
+
+class Display_all( View ):
+    def get( self, request ):
+        get_user = request.GET.get( 'user_id', request.user.id )
+        request.context_dict[ 'portfolios' ] = Portfolio.objects.filter( user = User.objects.get( id=request.user.id ) )
+        
+        return render( request, 'portfolio/display_all.html', request.context_dict )
+
+class Manage( View ):
+    def get( self, request, slug ):
+        request.context_dict[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
+        request.context_dict[ 'stocks' ] = Holding.objects.filter( portfolio=request.context_dict[ 'portfolio' ] )
+        request.context_dict[ 'slug' ] = slug
+
+        return render( request, 'portfolio/manage.html', request.context_dict )
+
+class Holding_add( View ):
+    def get( self, request, slug ):
+        request.context_dict[ 'form' ] = holding_form()
+        request.context_dict[ 'slug' ] = slug
+        
+        return render( request, 'portfolio/holding_add.html', request.context_dict )
+
+    def post( self, request, slug ):
+        form = holding_form( request.POST )
+
+        if form.is_valid():
+            request
+            data = form.cleaned_data
+            data[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
+            data = Holding.objects.create( **data )
+
+            return redirect( '/portfolio/{}/manage'.format( slug ) )
+
+        request.context_dict[ 'form' ] = form
+        request.context_dict[ 'slug' ] = slug
+        request.context_dict[ 'error' ] = 'Invalid?'
+
+        return render( request, 'portfolio/holding_add.html', request.context_dict )
 
 class Find_stock_by_name(View):
     def get(self, request):
@@ -10,14 +101,6 @@ class Find_stock_by_name(View):
         stock = Stock.objects.get(symbol=symbol, date__month=(request.session['game_round'] + 6) % 12)
         game_round = request.session['game_round']
         return render( request, 'game/round.html', {"game_round":game_round, 'user':request.session.user, 'price':stock.price, 'date':stock.date, 'symbol':stock.symbol})
-
-
-class Display_all(View):
-    def get(self, request):
-        game_round = request.session['game_round']        
-        all_stocks = Stock.objects.filter(date__month(request.session['game_round'] + 6) % 12)
-        return render( request, 'game/round.html', {"game_round":game_round, "all_stocks":all_stocks, 'user':request.session.user})
-
 
 class Display_owned(View):
     def get(self, request):

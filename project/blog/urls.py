@@ -9,6 +9,6 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', IndexView.as_view()),
-    url(r'^create$', BlogPostView.as_view() ),
+    url(r'^create$', Create.as_view() ),
     url(r'^post/(?P<slug>[\w\-]+$)',BlogDisplayView.as_view())
 )

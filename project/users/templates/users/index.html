@@ -20,8 +20,9 @@
 
                 {% csrf_token %}
                 {{ form.as_p }}
-
-                <input type="submit" value="sign up" />
+                <p>
+                    <input type="submit" value="sign up" />
+                </p>
             </form>
         </fieldset>
     </div>
@@ -32,10 +33,18 @@
                 <h2>{{ error }}</h2>
             {% endif %}
             <form action="/users/login" method="post">
-                <p>Username: <input type="text" name = "username_l"></p>
                 {% csrf_token %}
-                <p>Password: <input type="text" name = "password_l"></p>
-                <p> <input type="submit" class="btn" value="log in" />
+                <p>
+                    <lable>Username:</lable>
+                    <input type="text" name="username_l" required />
+                </p>
+                <p>
+                    <lable>Password:</lable>
+                    <input type="password" name="password_l" required/>
+                </p>
+                <p> 
+                    <input type="submit" class="btn" value="log in" />
+                <p>
             </form>
         </fieldset>
     </div>

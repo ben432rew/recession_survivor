@@ -1,0 +1,14 @@
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}List portfolio - {% endblock %}
+
+{% block content %}
+<ul>
+{% for portfolio in portfolios %}
+    <li><a href="/portfolio/{{ portfolio.slug }}/manage" class="ajax">{{ portfolio.title }}</a> - {{ portfolio.user.username }}</li>
+{% empty %}
+    <li>You do not seem to have any portfolios.</li>
+{% endfor %}
+</ul>
+<a href="/portfolio/create" class="ajax">Creat new portfilio</a>
+{% endblock %}

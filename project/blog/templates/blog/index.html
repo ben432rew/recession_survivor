@@ -1,6 +1,9 @@
 {% extends base_template|default:"ui/base.html" %}
-{% load partials%}
 
+{% block title %}Blog - {% endblock %}
+
+{% load partials%}
 {% block content %}
 	{% list_posts %}
+	<a href="/blog/create">Add blog post</a>
 {% endblock %}
