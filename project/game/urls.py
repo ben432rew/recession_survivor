@@ -3,8 +3,8 @@ from django.contrib import admin
 from game.views import *
 
 urlpatterns = patterns('',
-    url( r'^', Index.as_view() ),
-    url(r'^history/', Games_history.as_view() ),
-    url(r'^round/', Round.as_view() ),
-    url(r'^endgame/', Endgame.as_view() ),
+    # url( r'^', Index.as_view() ),
+    # url(r'^history/', Games_history.as_view() ),
+    # url(r'^round/', Round.as_view() ),
+    # url(r'^endgame/', Endgame.as_view() ),
 )
