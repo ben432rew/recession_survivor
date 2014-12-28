@@ -11,7 +11,8 @@
 {% for stock in stocks %}
     <li>{{ stock.shares }} shares of {{ stock.sysmbol }} @ ${{ stock.price }} </li>
 {% empty %}
-    <li>You do not seem to have any holdings, <a href="/portfolio/{{ slug }}/manage/add" class="ajax">add some?</a></li>
+    <li>You do not seem to have any holdings.</li>
 {% endfor %}
 </ul>
+<a href="/portfolio/{{ slug }}/manage/add" class="ajax">Add Holding</a>
 {% endblock %}

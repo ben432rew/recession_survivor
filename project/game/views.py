@@ -1,9 +1,12 @@
-# from django.shortcuts import render,redirect
-# # from portfolio.forms import Stock_list
+from django.shortcuts import render,redirect
+from django.views.generic import View
+# from portfolio.forms import Stock_list
 # from portfolio.models import Portfolio
-# from django.views.generic import View
 # from game.models import *
 
+class Index( View ):
+     def get( self, request ):
+     	return render( request, 'game/index.html', request.context_dict )
 
 # class Index(View):
 #     def get(self, request):

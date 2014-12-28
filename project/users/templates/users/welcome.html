@@ -1,16 +1,14 @@
 {% extends base_template|default:"ui/base.html" %}
 
-{% block title %}{{user}}'s Home - {% endblock %}
+{% block title %}{{user}} Home - {% endblock %}
 
 
-{% block header %}
-<buttton class="btn" id="change_pass_btn">Change my password</button>
-<a href="/users/logout" class="btn">Logout</a>
-{% endblock %}
+{% block header %}{% endblock %}
 
 {% block content %}    
     {% load staticfiles %}
     <script src="{%static "users/usershome.js"%}"></script> 
+    <buttton class="btn" id="change_pass_btn">Change my password</button>
 
     <div class="container">
         <div class="row" id="main">

@@ -1,7 +1,7 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from portfolio.models import Portfolio, Holding
-from portfolio.forms import portfolio_form
+from portfolio.forms import portfolio_form, holding_form
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from pprint import pprint as print
@@ -10,6 +10,7 @@ from pprint import pprint as print
 
 class Index( View ):
     def get( self, request ):
+        
         return render( request, 'portfolio/index.html', request.context_dict )
 
 class Create( View ):
@@ -64,16 +65,16 @@ class Display_all( View ):
 
 class Manage( View ):
     def get( self, request, slug ):
-        print( request )
         request.context_dict[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
         request.context_dict[ 'stocks' ] = Holding.objects.filter( portfolio=request.context_dict[ 'portfolio' ] )
         request.context_dict[ 'slug' ] = slug
-        
+
         return render( request, 'portfolio/manage.html', request.context_dict )
 
 class Holding_add( View ):
     def get( self, request, slug ):
         request.context_dict[ 'form' ] = holding_form()
+        request.context_dict[ 'slug' ] = slug
         
         return render( request, 'portfolio/holding_add.html', request.context_dict )
 
@@ -84,13 +85,15 @@ class Holding_add( View ):
             request
             data = form.cleaned_data
             data[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
-            data = Post.objects.update( **data )
+            data = Holding.objects.create( **data )
 
-            return redirect( '/portfolio/{}'.format( data.slug ) )
+            return redirect( '/portfolio/{}/manage'.format( slug ) )
 
         request.context_dict[ 'form' ] = form
+        request.context_dict[ 'slug' ] = slug
+        request.context_dict[ 'error' ] = 'Invalid?'
 
-        return render( request, 'portfolio/Holding_add.html', request.context_dict )
+        return render( request, 'portfolio/holding_add.html', request.context_dict )
 
 class Find_stock_by_name(View):
     def get(self, request):
