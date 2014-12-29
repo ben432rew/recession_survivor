@@ -4,21 +4,22 @@
 
 {% load partials%}
 {% block content %}
+<div class="col-md-8">
+	<div class="panel panel-default">
 
-<div class="container">
-	<div class="row">
-		<div class="col-md-8">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<div class="panel-title">
-						Post's - <a href="/blog/create">Add blog post</a>
-					</div>
-				</div>
-				<div class="panel-body">
-					{% list_posts %}
-				</div><!-- end panel body -->
-			</div>
+		<div class="panel-heading panel-title">
+			<span class="glyphicon glyphicon-bullhorn"></span>
+			Post's
+			<a href="/blog/create" class="ajax btn-defualt pull-right">
+				<span class="glyphicon glyphicon-pencil"></span>
+				Add blog post
+			</a>
 		</div>
+
+		<div class="panel-body">
+			{% list_posts %}
+		</div>
+
 	</div>
 </div>
 {% endblock %}

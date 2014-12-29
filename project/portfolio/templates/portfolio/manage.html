@@ -3,16 +3,34 @@
 {% block title %}{{ portfolio.title }} - {% endblock %}
 
 {% block content %}
-<h1>{{ portfolie.title }}</h1>
-<p>
-	{{ portfolio.description }}
+<div class="col-md-8">
+	<div class="panel panel-default">
 
-<ul>
-{% for stock in stocks %}
-    <li>{{ stock.shares }} shares of {{ stock.sysmbol }} @ ${{ stock.price }} </li>
-{% empty %}
-    <li>You do not seem to have any holdings.</li>
-{% endfor %}
-</ul>
-<a href="/portfolio/{{ slug }}/manage/add" class="ajax">Add Holding</a>
+		<div class="panel-heading panel-title">
+			<span class="glyphicon glyphicon-usd"></span>
+			{{ portfolio.title }}
+			<a href="/portfolio/{{ slug }}/manage/add" class="ajax btn-defualt pull-right">
+				<span class="glyphicon glyphicon-pencil"></span>
+				Add Holding
+			</a>
+		</div>
+
+		<div class="panel-body">
+			<p>
+				{{ portfolio.description }}
+			</p>
+
+			<hr />
+
+			<ul>
+			{% for stock in stocks %}
+			    <li>{{ stock.shares }} shares of {{ stock.symbol }} @ ${{ stock.price }} </li>
+			{% empty %}
+			    <li>You do not seem to have any holdings.</li>
+			{% endfor %}
+			</ul>
+		</div>
+
+	</div>
+</div>
 {% endblock %}
