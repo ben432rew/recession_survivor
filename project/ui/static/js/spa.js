@@ -5,7 +5,7 @@
 
 		var Spa = {
 			update: function ( url ) {
-
+				Spa.dom.$ajaxLoadingImage.show()
 				this.dom.$body.css( {
 					cursor: 'wait'
 				} );
@@ -14,13 +14,14 @@
 
 				this.resetCurrentPage();
 
-				this.dom.$content.hide( "fade" , function (){
+				this.dom.$content.hide( function (){
 					$.ajax( {
 						url: url,
 						method: 'GET',
 						success: function( data ) {
+							Spa.dom.$ajaxLoadingImage.hide()
 							Spa.dom.$content.html( data );
-							Spa.dom.$content.show( "fade", 1000 );
+							Spa.dom.$content.show();
 							//$this.__spa.spaLinks();
 
 							Spa.dom.$body.css( {
@@ -58,6 +59,7 @@
 			// cache some dom elements
 			$.Spa.dom.$body = $( 'body' );
 			$.Spa.dom.$content = $( 'main' );
+			$.Spa.dom.$ajaxLoadingImage = $( '#ajaxLoadingImage' );
 
 			$( 'body' ).on('click', 'a.ajax', function( event ){
 

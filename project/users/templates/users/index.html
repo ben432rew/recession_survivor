@@ -9,31 +9,41 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
 
-            <div id="buttons">
-                <h2 id="login_button" class="btn btn-primary">Log In</h2>
-                <h2 id="signup_button" class="btn btn-primary">Signup</h2>
+            <div class="btn-group" role="group">
+                <h2 id="login_button" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-user"></span>
+                    Log In
+                </h2>
+                <h2 id="signup_button" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-user"></span>
+                    Signup
+                </h2>
             </div>
-            <br />
+            <hr />
 
             <div id="signup_modal" class="views panel panel-default" style="display:none;">
                 <div class="panel-heading">
                     <div class="panel-title">
+                        <span class="glyphicon glyphicon-pencil"></span>
                         Signup
                     </div>
                 </div>
                 <div class="panel-body">
                     <form action="/users/signup" method="POST">
-                    {% csrf_token %}
-                    {{ login_form.non_field_errors }}
-                    {% for field in create_form %}
-                        <div class="form-group">
-                            {{ field.errors }}
-                            {{ field.label_tag }} {{ field|addcss:"form-control" }}
-                        </div>
-                    {% endfor %}
-                    <input type="submit" class="btn btn-default" value="sign up" />
+                        {% csrf_token %}
+                        {{ login_form.non_field_errors }}
+                        {% for field in create_form %}
+                            <div class="form-group">
+                                {{ field.errors }}
+                                {{ field.label_tag }} {{ field|addcss:"form-control" }}
+                            </div>
+                        {% endfor %}
+                        <button class="btn btn-default">
+                            <span class="glyphicon glyphicon-share-alt"></span>
+                            sign up
+                        </button>
                     </form>
                 </div>
             </div>
@@ -41,21 +51,25 @@
             <div id="login_modal" class="views panel panel-default" style="display:none">
                 <div class="panel-heading">
                     <div class="panel-title">
-                        login_modal
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        Login
                     </div>
                 </div>
                 <div class="panel-body">
                     <form action="/users/login" method="POST">
-                    {% csrf_token %}
-                    {{ login_form.non_field_errors }}
-                    {% for field in login_form %}
-                        <div class="form-group">
-                            {{ field.errors }}
-                            {{ field.label_tag }} {{ field|addcss:"form-control" }}
-                        </div>
-                    {% endfor %}
+                        {% csrf_token %}
+                        {{ login_form.non_field_errors }}
+                        {% for field in login_form %}
+                            <div class="form-group">
+                                {{ field.errors }}
+                                {{ field.label_tag }} {{ field|addcss:"form-control" }}
+                            </div>
+                        {% endfor %}
 
-                    <input type="submit" class="btn btn-default" value="login" />
+                        <button class="btn btn-default">
+                            <span class="glyphicon glyphicon-share-alt"></span>
+                            login
+                        </button>
                     </form>
                 </div>
             </div>
