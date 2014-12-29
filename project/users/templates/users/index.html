@@ -5,64 +5,97 @@
 {% block content %}
     {% load staticfiles %}
     {% load ui.bootstrap %}
-    <script src="{%static "users/index.js"%}"></script>
+<script src="{%static "users/index.js"%}"></script>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
+<div class="btn-group" role="group">
+    <h2 id="login_button" class="btn btn-info">
+        <span class="glyphicon glyphicon-pencil"></span>
+        Log In
+    </h2>
+    <h2 id="signup_button" class="btn btn-success">
+        <span class="glyphicon glyphicon-pencil"></span>
+        Signup
+    </h2>
+</div>
+<hr />
 
-            <div id="buttons">
-                <h2 id="login_button" class="btn btn-primary">Log In</h2>
-                <h2 id="signup_button" class="btn btn-primary">Signup</h2>
-            </div>
-            <br />
+<div class="row col-md-6">
+    <div id="signup_modal" class="panel panel-success views">
 
-            <div id="signup_modal" class="views panel panel-default" style="display:none;">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        Signup
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <form action="/users/signup" method="POST">
-                    {% csrf_token %}
-                    {{ login_form.non_field_errors }}
-                    {% for field in create_form %}
-                        <div class="form-group">
-                            {{ field.errors }}
-                            {{ field.label_tag }} {{ field|addcss:"form-control" }}
-                        </div>
-                    {% endfor %}
-                    <input type="submit" class="btn btn-default" value="sign up" />
-                    </form>
-                </div>
-            </div>
-
-            <div id="login_modal" class="views panel panel-default" style="display:none">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        login_modal
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <form action="/users/login" method="POST">
-                    {% csrf_token %}
-                    {{ login_form.non_field_errors }}
-                    {% for field in login_form %}
-                        <div class="form-group">
-                            {{ field.errors }}
-                            {{ field.label_tag }} {{ field|addcss:"form-control" }}
-                        </div>
-                    {% endfor %}
-
-                    <input type="submit" class="btn btn-default" value="login" />
-                    </form>
-                </div>
-            </div>
+        <div class="panel-heading panel-title">
+            <span class="glyphicon glyphicon-user"></span>
+            Signup
         </div>
+
+        <div class="panel-body">
+            <form action="/users/signup" method="POST">
+                {% csrf_token %}
+                
+                {% if create_form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ create_form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {% for field in create_form %}
+                    <div class="form-group">
+                        {% if field.errors %}
+                            <div class="alert alert-warning" role="alert">
+                                {{ field.errors }}
+                            </div>
+                        {% endif %}
+
+                        {{ field.label_tag }}
+                        {{ field|addcss:"form-control" }}
+                    </div>
+                {% endfor %}
+                <button class="btn btn-default">
+                    <span class="glyphicon glyphicon-share-alt"></span>
+                    sign up
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <div id="login_modal" class="panel panel-info views">
+
+        <div class="panel-heading panel-title">
+            <span class="glyphicon glyphicon-user"></span>
+            Login
+        </div>
+
+        <div class="panel-body">
+            <form action="/users/login" method="POST">
+                {% csrf_token %}
+
+                {% if login_form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ login_form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {% for field in login_form %}
+                    <div class="form-group">
+                        {% if field.errors %}
+                            <div class="alert alert-warning" role="alert">
+                                {{ field.errors }}
+                            </div>
+                        {% endif %}
+
+                        {{ field.label_tag }}
+                        {{ field|addcss:"form-control" }}
+                    </div>
+                {% endfor %}
+
+                <button class="btn btn-default">
+                    <span class="glyphicon glyphicon-share-alt"></span>
+                    login
+                </button>
+            </form>
+        </div>
+
     </div>
 </div>
-
-
 
 {% endblock %}

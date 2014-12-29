@@ -1,19 +1,17 @@
 {% extends base_template|default:"ui/base.html" %}
 
-{% block title %}Create portfolio - {% endblock %}
-
 {% block content %}
 {%  load ui.bootstrap %}
 <div class="col-md-8">
-	<div class="panel panel-default">
 
+	<div class="panel panel-default">
 		<div class="panel-heading panel-title">
-			<span class="glyphicon glyphicon-usd"></span>
-			Create Portfolio
+			<span class="glyphicon glyphicon-bullhorn"></span>
+			New blog post
 		</div>
 
 		<div class="panel-body">
-			<form action="/portfolio/create" method="POST">
+			<form method="POST">
 			{% csrf_token %}
 
 			{% if form.non_field_errors %}
@@ -30,10 +28,9 @@
 			        {{ field|addcss:"form-control" }}
 			    </div>
 			{% endfor %}
-
 			<button class="btn btn-default">
 				<span class="glyphicon glyphicon-share-alt"></span>
-				Create
+				Save
 			</button>
 			</form>
 		</div>

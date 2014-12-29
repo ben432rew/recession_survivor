@@ -13,11 +13,10 @@ class IndexView(View):
         return render( request, self.template , request.context_dict )
 
 class Create(View):
-    template = 'blog/blog.html'
+    template = 'blog/create.html'
 
     def get(self,request):
         if request.user.is_anonymous():
-
             return redirect( '/' )
 
         request.context_dict['form'] = PostForm()

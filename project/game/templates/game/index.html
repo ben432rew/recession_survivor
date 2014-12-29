@@ -1,8 +1,21 @@
 {% extends base_template|default:"ui/base.html" %}
 
-{% block title %}Game - {% endblock %}
+{% block title %}Blog - {% endblock %}
 
 {% load partials%}
 {% block content %}
-<h1> Comming soon!</h1>
+<div class="col-md-8">
+	<div class="panel panel-default">
+
+		<div class="panel-heading panel-title">
+			<span class="glyphicon glyphicon-warning-sign"></span>
+			Alert
+		</div>
+
+		<div class="panel-body">
+			<h1>Coming soon</h1>
+		</div>
+
+	</div>
+</div>
 {% endblock %}
