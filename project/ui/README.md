@@ -20,9 +20,10 @@ Bootstrap has special formating for HTML forms and From errors that do not play 
 </form>
 
 ``` 
-`{% load ui.bootstrap %}` loads the bootstrap tags.
-`{% boot_form_fields myForm %}` will render the field correctly and display all error messages in the proper stop. Demo this behavior with the login form, try to leave fields blank, and try to login with bad credentials.
- * where `form` is the form name passed to the template.
+
+1. `{% load ui.bootstrap %}` loads the bootstrap tags.
+2. `{% boot_form_fields myForm %}` will render the field correctly and display all error messages in the proper stop. Demo this behavior with the login form, try to leave fields blank, and try to login with bad credentials.
+ * where `myForm` is the form name passed to the template.
 
 ## middleware.py
 
