@@ -10,11 +10,18 @@ from pprint import pprint as print
 
 class Index( View ):
     def get( self, request ):
-        
+        if request.user.is_anonymous():
+
+            return redirect( '/' )
+
         return render( request, 'portfolio/index.html', request.context_dict )
 
 class Create( View ):
     def get( self, request ):
+        if request.user.is_anonymous():
+            
+            return redirect( '/' )
+
         request.context_dict[ 'form' ] = portfolio_form()
         
         return render( request, 'portfolio/create.html', request.context_dict )
@@ -58,6 +65,10 @@ class Edit( View ):
 
 class Display_all( View ):
     def get( self, request ):
+        if request.user.is_anonymous():
+
+            return redirect( '/' )
+        
         get_user = request.GET.get( 'user_id', request.user.id )
         request.context_dict[ 'portfolios' ] = Portfolio.objects.filter( user = User.objects.get( id=request.user.id ) )
         

@@ -20,9 +20,7 @@
 						method: 'GET',
 						success: function( data ) {
 							Spa.dom.$ajaxLoadingImage.hide()
-							Spa.dom.$content.html( data );
-							Spa.dom.$content.show();
-							//$this.__spa.spaLinks();
+							Spa.dom.$content.html( data ).show();
 
 							Spa.dom.$body.css( {
 								cursor:'auto'

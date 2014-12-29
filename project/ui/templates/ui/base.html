@@ -50,25 +50,27 @@
           </div>
         </nav> 
     </header>
-    <div id="ajaxLoadingImage" class="container" style="display: none;">
+    <div class="container">
         <div class="row">
-            <div class="col-md-8">
-                <div class="panel panel-default" style="position: absolute;">
-                    <div class="panel-heading">
-                        <div class="panel-title">
-                            Loading, please wait.
-                        </div>
+
+            <div id="ajaxLoadingImage" class="" style="display: none; position: absolute; z-index: 100;" >
+                <div class="panel panel-default" style="">
+                    <div class="panel-heading panel-title">
+                        <span class="glyphicon glyphicon-warning-sign"></span>
+                        Loading, please wait.
                     </div>
                     <div class="panel-body">
                         <img src="{% static 'images/ajax_loader.gif' %}" width="256px" height="256px" />
                     </div>
                 </div>
             </div>
+
+            <main>
+            {% block content %}
+            {% endblock %}
+            </main>
         </div>
     </div>
-    <main>
-    {% block content %}
-    {% endblock %}
-    </main>
+
 </body>
 </html>
