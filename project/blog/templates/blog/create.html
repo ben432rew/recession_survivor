@@ -21,7 +21,7 @@
 			{% for field in form %}
 			    <div class="form-group">
 			    	{% if field.errors %}
-			        	<div class="alert alert-alert" role="alert">{{ field.errors }}</div>
+			        	<div class="alert alert-warning" role="alert">{{ field.errors }}</div>
 			        {% endif %}
 			        
 			        {{ field.label_tag }}
