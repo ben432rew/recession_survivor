@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, AnonymousUser
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm
 from django.shortcuts import render, redirect
 from portfolio.models import Portfolio
 from django.views.generic import View
@@ -10,7 +10,9 @@ from game.models import Whole_Game
 class Index(View):
     def get(self, request):
         if request.user.is_anonymous():
-            request.context_dict[ 'form' ] = UserCreationForm()
+            request.context_dict[ 'create_form' ] = UserCreationForm()
+            request.context_dict[ 'login_form' ] = AuthenticationForm()
+
             return render( request, 'users/index.html', request.context_dict )
         else:
             return redirect('/users/welcome')
@@ -24,20 +26,28 @@ class Signup(View):
             a = User.objects.create_user( username=cd.get('username'), password=cd.get('password1'))
             return redirect('/?error={}'.format("signup a success! now please login") )
         else:
-            return render(request, '/users/index.html', {'error':"Not a valid name or password", 'form':UserCreationForm(request.POST) } )
+            request.context_dict[ 'create_form' ] = form
+            request.context_dict[ 'login_form' ] = AuthenticationForm()
+
+            return render( request, 'users/index.html', request.context_dict )
 
 
 class Login(View):
     def post(self, request):
-        username = request.POST["username_l"]
-        password = request.POST["password_l"]
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
+
+        # odd that None is needed...
+        # http://stackoverflow.com/a/21504550/3140931
+        form = AuthenticationForm( None,request.POST )
+
+        if form.is_valid():
+            login(request, form.get_user())
+            
             return redirect('/users/welcome')
         else:
-            return render(request, 'users/index.html', {"error":"incorrect username/password combination"})
+            request.context_dict[ 'create_form' ] = UserCreationForm()
+            request.context_dict[ 'login_form' ] = form
 
+            return render( request, 'users/index.html', request.context_dict )
 
 class Logout(View):
     def get(self, request):
