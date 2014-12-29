@@ -20,16 +20,15 @@
 				{{ portfolio.description }}
 			</p>
 
-			<hr />
-
-			<ul>
-			{% for stock in stocks %}
-			    <li>{{ stock.shares }} shares of {{ stock.symbol }} @ ${{ stock.price }} </li>
-			{% empty %}
-			    <li>You do not seem to have any holdings.</li>
-			{% endfor %}
-			</ul>
 		</div>
+
+		<ul class="list-group">
+		{% for stock in stocks %}
+		    <li class="list-group-item">{{ stock.shares }} shares of {{ stock.symbol }} @ ${{ stock.price }} </li>
+		{% empty %}
+		    <li class="list-group-item">You do not seem to have any holdings.</li>
+		{% endfor %}
+		</ul>
 
 	</div>
 </div>
