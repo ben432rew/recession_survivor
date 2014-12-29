@@ -38,7 +38,7 @@ class Create( View ):
 class Edit( View ):
     def get( self, request, slug ):
         request[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
-        request[ 'form' ] = portfolio_form( request.POST )
+        request[ 'form' ] = portfolio_form( request[ 'portfolio' ] )
         
         return render( request, 'portfolio/edit.html', request.context_dict )
 
@@ -73,6 +73,7 @@ class Manage( View ):
 
 class Holding_add( View ):
     def get( self, request, slug ):
+        request.context_dict[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
         request.context_dict[ 'form' ] = holding_form()
         request.context_dict[ 'slug' ] = slug
         

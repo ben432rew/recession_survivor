@@ -3,12 +3,35 @@
 {% block title %}Add holding - {% endblock %}
 
 {% block content %}
-<form action="/portfolio/{{ slug }}/manage/add" method="POST">
-<h2 class="error_message">{{ error }}</h2>
-{%csrf_token%}
-{{ form.as_p }}
-<p>
-	<input type="submit" value="create" />
-</p>
-</form>
+{%  load ui.bootstrap %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<div class="panel-title">
+						<span class="glyphicon glyphicon-usd"></span>
+						Add holdings to <b>{{ portfolio.title }}</b>
+					</div>
+				</div>
+				<div class="panel-body">
+					<form action="/portfolio/{{ slug }}/manage/add" method="POST">
+					{% csrf_token %}
+					{{ form.non_field_errors }}
+					{% for field in form %}
+					    <div class="form-group">
+					        {{ field.errors }}
+					        {{ field.label_tag }} {{ field|addcss:"form-control" }}
+					    </div>
+					{% endfor %}
+					<button class="btn btn-default">
+						<span class="glyphicon glyphicon-share-alt"></span>
+						Save
+					</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
