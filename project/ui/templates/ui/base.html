@@ -20,16 +20,18 @@
 <body>
     <header>
         <nav class='navbar navbar-default navbar-static-top'>
-          <div class="container-fluid">
-            <h1 class='text-center'>Historical Trader</h1>
-            <marquee>AAPL +1.98   GILD +2.50   XOM -.57   GPRO +2.82   AMZN +6.06   FB +0.01   RAD +0.15   PBR -0.20   GE -0.06   ABX +0.27   VALE +0.08   JCP 0.00   F +0.15   T +0.21   FCX +0.61   HAL +0.04   TLM 0.00   PFE +0.23   AUY +0.14   S +0.15   RIG +0.10   CHK -0.12   BTU +0.09   NBR +0.32   </marquee>
-            <a href="/users/" class="btn ajax">Users</a>
-            <a href="/blog/" class="btn ajax">Blog</a>
-            <a href="/portfolio/" class="btn ajax">Portfolio</a>
-            <a href="/game/" class="btn ajax">Game</a>
-            <a href="/users/logout" class="btn">Logout</a>
-            {% block header %}
-            {% endblock %}
+          <div class="container">
+            <div class="row">
+                <h1 class='text-center'>Historical Trader</h1>
+                <marquee>AAPL +1.98   GILD +2.50   XOM -.57   GPRO +2.82   AMZN +6.06   FB +0.01   RAD +0.15   PBR -0.20   GE -0.06   ABX +0.27   VALE +0.08   JCP 0.00   F +0.15   T +0.21   FCX +0.61   HAL +0.04   TLM 0.00   PFE +0.23   AUY +0.14   S +0.15   RIG +0.10   CHK -0.12   BTU +0.09   NBR +0.32   </marquee>
+                <a href="/users/" class="btn ajax">Users</a>
+                <a href="/blog/" class="btn ajax">Blog</a>
+                <a href="/portfolio/" class="btn ajax">Portfolio</a>
+                <a href="/game/" class="btn ajax">Game</a>
+                <a href="/users/logout" class="btn">Logout</a>
+                {% block header %}
+                {% endblock %}
+            </div>
           </div>
         </nav> 
     </header>

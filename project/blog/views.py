@@ -14,7 +14,6 @@ class IndexView(View):
 
 class Create(View):
     template = 'blog/blog.html'
-    print( 'blog Create' )
 
     def get(self,request):
         if request.user.is_anonymous():
