@@ -1,12 +1,10 @@
 $(document).ready(function(){
-    $("#signup_modal").hide()
-    $("#login_modal").hide()
     $('#signup_button').on('click', function(e) {
-        $( ".views" ).hide()
-        $("#signup_modal").show()
+        $( ".views" ).slideUp()
+        $("#signup_modal").slideDown()
     })
     $('#login_button').on('click', function(e) {
-        $( ".views" ).hide()
-        $("#login_modal").show()
+        $( ".views" ).slideUp()
+        $("#login_modal").slideDown()
     })    
 })

@@ -5,18 +5,19 @@
 {% block content %}
     {% load staticfiles %}
     {% load ui.bootstrap %}
-    <!-- <script src="{%static "users/index.js"%}"></script> -->
-    
-    <div id="buttons">
-        <h2 id="login_button" class="btn">Log In</h2>
-        <h2 id="signup_button" class="btn">Signup</h2>
-    </div>
-
+    <script src="{%static "users/index.js"%}"></script>
 
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <div id="signup_modal" class="views panel panel-default">
+
+            <div id="buttons">
+                <h2 id="login_button" class="btn btn-primary">Log In</h2>
+                <h2 id="signup_button" class="btn btn-primary">Signup</h2>
+            </div>
+            <br />
+
+            <div id="signup_modal" class="views panel panel-default" style="display:none;">
                 <div class="panel-heading">
                     <div class="panel-title">
                         Signup
@@ -37,7 +38,7 @@
                 </div>
             </div>
 
-            <div id="signup_modal" class="views panel panel-default">
+            <div id="login_modal" class="views panel panel-default" style="display:none">
                 <div class="panel-heading">
                     <div class="panel-title">
                         login_modal
