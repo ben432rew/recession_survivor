@@ -2,6 +2,28 @@
 
 This app manages the UI and AJAX loading. At the moment this app only handles GET request for rendering pages and does not assist with AJAX POST, or any other AJAX functionality. This will most likely change.  
 
+## BootStrap form fields
+
+Bootstrap has special formating for HTML forms and From errors that do not play nicely out of the box with django. To fix this and have proper formated forms use these tamplate tags;
+
+```html
+{% load ui.bootstrap %}
+<form method="POST">
+	{% csrf_token %}
+
+	{% boot_form_fields form %}
+			
+	<button class="btn btn-default">
+		<span class="glyphicon glyphicon-share-alt"></span>
+		Save
+	</button>
+</form>
+
+``` 
+`{% load ui.bootstrap %}` loads the bootstrap tags.
+`{% boot_form_fields myForm %}` will render the field correctly and display all error messages in the proper stop. Demo this behavior with the login form, try to leave fields blank, and try to login with bad credentials.
+ * where `form` is the form name passed to the template.
+
 ## middleware.py
 
 This file is where all the magic happens. Each request is checked if its AJAX and sets `request.context_dict` dict to be have appropriate `base_template` value.
@@ -89,7 +111,7 @@ Lets break down the template above:
 	* I do not like this behavior and am actively looking for a better way...
 
 
-For the view.py files, no changes are needed.
+For the view.py files, see `request.context_dict` on this page.
 
 ## AJAX links
 

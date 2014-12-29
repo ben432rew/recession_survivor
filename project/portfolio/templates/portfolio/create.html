@@ -3,7 +3,7 @@
 {% block title %}Create portfolio - {% endblock %}
 
 {% block content %}
-{%  load ui.bootstrap %}
+{% load ui.bootstrap %}
 <div class="col-md-8">
 	<div class="panel panel-default">
 
@@ -14,27 +14,15 @@
 
 		<div class="panel-body">
 			<form action="/portfolio/create" method="POST">
-			{% csrf_token %}
+				{% csrf_token %}
 
-			{% if form.non_field_errors %}
-				<div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
-			{% endif %}
-
-			{% for field in form %}
-			    <div class="form-group">
-			    	{% if field.errors %}
-			        	<div class="alert alert-warning" role="alert">{{ field.errors }}</div>
-			        {% endif %}
-			        
-			        {{ field.label_tag }}
-			        {{ field|addcss:"form-control" }}
-			    </div>
-			{% endfor %}
-
-			<button class="btn btn-default">
-				<span class="glyphicon glyphicon-share-alt"></span>
-				Create
-			</button>
+				{% boot_form_fields form %}
+				<div class="form-group">
+					<button class="btn btn-default">
+						<span class="glyphicon glyphicon-share-alt"></span>
+						Create
+					</button>
+				</div>
 			</form>
 		</div>
 

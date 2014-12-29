@@ -7,6 +7,7 @@
 
 {% block content %}    
     {% load staticfiles %}
+    {% load ui.bootstrap %}
     <script src="{%static "users/usershome.js"%}"></script> 
     <buttton class="btn" id="change_pass_btn">Change my password</button>
 
@@ -36,7 +37,9 @@
             <div id="change_pass_modal">
                 <form action="/users/changepassword" method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
+
+                {% boot_form_fields form %}
+
                 <input type="submit" value="change password" />
             </form>
             </div>
