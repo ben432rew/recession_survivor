@@ -56,3 +56,6 @@ class Portfolio:
         print( dir( results))
         return results
 
+    def remove_holding(self,user_id):
+        pass
+    

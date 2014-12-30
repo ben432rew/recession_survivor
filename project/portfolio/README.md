@@ -18,3 +18,5 @@ This app should work just like a regular portfolio, think what we did with the t
   
 ### /manage/(slugify title)
   This view allow a user to add and remove stocks from the current portfolio.
+  --user are now able to add stocks
+
