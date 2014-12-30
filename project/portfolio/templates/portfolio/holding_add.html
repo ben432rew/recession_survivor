@@ -3,28 +3,26 @@
 {% block title %}Add holding - {% endblock %}
 
 {% block content %}
-{%  load ui.bootstrap %}
-<div class="col-md-8">
-	<div class="panel panel-default">
+	{%  load ui.bootstrap %}
+<div class="panel panel-default">
 
-		<div class="panel-heading panel-title">
-			<span class="glyphicon glyphicon-usd"></span>
-			Add holdings to <b>{{ portfolio.title }}</b>
-		</div>
-
-		<div class="panel-body">
-			<form action="/portfolio/{{ slug }}/manage/add" method="POST">
-			{% csrf_token %}
-
-			{% boot_form_fields form %}
-
-			<button class="btn btn-default">
-				<span class="glyphicon glyphicon-share-alt"></span>
-				Save
-			</button>
-			</form>
-		</div>
-
+	<div class="panel-heading panel-title">
+		<span class="glyphicon glyphicon-usd"></span>
+		Add holdings to <b>{{ portfolio.title }}</b>
 	</div>
+
+	<div class="panel-body">
+		<form action="/portfolio/{{ slug }}/manage/add" method="POST">
+		{% csrf_token %}
+
+		{% boot_form_fields form %}
+
+		<button class="btn btn-default">
+			<span class="glyphicon glyphicon-share-alt"></span>
+			Save
+		</button>
+		</form>
+	</div>
+
 </div>
 {% endblock %}

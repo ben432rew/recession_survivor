@@ -4,22 +4,20 @@
 
 {% load partials%}
 {% block content %}
-<div class="col-md-8">
-	<div class="panel panel-default">
+<div class="panel panel-default">
 
-		<div class="panel-heading panel-title">
-			<span class="glyphicon glyphicon-bullhorn"></span>
-			Post's
-			<a href="/blog/create" class="ajax btn-defualt pull-right">
-				<span class="glyphicon glyphicon-pencil"></span>
-				Add blog post
-			</a>
-		</div>
-
-		<div class="panel-body">
-			{% list_posts %}
-		</div>
-
+	<div class="panel-heading panel-title">
+		<span class="glyphicon glyphicon-bullhorn"></span>
+		Post's
+		<a href="/blog/create" class="ajax btn-defualt pull-right">
+			<span class="glyphicon glyphicon-pencil"></span>
+			Add blog post
+		</a>
 	</div>
+
+	<div class="panel-body">
+		{% list_posts %}
+	</div>
+
 </div>
 {% endblock %}

@@ -3,28 +3,26 @@
 {% block title %}List portfolio - {% endblock %}
 
 {% block content %}
-<div class="col-md-8">
-	<div class="panel panel-default">
+<div class="panel panel-default">
 
-		<div class="panel-heading panel-title">
-			<span class="glyphicon glyphicon-usd"></span>
-			Portfolios
-			<a href="/portfolio/create" class="ajax btn-defualt pull-right">
-				<span class="glyphicon glyphicon-pencil"></span>
-				Add portfolio
-			</a>
-		</div>
-
-		<div class="panel-body">
-			<ul>
-			{% for portfolio in portfolios %}
-			    <li><a href="/portfolio/{{ portfolio.slug }}/manage" class="ajax">{{ portfolio.title }}</a> - {{ portfolio.user.username }}</li>
-			{% empty %}
-			    <li>You do not seem to have any portfolios.</li>
-			{% endfor %}
-			</ul>
-		</div>
-
+	<div class="panel-heading panel-title">
+		<span class="glyphicon glyphicon-usd"></span>
+		Portfolios
+		<a href="/portfolio/create" class="ajax btn-defualt pull-right">
+			<span class="glyphicon glyphicon-pencil"></span>
+			Add portfolio
+		</a>
 	</div>
+
+	<div class="panel-body">
+		<ul>
+		{% for portfolio in portfolios %}
+		    <li><a href="/portfolio/{{ portfolio.slug }}/manage" class="ajax">{{ portfolio.title }}</a> - {{ portfolio.user.username }}</li>
+		{% empty %}
+		    <li>You do not seem to have any portfolios.</li>
+		{% endfor %}
+		</ul>
+	</div>
+
 </div>
 {% endblock %}
