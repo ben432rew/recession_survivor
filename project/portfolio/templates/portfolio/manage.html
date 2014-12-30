@@ -22,7 +22,7 @@
 	</div>
 
 	<ul class="list-group">
-	{% for stock in stocks %}
+	{% for stock in portfolio.stocks %}
 	    <li class="list-group-item">{{ stock.shares }} shares of {{ stock.symbol }} @ ${{ stock.price }} </li>
 	{% empty %}
 	    <li class="list-group-item">You do not seem to have any holdings.</li>

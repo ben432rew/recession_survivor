@@ -6,14 +6,12 @@
 <div class="panel panel-default">
 
 	<div class="panel-heading panel-title">
-			<span class="glyphicon glyphicon glyphicon-pencil glyphicon glyphicon-bullhorn"></span>
-			{{ post.title}} - <i>{{ post.category }}</i>
-				<a class="ajax btn-defualt pull-right">
-					<span class="glyphicon glyphicon glyphicon-pencil"></span>
-					Edit
-				</a>
-		</h2>
-
+		<span class="glyphicon glyphicon glyphicon-pencil glyphicon glyphicon-bullhorn"></span>
+		{{ post.title}} - <i>{{ post.category }}</i>
+			<a class="ajax btn-defualt pull-right">
+				<span class="glyphicon glyphicon glyphicon-pencil"></span>
+				Edit
+			</a>
 	</div>
 
 	<div class="panel-body">
@@ -21,7 +19,7 @@
 			<p>
 				{{ post.content }}
 			</p>
-			<footer>By {{ post.user_id.username }} on {{ post.created_at }} </footer>
+			<footer>By <b>{{ post.user_id.username }}<b> on {{ post.created_at }} </footer>
 		</blockquote>
 	</div>
 

@@ -16,6 +16,7 @@
 	<script src="{% static "js/bootstrap.min.js" %}" defer></script>
 	<script src="{% static "js/django_ajax.js" %}" defer></script>
 	<script src="{% static "js/spa.js" %}" defer></script>
+
 </head>
 <body>
 	<div class="container">
@@ -47,7 +48,7 @@
 				CHK -0.12
 				BTU +0.09
 				NBR +0.32
-				</marquee>
+			</marquee>
 		</header>
 
 		<nav class="navbar navbar-default">
@@ -79,6 +80,7 @@
 				{% block header %}
 				{% endblock %}
 			</ul>
+
 			<ul class="nav navbar-nav navbar-right">
 				<li>
 					<a href="/users/logout" class="btn">
@@ -88,9 +90,11 @@
 				</li>
 			</ul>
 		</nav>
+
 		<div class="row">
+
 			<div class="col-md-9">
-				<div id="ajaxLoadingImage" style="display: none; position: absolute; z-index: 100;" >
+				<div id="ajaxLoadingImage" style="display: none;" >
 					<div class="panel panel-default">
 
 						<div class="panel-heading panel-title">
@@ -125,8 +129,8 @@
 
 				</div>
 			</div>
-
 		</div>
+		
 	</div>
 </body>
 </html>
