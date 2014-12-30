@@ -1,6 +1,10 @@
 from portfolio.models import *
 from django.forms import ModelForm
 from django import forms
+from pprint import pprint as print
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class portfolio_form( ModelForm ):
 	class Meta:
@@ -11,6 +15,9 @@ class holding_form( ModelForm ):
 	class Meta:
 		model = Holding
 		fields = ( 'symbol', 'price', 'shares', 'date' )
+		widgets = {
+            'date': DateInput()
+        }
 
 
 # class Portfolio(ModelForm):
