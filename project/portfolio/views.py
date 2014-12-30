@@ -63,6 +63,7 @@ class Edit( View ):
         
         return render( request, 'portfolio/create.html', request.context_dict )
 
+
 class Display_all( View ):
     def get( self, request ):
         if request.user.is_anonymous():
