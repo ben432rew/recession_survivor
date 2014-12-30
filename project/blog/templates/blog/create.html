@@ -2,27 +2,25 @@
 
 {% block content %}
 {%  load ui.bootstrap %}
-<div class="col-md-8">
-
-	<div class="panel panel-default">
-		<div class="panel-heading panel-title">
-			<span class="glyphicon glyphicon-bullhorn"></span>
-			New blog post
-		</div>
-
-		<div class="panel-body">
-			<form method="POST">
-			{% csrf_token %}
-
-			{% boot_form_fields form %}
-			
-			<button class="btn btn-default">
-				<span class="glyphicon glyphicon-share-alt"></span>
-				Save
-			</button>
-			</form>
-		</div>
-
+<div class="panel panel-default">
+	
+	<div class="panel-heading panel-title">
+		<span class="glyphicon glyphicon-bullhorn"></span>
+		New blog post
 	</div>
+
+	<div class="panel-body">
+		<form method="POST">
+		{% csrf_token %}
+
+		{% boot_form_fields form %}
+
+		<button class="btn btn-default">
+			<span class="glyphicon glyphicon-share-alt"></span>
+			Save
+		</button>
+		</form>
+	</div>
+
 </div>
 {% endblock %}
