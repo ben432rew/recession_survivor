@@ -3,6 +3,8 @@ from django.views.generic import View
 # from portfolio.forms import Stock_list
 from portfolio.models import Portfolio
 from game.models import *
+from django.template import RequestContext
+import datetime
 
 class Index( View ):
      def get( self, request ):
@@ -11,6 +13,7 @@ class Index( View ):
 class CreateView( View ):
 
 	def post(self, request):
+		print('went create')
 		context = RequestContext(request)
 		start_date = request.POST['start_date']
 		game_type = request.POST['game_type']
@@ -27,12 +30,13 @@ class CreateView( View ):
 		return redirect('/game/round/')
 
 class RoundView( View ):
-	template_name = 'round.html'
+	template_name = 'game/round.html'
 
 	def get(self, request):
 		if request.session['round'] < 12 and request.session['add'] == True:
 			request.session['round']+=1
 			if request.session['game_type'] == 'weekly':
+				print(request.session['round'])
 				days = request.session['round']*7
 				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
 				time = datetime.timedelta(days=days)
