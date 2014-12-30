@@ -61,14 +61,17 @@ class Holding_add( View ):
 
     def post( self, request, slug ):
         form = holding_form( request.POST )
+        results = p.Portfolio.add_holding( form, request.user.id )
+        if results:
 
-        if form.is_valid():
-            request
-            data = form.cleaned_data
-            data[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
-            data = Holding.objects.create( **data )
+        # this logic was moved to portfolio
+        # if form.is_valid():
+        #     request
+        #     data = form.cleaned_data
+        #     data[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
+        #     data = Holding.objects.create( **data )
 
-            return redirect( '/portfolio/{}/manage'.format( slug ) )
+            return redirect( '/portfolio/{}/manage'.format( results.slug ) )
 
         request.context_dict[ 'form' ] = form
         request.context_dict[ 'slug' ] = slug
