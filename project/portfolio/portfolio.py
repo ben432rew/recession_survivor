@@ -52,6 +52,7 @@ class Portfolio:
             return False
 
     def by_user_id( self, user_id ):
-        return models.Portfolio.objects.filter( user = User.objects.get( id=user_id ) )
-
+        results =  models.Portfolio.objects.filter( user = User.objects.get( id=user_id ) )
+        print( dir( results))
+        return results
 
