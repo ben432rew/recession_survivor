@@ -7,7 +7,7 @@ class Stock_history( models.Model ):
     date = models.DateField()
 
 class Portfolio( models.Model ):
-	title = models.CharField( max_length=200 )
+	title = models.CharField( max_length=200, unique=True  )
 	description = models.TextField()
 	slug = models.CharField( max_length=200 )
 	date_created = models.DateField( auto_now_add=True )
