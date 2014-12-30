@@ -1,22 +1,25 @@
 {% extends base_template|default:"ui/base.html" %}
 
-{% block title %}Blog - {% endblock %}
-
-{% load partials%}
 {% block content %}
+{%  load ui.bootstrap %}
 <div class="panel panel-default">
-
+	
 	<div class="panel-heading panel-title">
 		<span class="glyphicon glyphicon-bullhorn"></span>
-		Post's
-		<a href="/blog/create" class="ajax btn-defualt pull-right">
-			<span class="glyphicon glyphicon-pencil"></span>
-			Add blog post
-		</a>
+		New blog post
 	</div>
 
 	<div class="panel-body">
-		{% list_posts %}
+		<form method="POST">
+		{% csrf_token %}
+
+		{% boot_form_fields form %}
+
+		<button class="btn btn-default">
+			<span class="glyphicon glyphicon-share-alt"></span>
+			Save
+		</button>
+		</form>
 	</div>
 
 </div>

@@ -1,0 +1,21 @@
+{% load ui.bootstrap %}
+
+{% if form.non_field_errors %}
+	<div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+{% endif %}
+
+{% for field in form %}
+    <div class="form-group {% if field.errors %}has-error has-feedback{% endif %}">
+        
+        <label class="control-label">
+        	{{ field.label }}
+
+        	{% for error in field.errors %}
+        		<span class="glyphicon glyphicon-exclamation-sign"></span>
+        		<i>{{ error }}</i>
+        	{% endfor %}
+        </label>
+
+        {{ field|addcss:"form-control" }}
+    </div>
+{% endfor %}

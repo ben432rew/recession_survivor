@@ -1,0 +1,19 @@
+body {
+/*	background: url("/static/images/bg1.jpg") no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;*/
+	overflow:scroll;
+}
+
+nav a:hover{
+	-moz-transform: scale(1.35);
+	-webkit-transform: scale(1.35);
+	-ms-transform: scale(1.35);
+}
+
+#ajaxLoadingImage{
+	position: absolute;
+	z-index: 100;
+}

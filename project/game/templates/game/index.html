@@ -1,10 +1,32 @@
-{% extends "game/base.html" %}
+{% extends base_template|default:"ui/base.html" %}
 
+{% block title %}Blog - {% endblock %}
+
+{% load partials%}
 {% block content %}
-<h1>anything</h1>
-	
-	<form>
-		{{ form.as_p }}
-	</form>
+<div class="panel panel-default">
 
+	<div class="panel-heading panel-title">
+		<span class="glyphicon glyphicon-warning-sign"></span>
+		Alert
+	</div>
+
+	<div class="panel-body">
+		<h1>Coming soon</h1>
+		<h3>Customize you game here!</h3>
+		<form action = "create/" method = "POST">
+		{% csrf_token %}
+		<label for = 'game_type'>Game Type</label>
+		<select name = 'game_type'>
+			<option value = 'weekly'>Weekly</option>
+			<option value = 'monthly'>Monthly</option>
+			<option value = 'yearly'>Yearly</option>
+		</select>
+		<label for = 'start_date'>Start Date</label>
+		<input type = "date" name = 'start_date' value = "2000-01-01">
+		<input type = 'submit' value = 'Start'>
+	</form>
+	</div>
+
+</div>
 {% endblock %}

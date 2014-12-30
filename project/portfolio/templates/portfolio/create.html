@@ -1,0 +1,29 @@
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}Create portfolio - {% endblock %}
+
+{% block content %}
+	{% load ui.bootstrap %}
+<div class="panel panel-default">
+
+	<div class="panel-heading panel-title">
+		<span class="glyphicon glyphicon-usd"></span>
+		Create Portfolio
+	</div>
+
+	<div class="panel-body">
+		<form action="/portfolio/create" method="POST">
+			{% csrf_token %}
+
+			{% boot_form_fields form %}
+			<div class="form-group">
+				<button class="btn btn-default">
+					<span class="glyphicon glyphicon-share-alt"></span>
+					Create
+				</button>
+			</div>
+		</form>
+	</div>
+
+</div>
+{% endblock %}

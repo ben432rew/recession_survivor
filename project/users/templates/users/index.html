@@ -1,38 +1,68 @@
-{% extends "users/base.html" %}
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}Welcome - {% endblock %}
 
 {% block content %}
+    {% load staticfiles %}
+    {% load ui.bootstrap %}
+<script src="{%static "users/index.js"%}"></script>
 
-    <div id="buttons">
-        <h2 id="login_button" class="btn">Log In</h2>
-        <h2 id="signup_button" class="btn">Signup</h2>
-    </div>
-    <div id="signup">
-        <fieldset>
-            <legend>Signup</legend>
-            {% if error %}
-                <h2>{{ error }}</h2>
-            {% endif %}
-            <form action="/users/signup" method="post">
+<div class="btn-group" role="group">
+    <h2 id="login_button" class="btn btn-info">
+        <span class="glyphicon glyphicon-pencil"></span>
+        Log In
+    </h2>
+    <h2 id="signup_button" class="btn btn-success">
+        <span class="glyphicon glyphicon-pencil"></span>
+        Signup
+    </h2>
+</div>
+<hr />
 
+<div class="row col-md-6">
+    <div id="signup_modal" class="panel panel-success views">
+
+        <div class="panel-heading panel-title">
+            <span class="glyphicon glyphicon-user"></span>
+            Signup
+        </div>
+
+        <div class="panel-body">
+            <form action="/users/signup" method="POST">
                 {% csrf_token %}
-                {{ form.as_p }}
+                
+                {% boot_form_fields create_form %}
 
-                <input type="submit" value="sign up" />
+                <button class="btn btn-default">
+                    <span class="glyphicon glyphicon-share-alt"></span>
+                    sign up
+                </button>
             </form>
-        </fieldset>
+        </div>
+
     </div>
-    <div id="login">
-        <fieldset>
-            <legend>Log in</legend>
-            {% if error %}
-                <h2>{{ error }}</h2>
-            {% endif %}
-            <form action="/users/login" method="post">
-                <p>Username: <input type="text" name = "username_l"></p>
+
+    <div id="login_modal" class="panel panel-info views">
+
+        <div class="panel-heading panel-title">
+            <span class="glyphicon glyphicon-user"></span>
+            Login
+        </div>
+
+        <div class="panel-body">
+            <form action="/users/login" method="POST">
                 {% csrf_token %}
-                <p>Password: <input type="text" name = "password_l"></p>
+
+                {% boot_form_fields login_form %}
+
+                <button class="btn btn-default">
+                    <span class="glyphicon glyphicon-share-alt"></span>
+                    login
+                </button>
             </form>
-        </fieldset>
+        </div>
+
     </div>
+</div>
 
 {% endblock %}

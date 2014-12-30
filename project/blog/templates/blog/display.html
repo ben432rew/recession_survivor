@@ -3,9 +3,25 @@
 {% block title %}{{ post.title}} - {% endblock %}
 
 {% block content %}
-<p>
-<h3>{{ post.title}}</h3>
-<h4>{{ post.created_at }}</h4>
-{{post.content}}
-</p>
+<div class="panel panel-default">
+
+	<div class="panel-heading panel-title">
+		<span class="glyphicon glyphicon glyphicon-pencil glyphicon glyphicon-bullhorn"></span>
+		{{ post.title}} - <i>{{ post.category }}</i>
+			<a class="ajax btn-defualt pull-right">
+				<span class="glyphicon glyphicon glyphicon-pencil"></span>
+				Edit
+			</a>
+	</div>
+
+	<div class="panel-body">
+		<blockquote>
+			<p>
+				{{ post.content }}
+			</p>
+			<footer>By <b>{{ post.user_id.username }}<b> on {{ post.created_at }} </footer>
+		</blockquote>
+	</div>
+
+</div>
 {% endblock %}

@@ -1,8 +1,104 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from portfolio.models import Portfolio
-from game.models import *
+from portfolio.models import Portfolio, Holding
+from portfolio.forms import portfolio_form, holding_form
+from django.utils.text import slugify
+from django.contrib.auth.models import User
+from pprint import pprint as print
+import portfolio.portfolio as p
 
+# print( dir(p.Portfolio) )
+
+## nothing about game belongs in this file
+
+class Display_all( View ):
+    def get( self, request ):
+        if request.user.is_anonymous():
+
+            return redirect( '/' )
+        
+        user_id = request.GET.get( 'user_id', request.user.id )
+        request.context_dict[ 'portfolios' ] = p.Portfolio.by_user_id( None, user_id )
+        
+        return render( request, 'portfolio/display_all.html', request.context_dict )
+
+class Create( View ):
+    def get( self, request ):
+        if request.user.is_anonymous():
+            
+            return redirect( '/' )
+
+        request.context_dict[ 'form' ] = p.Portfolio.create_form()
+        
+        return render( request, 'portfolio/create.html', request.context_dict )
+
+    def post( self, request ):
+        form = p.Portfolio.create_form( request.POST )
+        results = p.Portfolio.create( form, request.user.id )
+        if results:
+
+            return redirect( '/portfolio/{}/manage'.format( results.slug ) )
+
+        request.context_dict[ 'form' ] = form
+        
+        return render( request, 'portfolio/create.html', request.context_dict )
+
+class Manage( View ):
+    def get( self, request, slug ):
+        request.context_dict[ 'portfolio' ] = P = p.Portfolio( slug )
+        request.context_dict[ 'slug' ] = slug
+
+        return render( request, 'portfolio/manage.html', request.context_dict )
+
+# needs to be converted to portfolio.py 
+class Holding_add( View ):
+    def get( self, request, slug ):
+        request.context_dict[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
+        request.context_dict[ 'form' ] = holding_form()
+        request.context_dict[ 'slug' ] = slug
+        
+        return render( request, 'portfolio/holding_add.html', request.context_dict )
+
+    def post( self, request, slug ):
+        form = holding_form( request.POST )
+
+        if form.is_valid():
+            request
+            data = form.cleaned_data
+            data[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
+            data = Holding.objects.create( **data )
+
+            return redirect( '/portfolio/{}/manage'.format( slug ) )
+
+        request.context_dict[ 'form' ] = form
+        request.context_dict[ 'slug' ] = slug
+        request.context_dict[ 'error' ] = 'Invalid?'
+
+        return render( request, 'portfolio/holding_add.html', request.context_dict )
+
+# needs to be converted to portfolio.py and template created
+class Edit( View ):
+    def get( self, request, slug ):
+        request[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
+        request[ 'form' ] = portfolio_form( request[ 'portfolio' ] )
+        
+        return render( request, 'portfolio/edit.html', request.context_dict )
+
+    def post( self, request, slug ):
+        form = portfolio_form( request.POST )
+        if form.is_valid():
+            data = form.cleaned_data
+            data[ 'slug' ] = slugify( request.POST[ 'title' ] )
+            data = Post.objects.update( **data )
+
+            return redirect( '/portfolio/{}'.format( data.slug ) )
+
+        request.context_dict[ 'form' ] = portfolio_form( request.POST )
+        request.context_dict[ 'error' ] = "Please review each field"
+        
+        return render( request, 'portfolio/create.html', request.context_dict )
+
+## not sure form here down
 
 class Find_stock_by_name(View):
     def get(self, request):
@@ -10,20 +106,6 @@ class Find_stock_by_name(View):
         stock = Stock.objects.get(symbol=symbol, date__month=(request.session['game_round'] + 6) % 12)
         game_round = request.session['game_round']
         return render( request, 'game/round.html', {"game_round":game_round, 'user':request.session.user, 'price':stock.price, 'date':stock.date, 'symbol':stock.symbol})
-
-
-class Display_all(View):
-    def get(self, request):
-        game_round = request.session['game_round']        
-        all_stocks = Stock.objects.filter(date__month(request.session['game_round'] + 6) % 12)
-        return render( request, 'game/round.html', {"game_round":game_round, "all_stocks":all_stocks, 'user':request.session.user})
-
-
-class Display_owned(View):
-    def get(self, request):
-        game_round = request.session['game_round']
-        owned = Portfolio.objects.select_related('Portfolio').filter(user=request.user)
-        return render( request, 'game/round.html', {"game_round":game_round, "portfolio":portfolio, 'user':request.session.user})
 
 #lot of overlap Buy_stock and Sell_shares, NOT DRY
 class Buy_stock(View):
