@@ -1,0 +1,24 @@
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}Tracked stocks - {% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+
+	<div class="panel-heading panel-title">
+		<span class="glyphicon glyphicon-usd"></span>
+		Tracked Stocks
+	</div>
+
+	<div class="panel-body">
+		<ul>
+		{% for track in tracked %}
+		    <li>{{ track.symbol }} | {{ track.name }}, {{ track.from_date }}-{{ track.to_date }}</li>
+		{% empty %}
+		    <li>You do not seem to have any tracks.</li>
+		{% endfor %}
+		</ul>
+	</div>
+
+</div>
+{% endblock %}

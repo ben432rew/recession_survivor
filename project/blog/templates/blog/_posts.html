@@ -1,5 +1,14 @@
-{% if posts%}
 {%for post in posts%}
-<p> <a href="/blog/post/{{ post.slug }}" class="ajax" > {{ post.title }},  By {{ post.user_id.username }} in {{ post.category }}</a></p>
+	<a href="/blog/post/{{ post.slug }}" class="ajax btn btn-defua" > 
+		<h3>
+			{{ post.title }}
+			<small>
+				By {{ post.user_id.username }}
+			</small>
+		</h3>
+	</a>
+{% empty %}
+	<p>
+		You do not seem to have any posts.
+	</p>
 {%endfor%}
-{% endif %}
