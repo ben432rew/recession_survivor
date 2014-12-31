@@ -79,11 +79,10 @@ class Holding_add( View ):
             return render( request, 'portfolio/holding_add.html', request.context_dict )
 
 class Holding_update( View ):
-    def get(self,request,slug):
-        pass
     def post(self,request,slug):
-        print(request.POST)
-        return HttpResponse("in progress")
+        portfolio = p.Portfolio(slug)
+        portfolio.remove_holding(request)
+        return redirect("/portfolio/"+slug+"/manage")
 
 # needs to be converted to portfolio.py and template created
 class Edit( View ):
