@@ -9,25 +9,42 @@
     {% load staticfiles %}
     {% load ui.bootstrap %}
     <script src="{%static "users/usershome.js"%}"></script> 
-    <buttton class="btn" id="change_pass_btn">Change my password</button>
-
+    <div class="btn btn-primary" id="change_pass_btn">
+        Change my password
+    </div>
+    <br>
+    <br>
     {% if error %}
         <h2>{{ error }}</h2>
     {% endif %}
-        <div class="row" id="main">
-            <div class="col-md-4">
-                <h3> High Scores: </h3>
-                {% for score in highscores %}
-                    <p> score </p>
-                {% endfor %}
-            </div>
-            <!-- should be in blog page, which should be the new homepage -->
- 
-            <div class="col-md-4">
-                My Games history:
+    <div class="row" id="main">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading panel-title">
+                    High Scores:
+                </div>
+                <div class="panel-body">                
+                    {% for score in highscores %}
+                        <p> score </p>
+                    {% endfor %}
+                </div>
             </div>
         </div>
-        <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading panel-title">
+                    My Games History:
+                </div>
+                <div class="panel-body">                
+                    {% for game in mygames %}
+                        <p> score </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
             <div id="change_pass_modal">
                 <form action="/users/changepassword" method="post">
                 {% csrf_token %}
@@ -35,7 +52,8 @@
                 {% boot_form_fields form %}
 
                 <input type="submit" value="change password" />
-            </form>
+                </form>
             </div>
         </div>
+    </div>
 {% endblock %}
