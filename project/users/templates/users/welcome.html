@@ -16,6 +16,9 @@
     {% endif %}
         <div class="row" id="main">
             <div class="col-md-4">
+                {% if request.user.is_authenticated %}
+        <h2>{{ request.user.id }}</h2>
+    {% endif %}
                 <h3> High Scores: </h3>
                 {% for score in highscores %}
                     <p> score </p>

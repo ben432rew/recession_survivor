@@ -11,12 +11,12 @@ class Stock(models.Model):
 
 class Whole_Game(models.Model):
     game_type = models.CharField(max_length=30)
+    name = models.CharField(max_length=30)
     final_score = models.FloatField(default=0)
     start_date = models.DateField()
     end_date = models.DateField()
     current_date = models.DateField()
-    current_round = models.IntegerField() 
-    # date_played = models.DateField(auto_now=True)
+    current_round = models.IntegerField(default=0) 
     user = models.ForeignKey(User)
     portfolio = models.ForeignKey(Portfolio)
 
