@@ -53,7 +53,6 @@ class Portfolio:
 
     def by_user_id( self, user_id ):
         results =  models.Portfolio.objects.filter( user = User.objects.get( id=user_id ) )
-        print( dir( results))
         return results
 
     def remove_holding(self,user_id):
