@@ -15,7 +15,7 @@ class Index(View):
 
             return render( request, 'users/index.html', request.context_dict )
         else:
-            return redirect('/users/welcome')
+            return redirect('/blog')
 
 
 class Signup(View):
@@ -42,7 +42,7 @@ class Login(View):
         if form.is_valid():
             login(request, form.get_user())
             
-            return redirect('/users/welcome')
+            return redirect('/blog')
         else:
             request.context_dict[ 'create_form' ] = UserCreationForm()
             request.context_dict[ 'login_form' ] = form

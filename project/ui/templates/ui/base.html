@@ -51,45 +51,47 @@
 			</marquee>
 		</header>
 
-		<nav class="navbar navbar-default">
-			<ul class="nav navbar-nav">
-				<li>
-					<a href="/blog/" class="btn ajax">
-						<span class="glyphicon glyphicon-bullhorn"></span>
-						Blog
-					</a>
-				</li>
-				<li>
-					<a href="/portfolio/" class="btn ajax">
-						<span class="glyphicon glyphicon-usd"></span>
-						Portfolio
-					</a>
-				</li>
-				<li>
-					<a href="/game/" class="btn ajax">
-						<span class="glyphicon glyphicon-plane"></span>
-						Game
-					</a>
-				</li>
-				{% block header %}
-				{% endblock %}
-			</ul>
+		{% if user.is_authenticated %}
+			<nav class="navbar navbar-default">
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="/blog/" class="btn ajax">
+							<span class="glyphicon glyphicon-bullhorn"></span>
+							Blog
+						</a>
+					</li>
+					<li>
+						<a href="/portfolio/" class="btn ajax">
+							<span class="glyphicon glyphicon-usd"></span>
+							Portfolio
+						</a>
+					</li>
+					<li>
+						<a href="/game/" class="btn ajax">
+							<span class="glyphicon glyphicon-plane"></span>
+							Game
+						</a>
+					</li>
+					{% block header %}
+					{% endblock %}
+				</ul>
 
-			<ul class="nav navbar-nav navbar-right">
-				<li>
-					<a href="/users/" class="btn ajax">
-						<span class="glyphicon glyphicon-user"></span>
-						Profile
-					</a>
-				</li>
-				<li>
-					<a href="/users/logout" class="btn">
-						<span class="glyphicon glyphicon-off"></span>
-						Logout
-					</a>
-				</li>
-			</ul>
-		</nav>
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a href="/users/" class="btn ajax">
+							<span class="glyphicon glyphicon-user"></span>
+							Profile
+						</a>
+					</li>
+					<li>
+						<a href="/users/logout" class="btn">
+							<span class="glyphicon glyphicon-off"></span>
+							Logout
+						</a>
+					</li>
+				</ul>
+			</nav>
+		{% endif %}
 
 		<div class="row">
 
