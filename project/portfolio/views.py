@@ -46,7 +46,7 @@ class Create( View ):
 
 class Manage( View ):
     def get( self, request, slug ):
-        request.context_dict[ 'portfolio' ] = P = p.Portfolio( slug )
+        request.context_dict[ 'portfolio' ] = p.Portfolio( slug )
         request.context_dict[ 'slug' ] = slug
 
         return render( request, 'portfolio/manage.html', request.context_dict )
@@ -54,28 +54,32 @@ class Manage( View ):
 # needs to be converted to portfolio.py 
 class Holding_add( View ):
     def get( self, request, slug ):
-        request.context_dict[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
-        request.context_dict[ 'form' ] = holding_form()
+        request.context_dict[ 'portfolio' ] = p.Portfolio( slug )
         request.context_dict[ 'slug' ] = slug
+        request.context_dict[ 'form' ] = p.Portfolio.create_holding()
         
         return render( request, 'portfolio/holding_add.html', request.context_dict )
 
     def post( self, request, slug ):
         form = holding_form( request.POST )
+        portfolio = p.Portfolio(slug)
+        results = portfolio.add_holding( form, request.user.id )
+        if results:
 
-        if form.is_valid():
-            request
-            data = form.cleaned_data
-            data[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
-            data = Holding.objects.create( **data )
+        # this logic was moved to portfolio
+        # if form.is_valid():
+        #     request
+        #     data = form.cleaned_data
+        #     data[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
+        #     data = Holding.objects.create( **data )
 
             return redirect( '/portfolio/{}/manage'.format( slug ) )
+        else:
+            request.context_dict[ 'form' ] = form
+            request.context_dict[ 'slug' ] = slug
+            request.context_dict[ 'error' ] = 'Invalid?'
 
-        request.context_dict[ 'form' ] = form
-        request.context_dict[ 'slug' ] = slug
-        request.context_dict[ 'error' ] = 'Invalid?'
-
-        return render( request, 'portfolio/holding_add.html', request.context_dict )
+            return render( request, 'portfolio/holding_add.html', request.context_dict )
 
 # needs to be converted to portfolio.py and template created
 class Edit( View ):

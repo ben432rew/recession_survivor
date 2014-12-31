@@ -41,17 +41,15 @@ You should now be at the postgres user bash prompt
 
 You should now be in the psql prompt -> postgres=#
 
-`CREATE ROLE bears WITH login password 'bears';`
+CREATE ROLE bears WITH login password 'bears';
 
-`ALTER ROLE bears WITH superuser createdb createrole;`
+ALTER ROLE bears WITH superuser createdb createrole;
 
-`\q`
+\q
 
-`exit`
+exit
 
-now run `createdb h_trader`
-
-go into the django shell and run: `from portfolio import seed` to get data in db
+Should be good to go
 
 ## Input and Outputs("v-" is a validation marker)
 Portfolio Inputs-
@@ -92,3 +90,4 @@ Stock Outputs-
 get_price: stock price
 get_general_finance_statements: prevelant info
 get_snippets_for_stock/date: sinppets
+

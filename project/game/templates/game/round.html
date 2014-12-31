@@ -1,11 +1,31 @@
 {% extends "game/base.html" %}
 
 {% block content %}
-	<h3>{{ user }}</h3>
-	<h3>{{ balance }}</h3>
-	<p>
-	{% for stock in portfolio %}
-		<h4>{{ stock }}</h4>
-	{% endfor %}
-	</p>
+	<h1>Round {{request.session.round}}</h1>
+	<table>
+		<tr>
+			<th>
+			Ticker
+			</th>
+			<th>
+			Price
+			</th>
+			<th>
+			Date
+			</th>
+		</tr>
+		{% for stock in stocks %}
+		<tr>
+			<td>
+				{{stock.ticker}}
+			</td>
+			<td>
+				{{stock.price}}
+			</td>
+			<td>
+				{{stock.date}}
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
 {% endblock %}

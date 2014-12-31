@@ -1,12 +1,112 @@
 from django.shortcuts import render,redirect
 from django.views.generic import View
 # from portfolio.forms import Stock_list
-# from portfolio.models import Portfolio
-# from game.models import *
+from portfolio.models import Portfolio
+from game.models import *
+from django.template import RequestContext
+import datetime
 
 class Index( View ):
      def get( self, request ):
      	return render( request, 'game/index.html', request.context_dict )
+
+class CreateView( View ):
+
+	def post(self, request):
+		print('went create')
+		context = RequestContext(request)
+		start_date = request.POST['start_date']
+		game_type = request.POST['game_type']
+		# Portfolio.objects.create(balance = 10000, initial_balance = 10000)
+		# portfolio = Portfolio.objects.last()
+		# request.session['portfolio_id'] = portfolio.id 
+		if game_type == 'weekly':
+			start = str( datetime.datetime.strptime(start_date,"%Y-%m-%d") )
+			request.session['round'] = 0
+			request.session['start_date'] = start[0:10]
+			request.session['game_type'] = game_type
+			request.session['add'] = True
+			request.session.set_expiry(300)
+		return redirect('/game/round/')
+
+class RoundView( View ):
+	template_name = 'game/round.html'
+
+	def get(self, request):
+		if request.session['round'] < 12 and request.session['add'] == True:
+			request.session['round']+=1
+			if request.session['game_type'] == 'weekly':
+				print(request.session['round'])
+				days = request.session['round']*7
+				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+				time = datetime.timedelta(days=days)
+				end = start + time
+				search_start = end - datetime.timedelta(days=7)
+				stocks = Stock.objects.filter(date__range=[search_start, end])
+				request.session['add'] = True
+				return render(request, self.template_name, {'stocks':stocks})
+			elif request.session['game_type'] == 'monthly':
+				days = request.session['round']*31
+				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+				time = datetime.timedelta(days=days)
+				end = start + time
+				search_start = end - datetime.timedelta(days=31)
+				request.session['search_start'] = search_start
+				request.session['current_point'] = end
+				stocks = Stock.objects.filter(date__range=[search_start, end])
+				request.session['add'] = True
+				return render(request, self.template_name, {'stocks':stocks})
+			elif request.session['game_type'] == 'yearly':
+				days = request.session['round']*365
+				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+				time = datetime.timedelta(days=days)
+				end = start + time
+				search_start = end - datetime.timedelta(days=365)
+				request.session['search_start'] = search_start
+				request.session['current_point'] = end
+				stocks = Stock.objects.filter(date__range=[search_start, end])
+				request.session['add'] = True
+				return render(request, self.template_name, {'stocks':stocks})
+			else:
+				pass
+		elif request.session['round'] < 12 and request.session['add'] == False:
+			if request.session['game_type'] == 'weekly':
+				days = request.session['round']*7
+				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+				time = datetime.timedelta(days=days)
+				end = start + time
+				search_start = end - datetime.timedelta(days=7)
+				request.session['search_start'] = search_start
+				request.session['current_point'] = end
+				stocks = Stock.objects.filter(date__range=[search_start, end])
+				request.session['add'] = True
+				return render(request, self.template_name, {'stocks':stocks})
+			elif request.session['game_type'] == 'monthly':
+				days = request.session['round']*31
+				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+				time = datetime.timedelta(days=days)
+				end = start + time
+				search_start = end - datetime.timedelta(days=31)
+				request.session['search_start'] = search_start
+				request.session['current_point'] = end
+				stocks = Stock.objects.filter(date__range=[search_start, end])
+				request.session['add'] = True
+				return render(request, self.template_name, {'stocks':stocks})
+			elif request.session['game_type'] == 'yearly':
+				days = request.session['round']*365
+				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+				time = datetime.timedelta(days=days)
+				end = start + time
+				search_start = end - datetime.timedelta(days=365)
+				request.session['search_start'] = search_start
+				request.session['current_point'] = end
+				stocks = Stock.objects.filter(date__range=[search_start, end])
+				request.session['add'] = True
+				return render(request, self.template_name, {'stocks':stocks})
+			else:
+				pass
+		else:
+			return render(request, 'results.html')
 
 # class Index(View):
 #     def get(self, request):

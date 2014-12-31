@@ -22,7 +22,7 @@ class Portfolio:
         self.current = portfolio
         self.title = portfolio.title
         self.description = portfolio.description
-        self.stocks = models.Holding.objects.filter( portfolio=portfolio )
+        self.stocks = models.Holding.objects.filter( portfolio = portfolio )
 
     create_form = portfolio_form
 
@@ -35,20 +35,24 @@ class Portfolio:
             data[ 'user' ] = User.objects.get( id=user_id )
             data[ 'slug' ] = slugify( data[ 'title' ] )
             data = models.Portfolio.objects.create( **data )
-
             return data
         else:
-
             return False
 
     # notice different naming
     create_holding = holding_form
     
-    @classmethod
-    def add_holding( cls, form, user_id ):
-        pass
+    def add_holding( self, form, user_id ):
+        if form.is_valid():
+            data = form.cleaned_data
+            data[ 'portfolio' ] = self.current
+            data = models.Holding.objects.create( **data )
+            return data
+        else:
+            return False
 
     def by_user_id( self, user_id ):
-        return models.Portfolio.objects.filter( user = User.objects.get( id=user_id ) )
-
+        results =  models.Portfolio.objects.filter( user = User.objects.get( id=user_id ) )
+        print( dir( results))
+        return results
 
