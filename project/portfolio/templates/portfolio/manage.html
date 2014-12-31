@@ -25,7 +25,7 @@
 	{% for stock in portfolio.stocks %}
 	    <li id="{{ stock.id }}"class="list-group-item">{{ stock.shares }} shares of {{ stock.symbol }} @ ${{ stock.price }} 
 	    	 <form action="/" method="get">
-			  <input type="text" name="lname">
+			  <input type="number">
 			  <input type="submit" value="sell">
 			</form> 
 	    </li>
