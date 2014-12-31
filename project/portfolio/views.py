@@ -1,16 +1,14 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from portfolio.models import Portfolio, Holding
+from portfolio.models import Portfolio, Holding, Stock_history, Stocks_Tracked
 from portfolio.forms import portfolio_form, holding_form
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from pprint import pprint as print
 import portfolio.portfolio as p
-
-# print( dir(p.Portfolio) )
+from django.http import HttpResponse
 
 ## nothing about game belongs in this file
-
 class Display_all( View ):
     def get( self, request ):
         if request.user.is_anonymous():
@@ -81,6 +79,12 @@ class Holding_add( View ):
 
             return render( request, 'portfolio/holding_add.html', request.context_dict )
 
+class Holding_update( View ):
+    def post(self,request,slug):
+        portfolio = p.Portfolio(slug)
+        portfolio.remove_holding(request)
+        return redirect("/portfolio/"+slug+"/manage")
+
 # needs to be converted to portfolio.py and template created
 class Edit( View ):
     def get( self, request, slug ):
@@ -102,6 +106,13 @@ class Edit( View ):
         request.context_dict[ 'error' ] = "Please review each field"
         
         return render( request, 'portfolio/create.html', request.context_dict )
+
+class Tracked( View ):
+    def get( self, request ):
+        request.context_dict['tracked'] = Stocks_Tracked.objects.all()
+        
+        return render( request, 'portfolio/tracked.html', request.context_dict )
+
 
 ## not sure form here down
 

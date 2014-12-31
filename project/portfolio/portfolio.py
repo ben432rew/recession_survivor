@@ -53,6 +53,18 @@ class Portfolio:
 
     def by_user_id( self, user_id ):
         results =  models.Portfolio.objects.filter( user = User.objects.get( id=user_id ) )
-        print( dir( results))
         return results
 
+    def remove_holding(self,request):
+        data = request.POST
+        holding = models.Holding.objects.get(id=data['stockid'])
+        if holding.shares < int(data['sellstock']):
+            return False
+        else:
+            print(holding.id)
+            print(holding.shares)
+            holding.shares -= int(data['sellstock'])
+            print(holding.shares)
+            holding.save()
+            return True 
+    
