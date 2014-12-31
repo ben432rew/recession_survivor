@@ -4,10 +4,19 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 # from pprint import pprint as print
 
+# portfolio should have a "value"  of all holdings
+# and it should take a "current_date" and reference the Stocks_history table for pirces
+# there should like "__compute_value" function in the portfolio object 
+
+
+
 class Portfolio:
     current = None
     title = None
     description = None
+    # all the holding price added up
+    value = 0
+
 
     def __init__( self, arg1 ):
         arg1_type = type( arg1 )
@@ -16,13 +25,22 @@ class Portfolio:
 
         elif isinstance( arg1, str ):
             print('string')
-            self.set_current( models.Portfolio.objects.get( slug=arg1 ) )
+            port = models.Portfolio.objects.get( slug=arg1 )
+            self.set_current( port )
+            self.set_value_all_holding( port )
+            print(self.value)
 
     def set_current( self, portfolio ):
         self.current = portfolio
         self.title = portfolio.title
         self.description = portfolio.description
         self.stocks = models.Holding.objects.filter( portfolio = portfolio )
+
+    def set_value_all_holding(self,portfolio):
+        stocks = self.stocks
+        for stock in stocks:
+            self.value += (stock.price * stock.shares)
+
 
     create_form = portfolio_form
 
