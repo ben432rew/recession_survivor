@@ -3,12 +3,16 @@ from django.views.generic import View
 # from portfolio.forms import Stock_list
 from portfolio.models import Portfolio
 from game.models import *
+from game.forms import GameCreateForm
 from django.template import RequestContext
 import datetime
 
 class Index( View ):
-     def get( self, request ):
-     	return render( request, 'game/index.html', request.context_dict )
+	form_class = GameCreateForm()
+
+	def get( self, request):
+		request.context_dict['form'] = self.form_class
+		return render( request, 'game/index.html', request.context_dict )
 
 class CreateView( View ):
 

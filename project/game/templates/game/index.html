@@ -15,14 +15,15 @@
 		<h3>Customize you game here!</h3>
 		<form action = "/game/create/" method = "POST">
 		{% csrf_token %}
-		<label for = 'game_type'>Game Type</label>
+		<!-- <label for = 'game_type'>Game Type</label>
 		<select name = 'game_type'>
 			<option value = 'weekly'>Weekly</option>
 			<option value = 'monthly'>Monthly</option>
 			<option value = 'yearly'>Yearly</option>
 		</select>
 		<label for = 'start_date'>Start Date</label>
-		<input type = "date" name = 'start_date' value = "2000-01-01">
+		<input type = "date" name = 'start_date' value = "2000-01-01"> -->
+		{{form.as_p}}
 		<input type = 'submit' value = 'Start'>
 	</form>
 	</div>
