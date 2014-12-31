@@ -15,9 +15,16 @@
 		{% for track in tracked %}
 		    <li>{{ track.symbol }} | {{ track.name }}, {{ track.from_date }}-{{ track.to_date }}</li>
 		{% empty %}
-		    <li>You do not seem to have any tracks.</li>
+			<li class="well well-sm">
+				To seed the data base do;<br />
+				<code class="panel">./manage.py shell</code><br />
+				then;<br />
+				<code class="panel">import portfolio.seed</code>
+			</li>
 		{% endfor %}
+
 		</ul>
+
 	</div>
 
 </div>
