@@ -1,0 +1,31 @@
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}Tracked stocks - {% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+
+	<div class="panel-heading panel-title">
+		<span class="glyphicon glyphicon-usd"></span>
+		Tracked Stocks
+	</div>
+
+	<div class="panel-body">
+		<ul>
+		{% for track in tracked %}
+		    <li>{{ track.symbol }} | {{ track.name }}, {{ track.from_date }}-{{ track.to_date }}</li>
+		{% empty %}
+			<li class="well well-sm">
+				To seed the data base do;<br />
+				<code class="panel">./manage.py shell</code><br />
+				then;<br />
+				<code class="panel">import portfolio.seed</code>
+			</li>
+		{% endfor %}
+
+		</ul>
+
+	</div>
+
+</div>
+{% endblock %}

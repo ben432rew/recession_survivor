@@ -1,6 +1,6 @@
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from portfolio.models import Portfolio, Holding
+from portfolio.models import Portfolio, Holding, Stock_history, Stocks_Tracked
 from portfolio.forms import portfolio_form, holding_form
 from django.utils.text import slugify
 from django.contrib.auth.models import User
@@ -101,6 +101,13 @@ class Edit( View ):
         request.context_dict[ 'error' ] = "Please review each field"
         
         return render( request, 'portfolio/create.html', request.context_dict )
+
+class Tracked( View ):
+    def get( self, request ):
+        request.context_dict['tracked'] = Stocks_Tracked.objects.all()
+        
+        return render( request, 'portfolio/tracked.html', request.context_dict )
+
 
 ## not sure form here down
 

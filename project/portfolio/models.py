@@ -3,22 +3,34 @@ from django.contrib.auth.models import User
 
 class Stock_history( models.Model ):
     symbol = models.CharField( max_length=50 )
-    price = models.FloatField()
     date = models.DateField()
+    open_price = models.FloatField() ## open is reserved word.
+    high = models.FloatField()
+    low = models.FloatField()
+    close = models.FloatField()
+    volume = models.FloatField()
+    dividend = models.FloatField() ## Ex-Dividend
+    split_ratio = models.FloatField( null=True )
+
+class Stocks_Tracked( models.Model ):
+    symbol = models.CharField( max_length=50, unique=True )
+    name = models.CharField( max_length=100 )
+    from_date = models.DateField()
+    to_date = models.DateField()
 
 class Portfolio( models.Model ):
-	title = models.CharField( max_length=200, unique=True  )
-	description = models.TextField()
-	slug = models.CharField( max_length=200 )
-	date_created = models.DateField( auto_now_add=True )
-	user = models.ForeignKey( User )
+    title = models.CharField( max_length=200, unique=True  )
+    description = models.TextField()
+    slug = models.CharField( max_length=200 )
+    date_created = models.DateField( auto_now_add=True )
+    user = models.ForeignKey( User )
 
 class Holding( models.Model ):
-	symbol = models.CharField( max_length=50 )
-	date = models.DateField()
-	price = models.FloatField()
-	shares = models.FloatField()
-	portfolio = models.ForeignKey( Portfolio )
+    symbol = models.CharField( max_length=50 )
+    date = models.DateField()
+    price = models.FloatField()
+    shares = models.FloatField()
+    portfolio = models.ForeignKey( Portfolio )
 
 class snippet( models.Model ):
     stock = models.ForeignKey( Stock_history )

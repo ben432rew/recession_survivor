@@ -1,6 +1,13 @@
 # Portfolio
 This app should work just like a regular portfolio, think what we did with the terminal trader app. Althou this app does not need to be fully built it, it should be. It will make our lives easier and make the game portion go smother.
 
+## DB seed
+
+To see the data base do;
+`./manage.py shell`
+then;
+`import portfolio.seed`
+
 ## Templates
 
 ### Index

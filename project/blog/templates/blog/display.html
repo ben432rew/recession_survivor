@@ -5,22 +5,27 @@
 {% block content %}
 <div class="panel panel-default">
 
-	<div class="panel-heading panel-title">
-		<span class="glyphicon glyphicon glyphicon-pencil glyphicon glyphicon-bullhorn"></span>
-		{{ post.title}} - <i>{{ post.category }}</i>
-			<a class="ajax btn-defualt pull-right">
-				<span class="glyphicon glyphicon glyphicon-pencil"></span>
-				Edit
-			</a>
-	</div>
-
 	<div class="panel-body">
+
+		<h2>{{ post.title}} - <i>{{ post.category }}</i></h2>
+
 		<blockquote>
 			<p>
 				{{ post.content }}
 			</p>
-			<footer>By <b>{{ post.user_id.username }}<b> on {{ post.created_at }} </footer>
 		</blockquote>
+	</div>
+
+	<div class="panel-footer">
+		By 
+		<b>
+			{{ post.user_id.username }}
+		</b> 
+		on {{ post.created_at }}
+		<a class="ajax btn-defualt pull-right">
+			<span class="glyphicon glyphicon glyphicon-pencil"></span>
+			Edit
+		</a>
 	</div>
 
 </div>
