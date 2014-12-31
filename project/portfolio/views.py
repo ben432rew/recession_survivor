@@ -7,10 +7,8 @@ from django.contrib.auth.models import User
 from pprint import pprint as print
 import portfolio.portfolio as p
 
-# print( dir(p.Portfolio) )
 
 ## nothing about game belongs in this file
-
 class Display_all( View ):
     def get( self, request ):
         if request.user.is_anonymous():
