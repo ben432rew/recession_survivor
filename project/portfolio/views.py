@@ -82,7 +82,8 @@ class Holding_update( View ):
     def get(self,request,slug):
         pass
     def post(self,request,slug):
-        print(request.POST)
+        portfolio = p.Portfolio(slug)
+        portfolio.remove_holding(request)
         return HttpResponse("in progress")
 
 # needs to be converted to portfolio.py and template created
