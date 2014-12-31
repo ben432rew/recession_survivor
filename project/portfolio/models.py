@@ -32,7 +32,7 @@ class Holding( models.Model ):
     shares = models.FloatField()
     portfolio = models.ForeignKey( Portfolio )
 
-class snippet( models.Model ):
+class Snippet( models.Model ):
     stock = models.ForeignKey( Stock_history )
     snippet = models.TextField()
     date = models.DateField()

@@ -13,10 +13,11 @@ class Whole_Game(models.Model):
     game_type = models.CharField(max_length=30)
     final_score = models.FloatField(default=0)
     start_date = models.DateField()
-    end_date = models.DateField() 
+    end_date = models.DateField()
+    current_date = models.DateField()
+    current_round = models.IntegerField() 
     # date_played = models.DateField(auto_now=True)
     user = models.ForeignKey(User)
-    round = models.IntegerField()
     portfolio = models.ForeignKey(Portfolio)
 
 
