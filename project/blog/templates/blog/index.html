@@ -4,6 +4,13 @@
 
 {% load partials%}
 {% block content %}
+<div class="col-md-4">
+    {% if saved_game %}
+        <a href="/game" class="btn ajax">Continue Saved Game</a>
+    {% else %}
+        <a href="/game" class="btn ajax">Start a new game</a>
+    {% endif %}
+</div>
 <div class="panel panel-default">
 
 	<div class="panel-heading panel-title">
@@ -14,7 +21,6 @@
 	<div class="panel-body">
 		{% list_posts %}
 	</div>
-
 	<div class="panel-footer">
 		&nbsp;
 		<a href="/blog/create" class="ajax pull-right">
