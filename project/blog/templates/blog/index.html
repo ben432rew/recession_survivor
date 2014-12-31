@@ -9,14 +9,18 @@
 	<div class="panel-heading panel-title">
 		<span class="glyphicon glyphicon-bullhorn"></span>
 		Post's
-		<a href="/blog/create" class="ajax btn-defualt pull-right">
-			<span class="glyphicon glyphicon-pencil"></span>
-			Add blog post
-		</a>
 	</div>
 
 	<div class="panel-body">
 		{% list_posts %}
+	</div>
+
+	<div class="panel-footer">
+		&nbsp;
+		<a href="/blog/create" class="ajax pull-right">
+			<span class="glyphicon glyphicon-pencil"></span>
+			Add blog post
+		</a>
 	</div>
 
 </div>

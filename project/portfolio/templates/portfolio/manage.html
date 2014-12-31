@@ -23,7 +23,14 @@
 
 	<ul class="list-group">
 	{% for stock in portfolio.stocks %}
-	    <li class="list-group-item">{{ stock.shares }} shares of {{ stock.symbol }} @ ${{ stock.price }} </li>
+	    <li id="{{ stock.id }}"class="list-group-item">{{ stock.shares }} shares of {{ stock.symbol }} @ ${{ stock.price }} 
+	    	 <form action="/portfolio/{{ slug }}/manage/update" method="POST">
+	    	 {%csrf_token%}
+			  <input type="number" name="sellstock">
+			  <input type="hidden" name="stockid" value="{{stock.id }}" />
+			  <input type="submit" value="sell">
+			</form> 
+	    </li>
 	{% empty %}
 	    <li class="list-group-item">You do not seem to have any holdings.</li>
 	{% endfor %}
