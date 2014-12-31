@@ -6,11 +6,9 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from pprint import pprint as print
 import portfolio.portfolio as p
-
-# print( dir(p.Portfolio) )
+from django.http import HttpResponse
 
 ## nothing about game belongs in this file
-
 class Display_all( View ):
     def get( self, request ):
         if request.user.is_anonymous():
@@ -79,6 +77,13 @@ class Holding_add( View ):
             request.context_dict[ 'error' ] = 'Invalid?'
 
             return render( request, 'portfolio/holding_add.html', request.context_dict )
+
+class Holding_update( View ):
+    def get(self,request,slug):
+        pass
+    def post(self,request,slug):
+        print(request.POST)
+        return HttpResponse("in progress")
 
 # needs to be converted to portfolio.py and template created
 class Edit( View ):

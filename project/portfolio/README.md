@@ -25,3 +25,5 @@ then;
   
 ### /manage/(slugify title)
   This view allow a user to add and remove stocks from the current portfolio.
+  --user are now able to add stocks
+
