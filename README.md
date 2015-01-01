@@ -40,6 +40,10 @@ ALTER ROLE bears WITH superuser createdb createrole;
 
 exit
 
+Then, to seed the database with the historical stocks:
+
+`psql h_trader < h_trader_portfolio_stock_history.pg`
+
 Should be good to go
 
 ## Input and Outputs("v-" is a validation marker)
