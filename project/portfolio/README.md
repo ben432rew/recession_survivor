@@ -27,3 +27,15 @@ then;
   This view allow a user to add and remove stocks from the current portfolio.
   --user are now able to add stocks
 
+
+### SQL Dump
+
+To make a SQL file of that table:
+
+`pg_dump h_trader -t portfolio_stock_history > h_trader_portfolio_stock_history.pg`
+
+and
+
+`psql h_trader < h_trader_portfolio_stock_history.pg`
+
+to import it.
