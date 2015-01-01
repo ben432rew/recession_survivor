@@ -1,23 +1,17 @@
 Historical Trader
 ==================
-##Basic Functionality
-Year is 2008, player starts with $10,000
+##The Game:
+Once a user signs up, they are able to start a game.
 
-Plays 12 Rounds
+At the beginning of the game, they choose the amount of money they are to build an initial portfolio with.
 
-Every round shown how their stocks changed, user given choice of buying or selling stocks or just continuing with same portfolio
+They also choose the timeframe for the game: From what date to what date, and how often the game rounds happen (weekly, monthly, or yearly).
 
-End of year all stocks are sold, display final balance
+**Then the game begins.**
 
+Each round, the user can look up the new stock prices for that day in history, and can choose to buy or sell shares.
 
-##Feature Upgrades
-Add more years to be available to play (Great Depression?)
-
-Every round, should be shown actual financial articles related to the stock they purchased from the prior month
-
-Displaying trend of what happend to the stocks user actually bought
-
-Different amounts of starting money
+At the end of the last round, all of the user's shares are sold and their final score is their total cash balance they have.
 
 
 ##Setup instructions
