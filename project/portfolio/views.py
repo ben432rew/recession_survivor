@@ -41,6 +41,7 @@ class Create( View ):
         
         return render( request, 'portfolio/create.html', request.context_dict )
 
+
 class Manage( View ):
     def get( self, request, slug ):
         request.context_dict[ 'portfolio' ] = p.Portfolio( slug )

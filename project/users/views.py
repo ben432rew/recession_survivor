@@ -1,6 +1,6 @@
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, AnonymousUser
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm
 from django.shortcuts import render, redirect
 from portfolio.models import Portfolio
 from django.views.generic import View
@@ -15,7 +15,7 @@ class Index(View):
 
             return render( request, 'users/index.html', request.context_dict )
         else:
-            return redirect('/users/welcome')
+            return redirect('/blog')
 
 
 class Signup(View):
@@ -42,7 +42,7 @@ class Login(View):
         if form.is_valid():
             login(request, form.get_user())
             
-            return redirect('/users/welcome')
+            return redirect('/blog')
         else:
             request.context_dict[ 'create_form' ] = UserCreationForm()
             request.context_dict[ 'login_form' ] = form
@@ -55,7 +55,7 @@ class Logout(View):
         return redirect( '/')
 
 
-class Welcome(View):
+class Profile(View):
     def get(self, request):
         if request.user.is_anonymous():
             return redirect( '/')
@@ -64,17 +64,17 @@ class Welcome(View):
             request.context_dict['saved_game'] = True if len( request.context_dict['game'] ) > 0 else False
             request.context_dict['scores'] = Whole_Game.objects.all().order_by('final_score')[:9]
             request.context_dict['form'] = PasswordChangeForm(request.user)
-            return render( request, 'users/welcome.html', request.context_dict)
+            return render( request, 'users/profile.html', request.context_dict)
 
 
 class ChangePass(View):
     def post(self, request):
         user = authenticate(username=request.user.username, password=request.POST["old_password"])
         if request.POST['new_password1'] != request.POST['new_password2']:
-            return redirect ('/users/welcome/?error={}'.format("new passwords don't match"))
+            return redirect ('/users/profile/?error={}'.format("new passwords don't match"))
         if user is not None:
             user.set_password(request.POST['new_password1'])
             user.save()
-            return redirect ('/users/welcome')
+            return redirect ('/users/profile')
         else:
-            return redirect ('/users/welcome/?error={}'.format("incorrect password"))
+            return redirect ('/users/profile/?error={}'.format("incorrect password"))

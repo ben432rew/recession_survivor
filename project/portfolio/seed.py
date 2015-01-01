@@ -1,5 +1,5 @@
 import requests
-from portfolio.models import Stock_history, Stocks_Tracked
+from models import Stock_history, Stocks_Tracked
 from pprint import pprint
 
 symbols = [ 'KWR','GOOG', 'MSFT', 'FB', 'YHOO', 'ORCL', 'IBM', 'AAPL', 'BBY',
