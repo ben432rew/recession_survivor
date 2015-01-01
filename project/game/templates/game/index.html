@@ -20,11 +20,24 @@
 				<input type = 'text' name = 'game_name'>
 			</p>
 			<p>
+				<label for = 'initial_balance'>Initial Balance</label>
+				<input type = 'number' name = 'initial_balance'>
+			</p>
+			<p>
 				<label for = 'game_type'>Game Type</label>
 				<select name = 'game_type'>
 					<option value = 'weekly'>Weekly</option>
 					<option value = 'monthly'>Monhthly</option>
 					<option value = 'yearly'>Yearly</option>
+				</select>
+			</p>
+			<p>
+				<label for = 'portfolio'>Portfolio</label>
+				<select name = 'portfolio'>
+						<option value = 'new_portfolio'>New Portfolio</option>
+					{% for portfolio in portfolios %}
+						<option value = '{{portfolio.slug}}'>{{portfolio.title}}</option>
+					{% endfor %}
 				</select>
 			</p>
 			<p>

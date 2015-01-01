@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.generic import View
 # from portfolio.forms import Stock_list
+from django.utils.text import slugify
 from portfolio.models import *
 from game.models import *
 from game.forms import GameCreateForm
@@ -11,7 +12,9 @@ class Index( View ):
 	form_class = GameCreateForm()
 
 	def get( self, request):
-		return render( request, 'game/index.html', { 'form' : self.form_class} )
+		user = User.objects.get(id=request.user.id)
+		portfolios = Portfolio.objects.filter(user=user) 
+		return render( request, 'game/index.html', { 'form' : self.form_class, 'portfolios':portfolios} )
 
 class CreateView( View ):
 
@@ -22,14 +25,20 @@ class CreateView( View ):
 		request.session['game_type'] = request.POST['game_type']
 		request.session['game_name'] = request.POST['game_name']
 		user = User.objects.get(id=request.user.id)
-		Portfolio.objects.create(user=user, title=request.session['game_name'], description=request.session['game_name'])
-		portfolio = Portfolio.objects.last()
-		request.session['portfolio_id'] = portfolio.id
+		if request.POST['portfolio'] == 'new_portfolio':
+			Portfolio.objects.create(user=user, title=request.session['game_name'], description=request.session['game_name'], slug=slugify(request.POST['game_name']))
+			portfolio = Portfolio.objects.last()
+			request.session['portfolio_id'] = portfolio.id
+			request.session['slug'] = portfolio.slug
+		else:
+			portfolio = Portfolio.objects.get(user=user, slug=request.POST['portfolio'])
+			request.session['portfolio_id'] = portfolio.id
+			request.session['slug'] = portfolio.slug
 		start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
 		time = datetime.timedelta(days=28)
 		end = start + time
 		request.session['end_date'] = end
-		Whole_Game.objects.create(user=user, game_type=request.session['game_type'], name=request.session['game_name'], start_date=request.session['start_date'], end_date=request.session['end_date'], current_date=request.session['start_date'], current_round=0, portfolio=portfolio)
+		Whole_Game.objects.create(user=user, balance=request.POST['initial_balance'], initial_balance=request.POST['initial_balance'], game_type=request.session['game_type'], name=request.session['game_name'], start_date=request.session['start_date'], end_date=request.session['end_date'], current_date=request.session['start_date'], current_round=0, portfolio=portfolio)
 		game = Whole_Game.objects.last()
 		request.session['game_id'] = game.id
 		if request.session['game_type'] == 'weekly':
@@ -58,7 +67,8 @@ class RoundView( View ):
 				request.session['current_date'] = str( end )
 				stocks = Stock_history.objects.filter(date__range=[search_start, end])
 				request.session['add'] = True
-				return render(request, self.template_name, {'stocks':stocks})
+				game = Whole_Game.objects.get(id=request.session['game_id'])
+				return render(request, self.template_name, {'stocks':stocks, 'game':game})
 			elif request.session['game_type'] == 'monthly':
 				days = request.session['round']*31
 				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
@@ -69,7 +79,8 @@ class RoundView( View ):
 				request.session['current_date'] = end
 				stocks = Stock.objects.filter(date__range=[search_start, end])
 				request.session['add'] = True
-				return render(request, self.template_name, {'stocks':stocks})
+				game = Whole_Game.objects.get(id=request.session['game_id'])
+				return render(request, self.template_name, {'stocks':stocks, 'game':game})
 			elif request.session['game_type'] == 'yearly':
 				days = request.session['round']*365
 				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
@@ -80,7 +91,8 @@ class RoundView( View ):
 				request.session['current_date'] = end
 				stocks = Stock.objects.filter(date__range=[search_start, end])
 				request.session['add'] = True
-				return render(request, self.template_name, {'stocks':stocks})
+				game = Whole_Game.objects.get(id=request.session['game_id'])
+				return render(request, self.template_name, {'stocks':stocks, 'game':game})
 			else:
 				pass
 		elif request.session['round'] < 12 and request.session['add'] == False:
@@ -94,7 +106,8 @@ class RoundView( View ):
 				request.session['current_date'] = end
 				stocks = Stock.objects.filter(date__range=[search_start, end])
 				request.session['add'] = True
-				return render(request, self.template_name, {'stocks':stocks})
+				game = Whole_Game.objects.get(id=request.session['game_id'])
+				return render(request, self.template_name, {'stocks':stocks, 'game':game})
 			elif request.session['game_type'] == 'monthly':
 				days = request.session['round']*31
 				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
@@ -105,7 +118,8 @@ class RoundView( View ):
 				request.session['current_date'] = end
 				stocks = Stock.objects.filter(date__range=[search_start, end])
 				request.session['add'] = True
-				return render(request, self.template_name, {'stocks':stocks})
+				game = Whole_Game.objects.get(id=request.session['game_id'])
+				return render(request, self.template_name, {'stocks':stocks, 'game':game})
 			elif request.session['game_type'] == 'yearly':
 				days = request.session['round']*365
 				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
@@ -116,7 +130,8 @@ class RoundView( View ):
 				request.session['current_date'] = end
 				stocks = Stock.objects.filter(date__range=[search_start, end])
 				request.session['add'] = True
-				return render(request, self.template_name, {'stocks':stocks})
+				game = Whole_Game.objects.get(id=request.session['game_id'])
+				return render(request, self.template_name, {'stocks':stocks, 'game':game})
 			else:
 				pass
 		else:

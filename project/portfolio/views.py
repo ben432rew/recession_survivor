@@ -1,4 +1,5 @@
 from django.views.generic import View
+from game.models import *
 from django.shortcuts import render, redirect
 from portfolio.models import Portfolio, Holding, Stock_history, Stocks_Tracked
 from portfolio.forms import portfolio_form, holding_form
@@ -55,7 +56,8 @@ class Holding_add( View ):
         request.context_dict[ 'portfolio' ] = p.Portfolio( slug )
         request.context_dict[ 'slug' ] = slug
         request.context_dict[ 'form' ] = p.Portfolio.create_holding()
-        
+        current = request.session['current_date']
+        stocks = Stock_history.objects.filter(date=current)
         return render( request, 'portfolio/holding_add.html', request.context_dict )
 
     def post( self, request, slug ):

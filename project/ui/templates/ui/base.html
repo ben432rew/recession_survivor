@@ -125,13 +125,20 @@
 						Game Panel
 					</div>
 
+							{% if 'slug' in request.session %}
 					<div class="panel-body">
 						<ul>
 							<li><a href = "/game/round/stats/">Current Round Statistics</a></li>
-							<li><a href = "/game/round/portfolio/">Current Round Portfolio</a></li>
+							<li><a href = "/portfolio/{{request.session.slug}}/manage/">Current Round Portfolio Stats</a>
+								<ul>
+									<a href = "/portfolio/{{request.session.slug}}/manage/add/"><li>Buy Stocks</li></a>
+									<a href = "/portfolio/{{request.session.slug}}/manage/update/"><li>Sell Stocks</li></a>
+								</ul>
+							</li>
 							<li><a href = "/game/find/">Load a saved game</a></li>
 						</ul>
 					</div>
+					{%endif%}
 
 				</div>
 			</div>
