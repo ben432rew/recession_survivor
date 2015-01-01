@@ -18,6 +18,7 @@ class CreateView( View ):
 	def post(self, request):
 		print('went create')
 		request.session['start_date'] = request.POST['start_date']
+		request.session['current_date'] = request.POST['start_date']
 		request.session['game_type'] = request.POST['game_type']
 		request.session['game_name'] = request.POST['game_name']
 		user = User.objects.get(id=request.user.id)
@@ -65,7 +66,7 @@ class RoundView( View ):
 				end = start + time
 				search_start = end - datetime.timedelta(days=31)
 				request.session['search_start'] = search_start
-				request.session['current_point'] = end
+				request.session['current_date'] = end
 				stocks = Stock.objects.filter(date__range=[search_start, end])
 				request.session['add'] = True
 				return render(request, self.template_name, {'stocks':stocks})
@@ -76,7 +77,7 @@ class RoundView( View ):
 				end = start + time
 				search_start = end - datetime.timedelta(days=365)
 				request.session['search_start'] = search_start
-				request.session['current_point'] = end
+				request.session['current_date'] = end
 				stocks = Stock.objects.filter(date__range=[search_start, end])
 				request.session['add'] = True
 				return render(request, self.template_name, {'stocks':stocks})
@@ -90,7 +91,7 @@ class RoundView( View ):
 				end = start + time
 				search_start = end - datetime.timedelta(days=7)
 				request.session['search_start'] = search_start
-				request.session['current_point'] = end
+				request.session['current_date'] = end
 				stocks = Stock.objects.filter(date__range=[search_start, end])
 				request.session['add'] = True
 				return render(request, self.template_name, {'stocks':stocks})
@@ -101,7 +102,7 @@ class RoundView( View ):
 				end = start + time
 				search_start = end - datetime.timedelta(days=31)
 				request.session['search_start'] = search_start
-				request.session['current_point'] = end
+				request.session['current_date'] = end
 				stocks = Stock.objects.filter(date__range=[search_start, end])
 				request.session['add'] = True
 				return render(request, self.template_name, {'stocks':stocks})
@@ -112,7 +113,7 @@ class RoundView( View ):
 				end = start + time
 				search_start = end - datetime.timedelta(days=365)
 				request.session['search_start'] = search_start
-				request.session['current_point'] = end
+				request.session['current_date'] = end
 				stocks = Stock.objects.filter(date__range=[search_start, end])
 				request.session['add'] = True
 				return render(request, self.template_name, {'stocks':stocks})
@@ -148,7 +149,7 @@ class StatsView( View ):
 			end = start + time
 			search_start = end - datetime.timedelta(days=31)
 			request.session['search_start'] = search_start
-			request.session['current_point'] = end
+			request.session['current_date'] = end
 			stocks = Stock.objects.filter(date__range=[search_start, end])
 			return render(request, self.template_name, {'stocks':stocks})
 		elif request.session['game_type'] == 'yearly':
@@ -158,7 +159,7 @@ class StatsView( View ):
 			end = start + time
 			search_start = end - datetime.timedelta(days=365)
 			request.session['search_start'] = search_start
-			request.session['current_point'] = end
+			request.session['current_date'] = end
 			stocks = Stock.objects.filter(date__range=[search_start, end])
 			return render(request, self.template_name, {'stocks':stocks})
 		else:
@@ -168,4 +169,26 @@ class PortfolioView( View ):
 	template_name = 'game/portfolio.html'
 
 	def get(self, request):
+		portfolio = Portfolio.objects.get(id=request.session['portfolio_id'])
+		holdings = Holding.objects.filter(portfolio=portfolio)
+		if holdings:
+			stocks = Stock_history.objects.filter(date__range=[request.session['start_date'], request.session['current_date']])
+			return render(request, self.template_name, {'holdings':holdings, 'stocks':stocks})
+		else:
+			stocks = Stock_history.objects.filter(date__range=[request.session['start_date'], request.session['current_date']])
+			return render(request, self.template_name, {stocks:'stocks'})
+
+class BuyView( View ):
+	template_name = 'game/buy.html'
+
+	def get(self, request):
+		stocks = Stock_history.objects.filter(date=request.session['current_date'])
+		game = Whole_Game.objects.get(id=request.session['game_id'])
+		portfolio = Portfolio.objects.get(id=request.session['portfolio_id'])
+		print('went')
+		return render(request, self.template_name, {'stocks':stocks, 'game':game, 'portfolio':portfolio})
+
+class CheckoutView( View ):
+
+	def post(self, request):
 		pass
