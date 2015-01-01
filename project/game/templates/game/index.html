@@ -2,8 +2,6 @@
 
 {% block title %}Game - {% endblock %}
 
-{% block header %}{% endblock %}
-
 {% block content %}
     {% load staticfiles %}
     {% load ui.bootstrap %}
@@ -24,7 +22,7 @@
 			</p>
 			<p>
 				<label for = 'initial_balance'>Initial Balance</label>
-				<input type = 'number' name = 'initial_balance'>
+				<input type = 'number' name = 'initial_balance' value = '10000'>
 			</p>
 			<p>
 				<label for = 'game_type'>Game Type</label>
