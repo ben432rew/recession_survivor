@@ -1,10 +1,10 @@
 import requests
-from models import Stock_history, Stocks_Tracked
+from portfolio.models import Stock_history, Stocks_Tracked
 from pprint import pprint
 
 symbols = [ 'KWR','GOOG', 'GOOGL', 'MSFT', 'FB', 'YHOO', 'ORCL', 'IBM', 'AAPL', 'BBY',
     'AMZN', 'GE', 'XOM', 'CVX', 'C', 'ED', 'CL', 'WSM', 'PG', 'K', 'HSY', 'DIS',
-    'COH', 'ALL', 'GIS', 'CAG', 'KO', 'PEP', 'M', 'WHR', 'MKC', 'NKE', 'KWR',
+    'COH', 'ALL', 'GIS', 'CAG', 'KO', 'PEP', 'M', 'WHR', 'MKC', 'NKE',
     'SJM', 'WFM', 'AEO', 'RL', 'HD', 'GPS', 'UA', 'CSCO', 'BBBY', 'GM', 'F', 
     'BAC', 'WMT', 'COST', 'JNJ', 'MET', 'VZ', 'T' ]
 

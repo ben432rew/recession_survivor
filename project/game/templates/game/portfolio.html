@@ -1,0 +1,40 @@
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}{{ portfolio.title }} - {% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+
+	<div class="panel-heading panel-title">
+		<span class="glyphicon glyphicon-usd"></span>
+		{{ portfolio.title }}
+		<a href="/game/round/portfolio/buy/" class="ajax btn-defualt pull-right">
+			<span class="glyphicon glyphicon-pencil"></span>
+			Add Holding
+		</a>
+	</div>
+
+	<div class="panel-body">
+		<p>
+			{{ portfolio.description }}
+		</p>
+
+	</div>
+
+	<ul class="list-group">
+	{% for stock in stocks %}
+	    <li id="{{ stock.id }}"class="list-group-item">{{ stock.shares }} shares of {{ stock.symbol }} @ ${{ stock.price }} 
+	    	 <form action="/portfolio/{{ slug }}/manage/update" method="POST">
+	    	 {%csrf_token%}
+			  <input type="number" name="sellstock">
+			  <input type="hidden" name="stockid" value="{{stock.id }}" />
+			  <input type="submit" value="sell">
+			</form> 
+	    </li>
+	{% empty %}
+	    <li class="list-group-item">You do not seem to have any holdings.</li>
+	{% endfor %}
+	</ul>
+
+</div>
+{% endblock %}
