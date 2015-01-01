@@ -2,6 +2,7 @@ import portfolio.models as models
 from portfolio.forms import portfolio_form, holding_form
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+import datetime
 # from pprint import pprint as print
 
 # portfolio should have a "value"  of all holdings
@@ -60,10 +61,17 @@ class Portfolio:
     # notice different naming
     create_holding = holding_form
     
-    def add_holding( self, form, user_id ):
+    def add_holding( self, form, user_id, request ):
         if form.is_valid():
             data = form.cleaned_data
             data[ 'portfolio' ] = self.current
+            print(data, 'data')
+            print(request.POST)
+            data[ 'shares' ] = request.POST['shares']
+            data[ 'date' ] = datetime.datetime.strptime(request.POST['date'][0:10],"%Y-%m-%d")
+            info = str.split(request.POST['stock'], '-')
+            data[ 'symbol' ] = info[0]
+            data[ 'price' ] = float(info[1])
             data = models.Holding.objects.create( **data )
             return data
         else:

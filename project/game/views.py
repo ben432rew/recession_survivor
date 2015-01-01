@@ -38,7 +38,7 @@ class CreateView( View ):
 		time = datetime.timedelta(days=28)
 		end = start + time
 		request.session['end_date'] = end
-		Whole_Game.objects.create(user=user, balance=request.POST['initial_balance'], initial_balance=request.POST['initial_balance'], game_type=request.session['game_type'], name=request.session['game_name'], start_date=request.session['start_date'], end_date=request.session['end_date'], current_date=request.session['start_date'], current_round=0, portfolio=portfolio)
+		Whole_Game.objects.create(user=user, balance=request.POST['initial_balance'], game_type=request.session['game_type'], name=request.session['game_name'], start_date=request.session['start_date'], end_date=request.session['end_date'], current_date=request.session['start_date'], current_round=0, portfolio=portfolio)
 		game = Whole_Game.objects.last()
 		request.session['game_id'] = game.id
 		if request.session['game_type'] == 'weekly':
