@@ -10,21 +10,45 @@
 		<span class="glyphicon glyphicon-warning-sign"></span>
 		Alert
 	</div>
-
 	<div class="panel-body">
-		<h3>Customize you game here!</h3>
-		<form action = "/game/create/" method = "POST">
-		{% csrf_token %}
-		<label for = 'game_type'>Game Type</label>
-		<select name = 'game_type'>
-			<option value = 'weekly'>Weekly</option>
-			<option value = 'monthly'>Monthly</option>
-			<option value = 'yearly'>Yearly</option>
-		</select>
-		<label for = 'start_date'>Start Date</label>
-		<input type = "date" name = 'start_date' value = "2000-01-01">
-		<input type = 'submit' value = 'Start'>
-	</form>
+		<div class = 'game_form'>
+			<h3>Customize you game here!</h3>
+			<form action = "/game/create/" method = "POST">
+			{% csrf_token %}
+			<p>
+				<label for = 'game_name'>Game Name</label>
+				<input type = 'text' name = 'game_name'>
+			</p>
+			<p>
+				<label for = 'initial_balance'>Initial Balance</label>
+				<input type = 'number' name = 'initial_balance'>
+			</p>
+			<p>
+				<label for = 'game_type'>Game Type</label>
+				<select name = 'game_type'>
+					<option value = 'weekly'>Weekly</option>
+					<option value = 'monthly'>Monhthly</option>
+					<option value = 'yearly'>Yearly</option>
+				</select>
+			</p>
+			<p>
+				<label for = 'portfolio'>Portfolio</label>
+				<select name = 'portfolio'>
+						<option value = 'new_portfolio'>New Portfolio</option>
+					{% for portfolio in portfolios %}
+						<option value = '{{portfolio.slug}}'>{{portfolio.title}}</option>
+					{% endfor %}
+				</select>
+			</p>
+			<p>
+				<label for = 'start_date'>Start Date</label>
+				<input type = 'date' name = 'start_date' value = '2000-01-01'>
+			</p>
+			<p>
+			<input type = 'submit' value = 'Start'>
+			</p>
+			</form>
+		</div>
 	</div>
 
 </div>
