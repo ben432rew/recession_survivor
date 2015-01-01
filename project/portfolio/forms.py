@@ -14,11 +14,7 @@ class portfolio_form( ModelForm ):
 class holding_form( ModelForm ):
 	class Meta:
 		model = Holding
-		fields = ( 'symbol', 'price', 'shares', 'date' )
-		widgets = {
-            'date': DateInput()
-        }
-
+		fields = ( 'shares', )
 
 # class Portfolio(ModelForm):
 # 	# how do i get the current user id to get all their portfolios

@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Stock',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('symbol', models.CharField(max_length=50)),
                 ('price', models.FloatField()),
                 ('date', models.DateField()),
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Transaction',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('symbol', models.CharField(max_length=50)),
                 ('number_of_shares', models.IntegerField()),
                 ('date_created', models.DateField(auto_now_add=True)),
@@ -43,9 +43,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Whole_Game',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('game_type', models.CharField(max_length=30)),
                 ('name', models.CharField(max_length=30)),
+                ('initial_balance', models.FloatField(default=10000)),
                 ('balance', models.FloatField(default=10000)),
                 ('final_score', models.FloatField(default=0)),
                 ('start_date', models.DateField()),
