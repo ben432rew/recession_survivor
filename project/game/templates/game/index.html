@@ -3,17 +3,14 @@
 {% block title %}Game - {% endblock %}
 
 {% block content %}
-    {% load staticfiles %}
-    {% load ui.bootstrap %}
 <div class="panel panel-default">
 
 	<div class="panel-heading panel-title">
 		<span class="glyphicon glyphicon-warning-sign"></span>
-		Alert
+		Customize your game here!
 	</div>
 	<div class="panel-body">
 		<div class = 'game_form'>
-			<h3>Customize you game here!</h3>
 			<form action = "/game/create/" method = "POST">
 			{% csrf_token %}
 			<p>
