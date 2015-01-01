@@ -81,8 +81,11 @@ class Portfolio:
         else:
             print(holding.id)
             print(holding.shares)
+            self.clear_zeros_shares()
             holding.shares -= int(data['sellstock'])
             print(holding.shares)
             holding.save()
-            return True 
-    
+            return True
+
+    def clear_zeros_shares(self):
+        models.Holding.objects.filter(shares=0).delete()
