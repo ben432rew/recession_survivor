@@ -1,9 +1,12 @@
 {% extends base_template|default:"ui/base.html" %}
 
-{% block title %}Blog - {% endblock %}
+{% block title %}Game - {% endblock %}
 
-{% load partials%}
+{% block header %}{% endblock %}
+
 {% block content %}
+    {% load staticfiles %}
+    {% load ui.bootstrap %}
 <div class="panel panel-default">
 
 	<div class="panel-heading panel-title">

@@ -1,12 +1,11 @@
 from django.shortcuts import render,redirect
 from django.views.generic import View
-# from portfolio.forms import Stock_list
 from django.utils.text import slugify
 from portfolio.models import *
 from game.models import *
 from game.forms import GameCreateForm
-from django.template import RequestContext
 import datetime
+
 
 class Index( View ):
 	form_class = GameCreateForm()
@@ -15,6 +14,7 @@ class Index( View ):
 		user = User.objects.get(id=request.user.id)
 		portfolios = Portfolio.objects.filter(user=user) 
 		return render( request, 'game/index.html', { 'form' : self.form_class, 'portfolios':portfolios} )
+
 
 class CreateView( View ):
 
@@ -50,6 +50,7 @@ class CreateView( View ):
 			request.session['add'] = True
 			request.session.set_expiry(300)
 		return redirect('/game/round/')
+
 
 class RoundView( View ):
 	template_name = 'game/round.html'
@@ -137,11 +138,13 @@ class RoundView( View ):
 		else:
 			return render(request, 'results.html')
 
+
 class FindView( View ):
 	template_name = 'game/find.html'
 
 	def get(self, request):
 		pass
+
 
 class StatsView( View ):
 	template_name = 'game/stats.html'
@@ -180,6 +183,7 @@ class StatsView( View ):
 		else:
 			pass
 
+
 class PortfolioView( View ):
 	template_name = 'game/portfolio.html'
 
@@ -197,6 +201,7 @@ class PortfolioView( View ):
 			stocks = Stock_history.objects.filter(date__range=[start, current])
 			return render(request, self.template_name, {stocks:'stocks'})
 
+
 class BuyView( View ):
 	template_name = 'game/buy.html'
 
@@ -207,6 +212,7 @@ class BuyView( View ):
 		game = Whole_Game.objects.get(id=request.session['game_id'])
 		portfolio = Portfolio.objects.get(id=request.session['portfolio_id'])
 		return render(request, self.template_name, {'stocks':stocks, 'game':game, 'portfolio':portfolio})
+
 
 class CheckoutView( View ):
 
