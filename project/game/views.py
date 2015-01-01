@@ -36,8 +36,8 @@ class CreateView( View ):
 			start = str( request.session['start_date'] )
 			request.session['round'] = 0
 			request.session['end_date'] = str( end ) 
-			request.session['start_date_string'] = start[0:10]
-			print(request.session['start_date_string'])
+			request.session['start_date_string'] = str( start )[0:10]
+			request.session['end_date_string'] = str( end )[0:10]
 			request.session['add'] = True
 			request.session.set_expiry(300)
 		return redirect('/game/round/')
@@ -49,14 +49,14 @@ class RoundView( View ):
 		if request.session['round'] < 12 and request.session['add'] == True:
 			request.session['round']+=1
 			if request.session['game_type'] == 'weekly':
-				print(request.session['round'])
 				days = request.session['round']*7
 				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
 				time = datetime.timedelta(days=days)
 				end = start + time
 				search_start = end - datetime.timedelta(days=7)
+				request.session['search_start'] = str( search_start )
+				request.session['current_date'] = str( end )
 				stocks = Stock_history.objects.filter(date__range=[search_start, end])
-				print(stocks)
 				request.session['add'] = True
 				return render(request, self.template_name, {'stocks':stocks})
 			elif request.session['game_type'] == 'monthly':
@@ -172,23 +172,40 @@ class PortfolioView( View ):
 		portfolio = Portfolio.objects.get(id=request.session['portfolio_id'])
 		holdings = Holding.objects.filter(portfolio=portfolio)
 		if holdings:
-			stocks = Stock_history.objects.filter(date__range=[request.session['start_date'], request.session['current_date']])
+		# 	start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+		# 	current = datetime.datetime.strptime(request.session['current_date'],"%Y-%m-%d")
+			stocks = Stock_history.objects.filter(date__range=[request.session['start_date_string'], request.session['end_date_string']])
 			return render(request, self.template_name, {'holdings':holdings, 'stocks':stocks})
 		else:
-			stocks = Stock_history.objects.filter(date__range=[request.session['start_date'], request.session['current_date']])
+			start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+			current = datetime.datetime.strptime(request.session['current_date'][0:10],"%Y-%m-%d")
+			stocks = Stock_history.objects.filter(date__range=[start, current])
 			return render(request, self.template_name, {stocks:'stocks'})
 
 class BuyView( View ):
 	template_name = 'game/buy.html'
 
 	def get(self, request):
-		stocks = Stock_history.objects.filter(date=request.session['current_date'])
+		current = datetime.datetime.strptime(request.session['current_date'][0:10],"%Y-%m-%d")
+		print(current)
+		stocks = Stock_history.objects.filter(date=current)
 		game = Whole_Game.objects.get(id=request.session['game_id'])
 		portfolio = Portfolio.objects.get(id=request.session['portfolio_id'])
-		print('went')
 		return render(request, self.template_name, {'stocks':stocks, 'game':game, 'portfolio':portfolio})
 
 class CheckoutView( View ):
 
 	def post(self, request):
-		pass
+		post = str.split(request.POST['symbol'], '/')
+		symbol = post[0]
+		price = int(post[1])
+		quantity = int(request.POST['quantity'])
+		deduction = price * quantity
+		current = datetime.datetime.strptime(request.session['current_date'][0:10],"%Y-%m-%d")
+		portfolio = Portfolio.objects.get(id=request.session['portfolio_id'])
+		Holding.objects.create(symbol=symbol, date=current, price=price, shares=quantity, portfolio=portfolio)
+		game = Whole_Game.objects.get(id=request.session['game_id'])
+		game.balance -= deduction
+		game.save()
+		return redirect('/game/round/portfolio/')
+

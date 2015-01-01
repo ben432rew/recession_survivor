@@ -12,18 +12,21 @@
 	</div>
 
 	<div class="panel-body">
+		<p>Balance: {{game.balance}}</p>
 		<form action="/game/portfolio/buy/checkout/" method="POST">
 		{% csrf_token %}
 
 		{% boot_form_fields form %}
-		<select name = "ticker">
+		<select name = "symbol">
 			{% for stock in stocks %}
-				<option>{{stock.ticker}} - {{stock.close}}</option>
+				<option value = '{{stock.symbol}}/{{stock.close}}'>{{stock.symbol}} - {{stock.close}}</option>
 			{% endfor %}
 		</select>
+		<label for = 'quantity'>Quantity</label>
+		<input type= 'number' name = 'quantity'>
 		<button class="btn btn-default">
 			<span class="glyphicon glyphicon-share-alt"></span>
-			Save
+			Buy
 		</button>
 		</form>
 	</div>
