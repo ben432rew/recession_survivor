@@ -1,8 +1,5 @@
-Recession Survivor
+Historical Trader
 ==================
-Putting the fun back in recession
----------------------------------
-
 ##Basic Functionality
 Year is 2008, player starts with $10,000
 

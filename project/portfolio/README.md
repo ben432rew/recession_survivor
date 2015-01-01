@@ -3,7 +3,7 @@ This app should work just like a regular portfolio, think what we did with the t
 
 ## DB seed
 
-To see the data base do;
+To seed the data base do;
 `./manage.py shell`
 then;
 `import portfolio.seed`
@@ -30,12 +30,12 @@ then;
 
 ### SQL Dump
 
-To make a SQL file of that table:
+To make a SQL file of the database:
 
-`pg_dump h_trader -t portfolio_stock_history > h_trader_portfolio_stock_history.pg`
+`pg_dump h_trader > h_trader_sql.pg`
 
 and
 
-`psql h_trader < h_trader_portfolio_stock_history.pg`
+`psql h_trader < h_trader_sql.pg`
 
 to import it.
