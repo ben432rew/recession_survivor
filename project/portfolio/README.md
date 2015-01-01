@@ -30,12 +30,12 @@ then;
 
 ### SQL Dump
 
-To make a SQL file of the database:
+To make a SQL file of the historical stocks in the database:
 
-`pg_dump h_trader > h_trader_sql.pg`
+`pg_dump h_trader -t portfolio_stock_history > h_trader_portfolio_stock_history.pg`
 
 and
 
-`psql h_trader < h_trader_sql.pg`
+`psql h_trader < h_trader_portfolio_stock_history.pg`
 
 to import it.
