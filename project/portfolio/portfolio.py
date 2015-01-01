@@ -79,12 +79,9 @@ class Portfolio:
         if holding.shares < int(data['sellstock']):
             return False
         else:
-            print(holding.id)
-            print(holding.shares)
-            self.clear_zeros_shares()
             holding.shares -= int(data['sellstock'])
-            print(holding.shares)
             holding.save()
+            self.clear_zeros_shares()
             return True
 
     def clear_zeros_shares(self):
