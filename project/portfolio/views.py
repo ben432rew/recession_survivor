@@ -45,6 +45,7 @@ class Create( View ):
 
 class Manage( View ):
     def get( self, request, slug ):
+        print(request.session)
         request.context_dict[ 'portfolio' ] = p.Portfolio( slug , request.session['current_date'])
         request.context_dict[ 'slug' ] = slug
 
