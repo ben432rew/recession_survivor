@@ -49,11 +49,10 @@ class Portfolio:
         Load all the holdings of current portfolio, total them up, build stocks dict
         '''
         self.stocks = {} # clear old data
-        holdings = models.Holding.objects.filter( portfolio = self.current )
+        holdings = models.Holding.objects.filter( portfolio=self.current )
 
         for hold in holdings:
             stock_hist = models.Stock_history.objects.filter( symbol=hold.symbol, date=self.current_date )[0]
-            stock_data = models.Stocks_Tracked.objects.get( symbol=hold.symbol )
             holding_value = hold.shares*stock_hist.close
             self.value += holding_value
 
@@ -61,14 +60,12 @@ class Portfolio:
                 self.stocks[ hold.symbol ]['shares'] += hold.shares
                 self.stocks[ hold.symbol ]['current_value'] += holding_value
             else:
-                self.stocks[ hold.symbol ] = {
-                    'symbol': hold.symbol,
-                    'name': stock_data.name,
-                    'shares': hold.shares,
-                    'current_price': stock_hist.close,
-                    'current_value': holding_value
-                }
+                stock_data = models.Stocks_Tracked.objects.get( symbol=hold.symbol )
 
+                self.stocks[ hold.symbol ] = stock_hist.__dict__
+                self.stocks[ hold.symbol ]['name'] = stock_data.name
+                self.stocks[ hold.symbol ]['shares'] = hold.shares
+                self.stocks[ hold.symbol ]['current_value'] = holding_value
 
     @classmethod
     def by_user_id( cls, user_id ):
@@ -76,10 +73,11 @@ class Portfolio:
         return all portfolios for passed user_id
         '''
 
-        results =  models.Portfolio.objects.filter( user = User.objects.get( id=user_id ) )
+        results =  models.Portfolio.objects.filter( user=User.objects.get( id=user_id ) )
         return results
 
     create_form = portfolio_form
+
     @classmethod
     def create( cls, form, user_id ):
         '''
@@ -108,6 +106,7 @@ class Portfolio:
             return False
 
     def remove_holding( self, symbol, amount ):
+
         if symbol not in self.stocks:
             return False
 
@@ -116,7 +115,7 @@ class Portfolio:
         if self.stocks[symbol]['shares'] < amount:
             return False
 
-        holdings = models.Holding.objects.filter( portfolio = self.current, symbol=symbol )
+        holdings = models.Holding.objects.filter( portfolio=self.current, symbol=symbol )
 
         for hold in holdings:
             print( 'amount', amount, 'has', hold.shares )
@@ -131,7 +130,4 @@ class Portfolio:
 
         self.__load_stocks() # update stock data
         return True
-
-
-    def clear_zeros_shares(self):
-        models.Holding.objects.filter(shares=0).delete()
+ 
