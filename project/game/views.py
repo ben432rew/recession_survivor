@@ -90,7 +90,7 @@ class RoundView( View ):
 			return render(request, 'results.html')
 
 
-class FindView( View ):
+class SeeSavedGames( View ):
 	template_name = 'game/find.html'
 
 	def get(self, request):
