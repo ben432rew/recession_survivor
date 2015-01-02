@@ -17,7 +17,7 @@
 	<div class="panel-body">
 		<ul>
 		{% for portfolio in portfolios %}
-		    <li><a href="/portfolio/{{ portfolio.slug }}/manage" class="ajax">{{ portfolio.title }}</a> - {{ portfolio.user.username }}</li>
+		    <li><a href="/portfolio/{{ portfolio.slug }}/manage?date=2014-12-30" class="ajax">{{ portfolio.title }}</a> - {{ portfolio.user.username }}</li>
 		{% empty %}
 		    <li>You do not seem to have any portfolios.</li>
 		{% endfor %}

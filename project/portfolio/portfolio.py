@@ -2,8 +2,8 @@ import portfolio.models as models
 from portfolio.forms import portfolio_form, holding_form
 from django.utils.text import slugify
 from django.contrib.auth.models import User
-import datetime
-# from pprint import pprint as print
+from datetime import datetime
+from pprint import pprint
 
 # portfolio should have a "value"  of all holdings
 # and it should take a "current_date" and reference the Stocks_history table for pirces
@@ -17,44 +17,61 @@ class Portfolio:
     description = None
     # all the holding price added up
     value = 0
-    stocks = []
+    stocks = {}
+    holdings = []
 
     def __init__( self, arg1, arg2=False ):
-        arg1_type = type( arg1 )
-        if isinstance( arg1, int ):
-            self.set_current( models.Portfolio.objects.get( id=arg1 ) )
-
-        elif isinstance( arg1, str ):
-            print('string')
-            port = models.Portfolio.objects.get( slug=arg1 )
-            self.set_current( port )
-            self.set_value_all_holding( port )
-            print(self.value)
 
         if arg2:
             self.current_date = arg2
             print( 'arg2', arg2 )
         else:
-            self.current_date = datetime.date.today()
+            self.current_date = datetime.strftime( datetime.today() ,"%Y-%m-%d")
+
+        arg1_type = type( arg1 )
+        if isinstance( arg1, int ):
+            self.set_current( models.Portfolio.objects.get( id=arg1 ) )
+
+        elif isinstance( arg1, str ):
+            port = models.Portfolio.objects.get( slug=arg1 )
+            self.set_current( port )
+            # self.set_value_all_holding( port )
 
     def set_current( self, portfolio ):
         self.current = portfolio
         self.title = portfolio.title
         self.description = portfolio.description
-        self.stocks = self.__load_stocks()
+        self.__load_stocks()
 
     def __load_stocks( self ):
-        stocks = models.Holding.objects.filter( portfolio = portfolio ).distinct()
+        holdings = models.Holding.objects.filter( portfolio = self.current ).distinct()
 
-        for stock in stocks
-            stock = models.Stocks_history.filter( symbol=stock, date=self.current_date )
-            self.stocks.append( stock )
+        for hold in holdings:
+            stock_hist = models.Stock_history.objects.filter( symbol=hold.symbol, date=self.current_date )[0]
+            stock_data = models.Stocks_Tracked.objects.get( symbol=hold.symbol )
+            holding_value = hold.shares*stock_hist.close
+            self.value += holding_value
+
+            if hold.symbol in self.stocks:
+                self.stocks[ hold.symbol ]['shares'] += hold.shares
+                self.stocks[ hold.symbol ]['current_value'] += holding_value
+            else:
+                self.stocks[ hold.symbol ] = {
+                    'symbol': hold.symbol,
+                    'name': stock_data.name,
+                    'shares': hold.shares,
+                    'current_price': stock_hist.close,
+                    'current_value': holding_value
+                }
+
+        for stock in self.stocks:
+            pprint(stock)
 
 
-    def set_value_all_holding( self,portfolio ):
-        stocks = self.stocks
-        for stock in stocks:
-            self.value += (stock.price * stock.shares)
+    # def set_value_all_holding( self, portfolio ):
+    #     stocks = self.stocks
+    #     for stock in stocks:
+    #         self.value += (stock.price * stock.shares)
 
 
     create_form = portfolio_form
@@ -75,17 +92,11 @@ class Portfolio:
     # notice different naming
     create_holding = holding_form
     
-    def add_holding( self, form, user_id, request ):
+    def add_holding( self, form, user_id ):
         if form.is_valid():
             data = form.cleaned_data
-            data[ 'portfolio' ] = self.current
-            print(data, 'data')
-            print(request.POST)
-            data[ 'shares' ] = request.POST['shares']
-            data[ 'date' ] = datetime.datetime.strptime(request.POST['date'][0:10],"%Y-%m-%d")
-            info = str.split(request.POST['stock'], '-')
-            data[ 'symbol' ] = info[0]
-            data[ 'price' ] = float(info[1])
+            # data['date'] =  datetime.strftime( data['date'], "%Y-%m-%d")
+            data['portfolio'] = self.current
             data = models.Holding.objects.create( **data )
             return data
         else:
