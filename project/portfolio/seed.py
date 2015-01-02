@@ -25,7 +25,7 @@ def seed():
 
 
         if response['errors']:
-            print( 'error:', response['errors'])
+            print( 'error:', response['errors'] )
             continue
 
         if not response['data']:
@@ -33,16 +33,17 @@ def seed():
             continue
 
         for row in response['data']:
-            entry = {}
-            entry['symbol'] = symbol
-            entry['date'] = row[0]
-            entry['open_price'] = row[1]
-            entry['high'] = row[2]
-            entry['low'] = row[3]
-            entry['close'] = row[4]
-            entry['volume'] = row[5]
-            entry['dividend'] = row[6]
-            entry['split_ratio'] = row[7]
+            entry = {
+                'symbol': symbol,
+                'date': row[0],
+                'open_price': row[1],
+                'high': row[2],
+                'low': row[3],
+                'close': row[4],
+                'volume': row[5],
+                'dividend': row[6],
+                'split_ratio': row[7]
+            }
 
             try:
                 Stock_history.objects.create( **entry )
@@ -54,5 +55,6 @@ def seed():
             symbol=symbol,
             from_date=response["from_date"],
             to_date=response["to_date"],
-            name=response['name'].split(" (")[0] )
+            name=response['name'].split( " (" )[0]
+        )
 seed()

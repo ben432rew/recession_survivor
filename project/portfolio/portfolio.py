@@ -9,7 +9,7 @@ import datetime
 # and it should take a "current_date" and reference the Stocks_history table for pirces
 # there should like "__compute_value" function in the portfolio object 
 
-
+# today = str( datetime.date.today() )
 
 class Portfolio:
     current = None
@@ -17,9 +17,9 @@ class Portfolio:
     description = None
     # all the holding price added up
     value = 0
+    stocks = []
 
-
-    def __init__( self, arg1 ):
+    def __init__( self, arg1, arg2=False ):
         arg1_type = type( arg1 )
         if isinstance( arg1, int ):
             self.set_current( models.Portfolio.objects.get( id=arg1 ) )
@@ -31,13 +31,27 @@ class Portfolio:
             self.set_value_all_holding( port )
             print(self.value)
 
+        if arg2:
+            self.current_date = arg2
+            print( 'arg2', arg2 )
+        else:
+            self.current_date = datetime.date.today()
+
     def set_current( self, portfolio ):
         self.current = portfolio
         self.title = portfolio.title
         self.description = portfolio.description
-        self.stocks = models.Holding.objects.filter( portfolio = portfolio )
+        self.stocks = self.__load_stocks()
 
-    def set_value_all_holding(self,portfolio):
+    def __load_stocks( self ):
+        stocks = models.Holding.objects.filter( portfolio = portfolio ).distinct()
+
+        for stock in stocks
+            stock = models.Stocks_history.filter( symbol=stock, date=self.current_date )
+            self.stocks.append( stock )
+
+
+    def set_value_all_holding( self,portfolio ):
         stocks = self.stocks
         for stock in stocks:
             self.value += (stock.price * stock.shares)
