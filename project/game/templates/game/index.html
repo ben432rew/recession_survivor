@@ -3,6 +3,9 @@
 {% block title %}Game - {% endblock %}
 
 {% block content %}
+<a href = "/game/find/" class="btn btn-primary ajax">Load a saved game</a>
+<br>
+<br>
 <div class="panel panel-default">
 
 	<div class="panel-heading panel-title">
@@ -16,6 +19,10 @@
 			<p>
 				<label for = 'game_name'>Game Name</label>
 				<input type = 'text' name = 'game_name'>
+			</p>
+			<p>
+				<label for = 'total_rounds'>Total Rounds</label>
+				<input type = 'number' name = 'total_rounds' value="12">
 			</p>
 			<p>
 				<label for = 'initial_balance'>Initial Balance</label>
