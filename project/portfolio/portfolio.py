@@ -12,29 +12,29 @@ from pprint import pprint
 # today = str( datetime.date.today() )
 
 class Portfolio:
-    current = None
-    title = None
-    description = None
-    # all the holding price added up
-    value = 0
-    stocks = {}
-    holdings = []
+    current = None # current portfolio model
+    title = None # current portfolio title
+    description = None # current portfolio title
+    value = 0 # current portfolio title at current date
+    stocks = {} # list of stocks, totaled
+    holdings = [] # list of holdings, model objects
 
     def __init__( self, arg1, arg2=False ):
 
+        ## set date for price eval
         if arg2:
             self.current_date = arg2
             print( 'arg2', arg2 )
         else:
             self.current_date = datetime.strftime( datetime.today() ,"%Y-%m-%d")
 
+        ## get portfolio based on ID or slug(title)
         arg1_type = type( arg1 )
         if isinstance( arg1, int ):
             self.set_current( models.Portfolio.objects.get( id=arg1 ) )
 
         elif isinstance( arg1, str ):
-            port = models.Portfolio.objects.get( slug=arg1 )
-            self.set_current( port )
+            self.set_current( models.Portfolio.objects.get( slug=arg1 ) )
             # self.set_value_all_holding( port )
 
     def set_current( self, portfolio ):
@@ -44,6 +44,10 @@ class Portfolio:
         self.__load_stocks()
 
     def __load_stocks( self ):
+        '''
+        Load all the holdings of current portfolio, total them up, build stocks dict
+        '''
+        self.stocks = {} # clear old data
         holdings = models.Holding.objects.filter( portfolio = self.current ).distinct()
 
         for hold in holdings:
@@ -64,21 +68,22 @@ class Portfolio:
                     'current_value': holding_value
                 }
 
-        for stock in self.stocks:
-            pprint(stock)
-
-
-    # def set_value_all_holding( self, portfolio ):
-    #     stocks = self.stocks
-    #     for stock in stocks:
-    #         self.value += (stock.price * stock.shares)
-
-
-    create_form = portfolio_form
 
     @classmethod
+    def by_user_id( cls, user_id ):
+        '''
+        return all portfolios for passed user_id
+        '''
+
+        results =  models.Portfolio.objects.filter( user = User.objects.get( id=user_id ) )
+        return results
+
+    create_form = portfolio_form
+    @classmethod
     def create( cls, form, user_id ):
-        print
+        '''
+        Create new portfolio from create_form date and user_id argument
+        '''
 
         if form.is_valid():
             data = form.cleaned_data
@@ -95,16 +100,11 @@ class Portfolio:
     def add_holding( self, form, user_id ):
         if form.is_valid():
             data = form.cleaned_data
-            # data['date'] =  datetime.strftime( data['date'], "%Y-%m-%d")
             data['portfolio'] = self.current
             data = models.Holding.objects.create( **data )
             return data
         else:
             return False
-
-    def by_user_id( self, user_id ):
-        results =  models.Portfolio.objects.filter( user = User.objects.get( id=user_id ) )
-        return results
 
     def remove_holding(self,request):
         data = request.POST
