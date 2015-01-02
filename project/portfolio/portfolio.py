@@ -18,15 +18,15 @@ class Portfolio:
     value = 0 # current portfolio title at current date
     stocks = {} # list of stocks, totaled
     holdings = [] # list of holdings, model objects
+    slug = ''
 
     def __init__( self, arg1, arg2=False ):
 
         ## set date for price eval
         if arg2:
             self.current_date = arg2
-            print( 'arg2', arg2 )
         else:
-            self.current_date = datetime.strftime( datetime.today() ,"%Y-%m-%d")
+            self.current_date = '2014-12-30' # datetime.strftime( datetime.today() ,"%Y-%m-%d")
 
         ## get portfolio based on ID or slug(title)
         arg1_type = type( arg1 )
@@ -41,6 +41,7 @@ class Portfolio:
         self.current = portfolio
         self.title = portfolio.title
         self.description = portfolio.description
+        self.slug = portfolio.slug
         self.__load_stocks()
 
     def __load_stocks( self ):
@@ -48,7 +49,7 @@ class Portfolio:
         Load all the holdings of current portfolio, total them up, build stocks dict
         '''
         self.stocks = {} # clear old data
-        holdings = models.Holding.objects.filter( portfolio = self.current ).distinct()
+        holdings = models.Holding.objects.filter( portfolio = self.current )
 
         for hold in holdings:
             stock_hist = models.Stock_history.objects.filter( symbol=hold.symbol, date=self.current_date )[0]
@@ -106,16 +107,31 @@ class Portfolio:
         else:
             return False
 
-    def remove_holding(self,request):
-        data = request.POST
-        holding = models.Holding.objects.get(id=data['stockid'])
-        if holding.shares < int(data['sellstock']):
+    def remove_holding( self, symbol, amount ):
+        if symbol not in self.stocks:
             return False
-        else:
-            holding.shares -= int(data['sellstock'])
-            holding.save()
-            self.clear_zeros_shares()
-            return True
+
+        amount = int( amount )
+        # print( 'amount', amount, 'has', self.stocks[symbol]['shares'] )
+        if self.stocks[symbol]['shares'] < amount:
+            return False
+
+        holdings = models.Holding.objects.filter( portfolio = self.current, symbol=symbol )
+
+        for hold in holdings:
+            print( 'amount', amount, 'has', hold.shares )
+            if amount == 0: 
+                break
+
+            if hold.shares <= amount:
+                hold.delete()
+            else:
+                hold.shares -= amount
+                hold.save()
+
+        self.__load_stocks() # update stock data
+        return True
+
 
     def clear_zeros_shares(self):
         models.Holding.objects.filter(shares=0).delete()

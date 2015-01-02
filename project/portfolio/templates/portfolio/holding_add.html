@@ -12,7 +12,7 @@
 	</div>
 
 	<div class="panel-body">
-		<form action="/portfolio/{{ slug }}/manage/add/" method="POST">
+		<form action="/portfolio/{{ portfolio.slug }}/manage/add" method="POST">
 		{% csrf_token %}
 
 		{% boot_form_fields form %}

@@ -8,7 +8,7 @@
 	<div class="panel-heading panel-title">
 		<span class="glyphicon glyphicon-usd"></span>
 		{{ portfolio.title }}
-		<a href="/portfolio/{{ slug }}/manage/add" class="ajax btn-defualt pull-right">
+		<a href="/portfolio/{{ portfolio.slug }}/manage/add" class="ajax btn-defualt pull-right">
 			<span class="glyphicon glyphicon-pencil"></span>
 			Add Holding
 		</a>
@@ -23,12 +23,15 @@
 
 	<ul class="list-group">
 	{% for stock, value in portfolio.stocks.items %} 
-	    <li class="list-group-item">{{ value.shares }} shares of {{ stock }} @ ${{ value.current_value }} 
-	    	 <form action="/portfolio/{{ slug }}/manage/update" method="POST">
-	    	 {%csrf_token%}
-			  <input type="number" name="sellstock">
-			  <input type="hidden" name="stockid" value="{{stock.id }}" />
-			  <input type="submit" value="sell">
+	    <li class="list-group-item form-group">{{ value.shares }} shares of {{ stock }} @ ${{ value.current_value }} 
+	    	<form action="/portfolio/{{ portfolio.slug }}/manage/remove" method="POST">
+				{%csrf_token%}
+				<input type="hidden" name="symbol" value="{{ stock }}" />
+				<input type="number" name="amount" value="0" />
+				<button class="btn btn-default">
+					<span class="glyphicon glyphicon-share-alt"></span>
+					Remove
+				</button>
 			</form> 
 	    </li>
 	{% empty %}

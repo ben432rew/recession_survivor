@@ -14,7 +14,7 @@ def seed():
     for symbol in symbols:
         print( 'symbol:', symbol, "===========" )
 
-        # todaye = str( datetime.date.today() )
+        # today = str( datetime.date.today() )
 
         if Stocks_Tracked.objects.filter( symbol=symbol ).exists():
             print( "all ready tracked" )
