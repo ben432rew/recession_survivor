@@ -86,8 +86,8 @@ class Portfolio:
 
         if form.is_valid():
             data = form.cleaned_data
-            data[ 'user' ] = User.objects.get( id=user_id )
-            data[ 'slug' ] = slugify( data[ 'title' ] )
+            data['user'] = User.objects.get( id=user_id )
+            data['slug'] = slugify( data[ 'title' ] )
             data = models.Portfolio.objects.create( **data )
             return data
         else:
