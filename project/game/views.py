@@ -43,18 +43,13 @@ class CreateView( View ):
 			request.session['portfolio_id'] = portfolio.id
 			request.session['slug'] = portfolio.slug
 		start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-		time = datetime.timedelta(days=28)
-		end = start + time
-		request.session['end_date'] = end
-		game = Whole_Game.objects.create(user=user, balance=request.POST['initial_balance'], game_type=request.session['game_type'], name=request.session['game_name'], start_date=request.session['start_date'], end_date=request.session['end_date'], current_date=request.session['start_date'], current_round=0, total_rounds=request.session['total_rounds'], portfolio=portfolio)
+		game = Whole_Game.objects.create(user=user, balance=request.POST['initial_balance'], game_type=request.session['game_type'], name=request.session['game_name'], end_date=None, current_date=request.session['start_date'], current_round=0, total_rounds=request.session['total_rounds'], portfolio=portfolio)
 		request.session['game_id'] = game.id
-		# what if the game_type isn't weekly????
+		# what if the game_type isn't weekly?  what is this if statement even doing?
 		if request.session['game_type'] == 'weekly':
 			start = str( request.session['start_date'] )
 			request.session['round'] = 0
-			request.session['end_date'] = str( end ) 
 			request.session['start_date_string'] = str( start )[0:10]
-			request.session['end_date_string'] = str( end )[0:10]
 			request.session['add'] = True
 			request.session.set_expiry(300)
 		return redirect('/game/round/')
@@ -95,11 +90,12 @@ class RoundView( View ):
 			return render(request, 'results.html')
 
 
-class FindView( View ):
+class SeeSavedGames( View ):
 	template_name = 'game/find.html'
 
 	def get(self, request):
-		pass
+		request.context_dict['games'] = Whole_Game.objects.filter(user=request.user, end_date=None)
+		return render(request, self.template_name, request.context_dict)
 
 
 class StatsView( View ):
