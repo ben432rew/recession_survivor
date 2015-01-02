@@ -28,11 +28,9 @@ class Portfolio:
             self.set_value_all_holding( port , date)
 
         elif isinstance( arg1, str ):
-            print('string')
             port = models.Portfolio.objects.get( slug=arg1 )
             self.set_current( port )
             self.set_value_all_holding( port , date)
-            print(self.value)
 
     def set_current( self, portfolio ):
         self.current = portfolio
@@ -44,13 +42,12 @@ class Portfolio:
         stocks = self.stocks
         for stock in stocks:
             self.value += (self.get_price_at_date(date,stock.symbol) * stock.shares)
-        print(self.value)
 
-    def get_price_at_date(self , cdate, stock_symbol):
+    def get_price_at_date(self , date_string, stock_symbol):
         # "2014-12-30" = date_string
-        # b = datetime.strptime( date_string , "%Y-%m-%d")
-        # current_date = b.date()
-        stock_found = Stock_history.objects.filter( date=cdate, symbol=stock_symbol)
+        b = datetime.datetime.strptime( date_string , "%Y-%m-%d")
+        current_date = b.date()
+        stock_found = Stock_history.objects.filter( date=current_date , symbol=stock_symbol)
         return stock_found[0].close
 
 
@@ -58,7 +55,6 @@ class Portfolio:
 
     @classmethod
     def create( cls, form, user_id ):
-        print
 
         if form.is_valid():
             data = form.cleaned_data
@@ -76,8 +72,6 @@ class Portfolio:
         if form.is_valid():
             data = form.cleaned_data
             data[ 'portfolio' ] = self.current
-            print(data, 'data')
-            print(request.POST)
             data[ 'shares' ] = request.POST['shares']
             data[ 'date' ] = datetime.datetime.strptime(request.POST['date'][0:10],"%Y-%m-%d")
             info = str.split(request.POST['stock'], '-')
