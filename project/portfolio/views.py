@@ -44,7 +44,7 @@ class Create( View ):
 
 class Manage( View ):
     def get( self, request, slug ):
-        request.context_dict[ 'portfolio' ] = p.Portfolio( slug )
+        request.context_dict[ 'portfolio' ] = p.Portfolio( slug , request.session['current_date'])
         request.context_dict[ 'slug' ] = slug
 
         return render( request, 'portfolio/manage.html', request.context_dict )
@@ -52,7 +52,8 @@ class Manage( View ):
 # needs to be converted to portfolio.py 
 class Holding_add( View ):
     def get( self, request, slug ):
-        request.context_dict[ 'portfolio' ] = p.Portfolio( slug )
+
+        request.context_dict[ 'portfolio' ] = p.Portfolio( slug , request.session['current_date'])
         request.context_dict[ 'slug' ] = slug
         request.context_dict[ 'form' ] = p.Portfolio.create_holding()
         
@@ -60,7 +61,7 @@ class Holding_add( View ):
 
     def post( self, request, slug ):
         form = holding_form( request.POST )
-        portfolio = p.Portfolio(slug)
+        portfolio = p.Portfolio(slug, request.session['current_date'])
         results = portfolio.add_holding( form, request.user.id )
         if results:
 
@@ -81,7 +82,7 @@ class Holding_add( View ):
 
 class Holding_update( View ):
     def post(self,request,slug):
-        portfolio = p.Portfolio(slug)
+        portfolio = p.Portfolio(slug, request.session['current_date'])
         portfolio.remove_holding(request)
         return redirect("/portfolio/"+slug+"/manage")
 

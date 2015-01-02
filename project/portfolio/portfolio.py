@@ -2,6 +2,7 @@ import portfolio.models as models
 from portfolio.forms import portfolio_form, holding_form
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+from datetime import datetime
 # from pprint import pprint as print
 
 # portfolio should have a "value"  of all holdings
@@ -16,18 +17,21 @@ class Portfolio:
     description = None
     # all the holding price added up
     value = 0
+    current_date = ""
 
 
-    def __init__( self, arg1 ):
+    def __init__( self, arg1 , date):
         arg1_type = type( arg1 )
         if isinstance( arg1, int ):
-            self.set_current( models.Portfolio.objects.get( id=arg1 ) )
+            port = models.Portfolio.objects.get( id=arg1 )
+            self.set_current( port )
+            self.set_value_all_holding( port , date)
 
         elif isinstance( arg1, str ):
             print('string')
             port = models.Portfolio.objects.get( slug=arg1 )
             self.set_current( port )
-            self.set_value_all_holding( port )
+            self.set_value_all_holding( port , date)
             print(self.value)
 
     def set_current( self, portfolio ):
@@ -36,10 +40,18 @@ class Portfolio:
         self.description = portfolio.description
         self.stocks = models.Holding.objects.filter( portfolio = portfolio )
 
-    def set_value_all_holding(self,portfolio):
+    def set_value_all_holding(self,portfolio, date):
         stocks = self.stocks
         for stock in stocks:
-            self.value += (stock.price * stock.shares)
+            self.value += (self.get_price_at_date(date,stock.symbol) * stock.shares)
+        print(self.value)
+
+    def get_price_at_date(self , cdate, stock_symbol):
+        # "2014-12-30" = date_string
+        # b = datetime.strptime( date_string , "%Y-%m-%d")
+        # current_date = b.date()
+        stock_found = Stock_history.objects.filter( date=cdate, symbol=stock_symbol)
+        return stock_found[0].close
 
 
     create_form = portfolio_form
