@@ -27,7 +27,6 @@ class Index( View ):
 class CreateView( View ):
 
 	def post(self, request):
-		request.session['start_date'] = request.POST['start_date']
 		request.session['current_date'] = request.POST['start_date']
 		request.session['game_type'] = request.POST['game_type']
 		request.session['game_name'] = request.POST['game_name']
@@ -42,14 +41,13 @@ class CreateView( View ):
 			portfolio = Portfolio.objects.get(user=user, slug=request.POST['portfolio'])
 			request.session['portfolio_id'] = portfolio.id
 			request.session['slug'] = portfolio.slug
-		start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-		game = Whole_Game.objects.create(user=user, balance=request.POST['initial_balance'], game_type=request.session['game_type'], name=request.session['game_name'], end_date=None, current_date=request.session['start_date'], current_round=0, total_rounds=request.session['total_rounds'], portfolio=portfolio)
+		start = datetime.datetime.strptime(request.POST['start_date'],"%Y-%m-%d")
+		game = Whole_Game.objects.create(user=user, balance=request.POST['initial_balance'], game_type=request.session['game_type'], name=request.session['game_name'], end_date=None, current_date=request.POST['start_date'], current_round=0, total_rounds=request.session['total_rounds'], portfolio=portfolio)
 		request.session['game_id'] = game.id
 		# what if the game_type isn't weekly?  what is this if statement even doing?
 		if request.session['game_type'] == 'weekly':
-			start = str( request.session['start_date'] )
+			start = str( request.POST['start_date'] )
 			request.session['round'] = 0
-			request.session['start_date_string'] = str( start )[0:10]
 			request.session['add'] = True
 			request.session.set_expiry(300)
 		return redirect('/game/round/')
@@ -63,7 +61,7 @@ class RoundView( View ):
 			request.session['round']+=1
 			increment = incrementer(request.session['game_type'])
 			days = request.session['round']*increment
-			start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+			start = datetime.datetime.strptime(request.session['current_date'],"%Y-%m-%d")
 			time = datetime.timedelta(days=increment)
 			end = start + time
 			search_start = end - datetime.timedelta(days=increment)
@@ -76,7 +74,7 @@ class RoundView( View ):
 		elif request.session['round'] < int(request.session["total_rounds"]) and request.session['add'] == False:
 			increment = incrementer(request.session['game_type'])
 			days = request.session['round']*increment
-			start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+			start = datetime.datetime.strptime(request.session['current_date'],"%Y-%m-%d")
 			time = datetime.timedelta(days=days)
 			end = start + time
 			search_start = end - datetime.timedelta(days=increment)
@@ -165,7 +163,7 @@ class BuyView( View ):
 		portfolio = Portfolio.objects.get(id=request.session['portfolio_id'])
 		return render(request, self.template_name, {'stocks':stocks, 'game':game, 'portfolio':portfolio})
 
-
+#is this the view to sell shares from the portfolio?
 class CheckoutView( View ):
 
 	def post(self, request):
