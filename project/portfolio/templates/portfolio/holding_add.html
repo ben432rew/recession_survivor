@@ -12,14 +12,19 @@
 	</div>
 
 	<div class="panel-body">
-		<form action="/portfolio/{{ slug }}/manage/add" method="POST">
+		<form action="/portfolio/{{ slug }}/manage/add/" method="POST">
 		{% csrf_token %}
 
 		{% boot_form_fields form %}
-
+		<select name = 'stock'>
+		{% for stock in stocks %}
+			<option value = '{{stock.symbol}}-{{stock.close}}'>{{stock.symbol}} - {{stock.close}}</option>
+		{% endfor %}
+	</select>
+		<input type = 'hidden' name = 'date' value = "{{request.session.current_date}}"> 
 		<button class="btn btn-default">
 			<span class="glyphicon glyphicon-share-alt"></span>
-			Save
+			Buy
 		</button>
 		</form>
 	</div>

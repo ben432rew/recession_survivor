@@ -1,0 +1,60 @@
+{% extends base_template|default:"ui/base.html" %}
+{% block content %}
+	<h1>Round {{request.session.round}}</h1>
+	<table>
+		<tr>
+			<th>
+			Ticker
+			</th>
+			<th>
+			Date
+			</th>
+			<th>
+			Open
+			</th>
+			<th>
+			High
+			</th>
+			<th>
+			Low
+			</th>
+			<th>
+			Close
+			</th>
+			<th>
+			Volume
+			</th>
+			<th>
+			Dividend
+			</th>
+		</tr>
+		{% for stock in stocks %}
+		<tr>
+			<td>
+				{{stock.symbol}}
+			</td>
+			<td>
+				{{stock.date}}
+			</td>
+			<td>
+				{{stock.open_price}}
+			</td>
+			<td>
+				{{stock.high}}
+			</td>
+			<td>
+				{{stock.low}}
+			</td>
+			<td>
+				{{stock.close}}
+			</td>
+			<td>
+				{{stock.volume}}
+			</td>
+			<td>
+				{{stock.dividend}}
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endblock %}

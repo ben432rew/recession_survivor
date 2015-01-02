@@ -29,10 +29,10 @@ class Holding( models.Model ):
     symbol = models.CharField( max_length=50 )
     date = models.DateField()
     price = models.FloatField()
-    shares = models.FloatField()
+    shares = models.IntegerField()
     portfolio = models.ForeignKey( Portfolio )
 
-class snippet( models.Model ):
+class Snippet( models.Model ):
     stock = models.ForeignKey( Stock_history )
     snippet = models.TextField()
     date = models.DateField()
