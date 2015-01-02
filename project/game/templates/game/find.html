@@ -1,0 +1,19 @@
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}Game - {% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+
+    <div class="panel-heading panel-title">
+        <span class="glyphicon glyphicon-play-circle"></span>
+        Here are your unfinished games:
+    </div>
+    <div class="panel-body">
+        {% for game in games %}
+            <p> {{game.name}} <a href = "#" class="btn btn-default ajax">Resume</a> </p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
