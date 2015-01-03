@@ -1,0 +1,61 @@
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}{{ game.name }} - {% endblock %}
+
+{% block content %}
+{% load ui.bootstrap %}
+<div class="panel panel-default">
+
+	<div class="panel-heading panel-title">
+		<span class="glyphicon glyphicon-usd"></span>
+		{{ game.name }}
+		<a href="/game/round/portfolio/buy/" class="ajax btn-defualt pull-right">
+			<span class="glyphicon glyphicon-pencil"></span>
+			Add Holding
+		</a>
+	</div>
+
+	<div class="panel-body">
+		<form action="/game/{{ game.id }}/manage/add" method="POST">
+			{% csrf_token %}
+
+			{% boot_form_fields game.portfolio.create_holding %}
+
+			<button class="btn btn-default">
+				<span class="glyphicon glyphicon-share-alt"></span>
+				Buy
+			</button>
+		</form>
+	</div>
+
+	<ul class="list-group">
+	{% for stock, value in game.portfolio.stocks.items %} 
+	    <li class="list-group-item">
+	    	{{ value.shares }} shares of {{ value.name }} @ ${{ value.close }} Worth {{ value.current_value }}
+
+	    	<form action="/mange/{{ game_id }}/manage/remove" method="POST" class="form-inline">
+				{%csrf_token%}
+				<input type="hidden" name="symbol" value="{{ stock }}" />
+
+				<div class="form-group">
+					<input type="number" name="amount" value="0" class="form-control input-sm" />
+				</div>
+
+				<button type="submit" class="btn btn-sm btn-danger">
+					<span class="glyphicon glyphicon-share-alt"></span>
+					Remove
+				</button>
+
+			</form>
+	    </li>
+	{% empty %}
+	    <li class="list-group-item">You do not seem to have any holdings.</li>
+	{% endfor %}
+	</ul>
+
+	<div class="panel-footer">
+		Current Cash: ${{ game.balance }}, Portfolio value: $ {{ game.portfolio.value }}
+	</div>
+
+</div>
+{% endblock %}

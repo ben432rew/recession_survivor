@@ -87,21 +87,17 @@ class Portfolio:
     create_form = portfolio_form
 
     @classmethod
-    def create( cls, form, user_id ):
+    def create( cls, data, user_id ):
 
         '''
-        Create new portfolio from create_form date and user_id argument
+        Create new portfolio from create_form data and user_id argument
         '''
 
-        if form.is_valid():
-            data = form.cleaned_data
-            data['user'] = User.objects.get( id=user_id )
-            data['slug'] = slugify( data[ 'title' ] )
-            data = models.Portfolio.objects.create( **data )
+        data['user'] = User.objects.get( id=user_id )
+        data['slug'] = slugify( data[ 'title' ] )
+        data = models.Portfolio.objects.create( **data )
 
-            return data
-        else:
-            return False
+        return data
 
     # notice different naming
     create_holding = holding_form
@@ -115,7 +111,6 @@ class Portfolio:
 
             data['portfolio'] = self.current
             data = models.Holding.objects.create( **data )
-
 
             return value
         else:

@@ -29,9 +29,11 @@ class Create( View ):
 
     def post( self, request ):
         form = Portfolio.create_form( request.POST )
-        results = Portfolio.create( form, request.user.id )
-        if results:
 
+        if form.is_valid():
+            data = form.cleaned_data
+            results = Portfolio.create( data, request.user.id )
+            
             return redirect( '/portfolio/{}/manage'.format( results.slug ) )
 
         request.context_dict[ 'form' ] = form
