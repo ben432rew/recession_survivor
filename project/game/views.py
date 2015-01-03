@@ -30,7 +30,7 @@ class CreateGame( View ):
         request.context_dict['form'] = GameCreateForm()
 
         return render( request, 'game/index.html', request.context_dict )
-#untested:
+
     def post(self, request):
         form = GameCreateForm( request.POST )
         if form.is_valid():
@@ -50,27 +50,25 @@ class CreateGame( View ):
             form_data['portfolio'] = portfolio.id
 
             game = Whole_Game.objects.create( **form_data )
-    #Q. how do we redirect and let the round know which game object we're using? whatever we do will also be needed for the Resume button on the unfinished games page
-    #A. We can pass it a GET query sting of the game ID, and should a page for setting a game up
-
             return redirect( '/game/{}/start'.format( game.id ) )
         else:
             request.context_dict['form'] = form 
             return render( request, 'game/index.html', request.context_dict )
 
-#THIS FUNCTION NEEDS TO BE TOTALLY REDONE
-
+#here game is gotten
 class Start( View ):
     def get( self, request, game_id ):
         game = get_game( game_id )
         request.session['game_id'] = game_id
         return redirect( '/game/{}/manage'.format( game_id ) )
 
+
 class Manage( View ):
     def get( self, request, game_id ):
         request.context_dict['game'] = get_game( game_id )
 
         return render( request, 'game/manage.html', request.context_dict )
+
 
 class Manage_add( View ):
     def post( self, request, game_id ):
@@ -96,6 +94,7 @@ class Manage_add( View ):
 
             return render( request, 'game/manage.html', request.context_dict )
 
+
 class Manage_remove( View ):
     def post( self, request, game_id ):
         game = get_game( game_id )
@@ -111,6 +110,7 @@ class Manage_remove( View ):
         else:
             # add error here, but this should never be called?
             return redirect( '/game/{}/manage'.format( game_id ) )
+
 
 class RoundView( View ):
     template_name = 'game/round.html'
@@ -158,6 +158,7 @@ class UnfinishedGames( View ):
 
     def get(self, request):
         request.context_dict['games'] = Whole_Game.objects.filter(user=request.user, end_date=None)
+        request.context_dict['starturl'] = "/game/{}/start"
         return render(request, self.template_name, request.context_dict)
 
 
@@ -196,50 +197,3 @@ class StatsView( View ):
             return render(request, self.template_name, {'stocks':stocks})
         else:
             pass
-
-
-class PortfolioView( View ):
-    template_name = 'game/portfolio.html'
-
-    def get(self, request):
-        portfolio = Portfolio.objects.get(id=request.session['portfolio_id'])
-        holdings = Holding.objects.filter(portfolio=portfolio)
-        if holdings:
-        #   start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-        #   current = datetime.datetime.strptime(request.session['current_date'],"%Y-%m-%d")
-            stocks = Stock_history.objects.filter(date__range=[request.session['start_date_string'], request.session['end_date_string']])
-            return render(request, self.template_name, {'holdings':holdings, 'stocks':stocks})
-        else:
-            start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-            current = datetime.datetime.strptime(request.session['current_date'][0:10],"%Y-%m-%d")
-            stocks = Stock_history.objects.filter(date__range=[start, current])
-            return render(request, self.template_name, {stocks:'stocks'})
-
-
-class BuyView( View ):
-    template_name = 'game/buy.html'
-
-    def get(self, request):
-        current = datetime.datetime.strptime(request.session['current_date'][0:10],"%Y-%m-%d")
-        stocks = Stock_history.objects.filter(date=current)
-        game = Whole_Game.objects.get(id=request.session['game_id'])
-        portfolio = Portfolio.objects.get(id=request.session['portfolio_id'])
-        return render(request, self.template_name, {'stocks':stocks, 'game':game, 'portfolio':portfolio})
-
-#is this the view to sell shares from the portfolio?
-class CheckoutView( View ):
-
-    def post(self, request):
-        post = str.split(request.POST['symbol'], '/')
-        symbol = post[0]
-        price = int(post[1])
-        quantity = int(request.POST['quantity'])
-        deduction = price * quantity
-        current = datetime.datetime.strptime(request.session['current_date'][0:10],"%Y-%m-%d")
-        portfolio = Portfolio.objects.get(id=request.session['portfolio_id'])
-        Holding.objects.create(symbol=symbol, date=current, price=price, shares=quantity, portfolio=portfolio)
-        game = Whole_Game.objects.get(id=request.session['game_id'])
-        game.balance -= deduction
-        game.save()
-        return redirect('/game/round/portfolio/')
-

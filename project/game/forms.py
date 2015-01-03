@@ -15,5 +15,5 @@ class GameCreateForm( ModelForm ):
             'current_date' : DateInput()
         }
         labels = {
-            'current_date': _('Starting Day of Your Game')
+            'current_date': _('Starting Day of Your Game (use format 9/20/2011)')
         }
