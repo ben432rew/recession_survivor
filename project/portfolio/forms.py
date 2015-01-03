@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django import forms
 from pprint import pprint as print
 
-class DateInput(forms.DateInput):
+class DateInput( forms.DateInput ):
     input_type = 'date'
 
 class portfolio_form( ModelForm ):
@@ -14,7 +14,10 @@ class portfolio_form( ModelForm ):
 class holding_form( ModelForm ):
 	class Meta:
 		model = Holding
-		fields = ( 'shares', )
+		fields = ( 'symbol', 'price', 'shares', 'date' )
+		widgets = {
+            'date': DateInput()
+        }
 
 # class Portfolio(ModelForm):
 # 	# how do i get the current user id to get all their portfolios

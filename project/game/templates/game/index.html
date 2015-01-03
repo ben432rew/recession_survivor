@@ -1,18 +1,19 @@
 {% extends base_template|default:"ui/base.html" %}
 
-{% block title %}Blog - {% endblock %}
+{% block title %}Game - {% endblock %}
 
-{% load partials%}
 {% block content %}
+<a href = "/game/find/" class="btn btn-primary ajax">Load a saved game</a>
+<br>
+<br>
 <div class="panel panel-default">
 
 	<div class="panel-heading panel-title">
-		<span class="glyphicon glyphicon-warning-sign"></span>
-		Alert
+		<span class="glyphicon glyphicon-plane"></span>
+		Customize your game here!
 	</div>
 	<div class="panel-body">
 		<div class = 'game_form'>
-			<h3>Customize you game here!</h3>
 			<form action = "/game/create/" method = "POST">
 			{% csrf_token %}
 			<p>
@@ -20,8 +21,12 @@
 				<input type = 'text' name = 'game_name'>
 			</p>
 			<p>
+				<label for = 'total_rounds'>Total Rounds</label>
+				<input type = 'number' name = 'total_rounds' value="12">
+			</p>
+			<p>
 				<label for = 'initial_balance'>Initial Balance</label>
-				<input type = 'number' name = 'initial_balance'>
+				<input type = 'number' name = 'initial_balance' value = '10000'>
 			</p>
 			<p>
 				<label for = 'game_type'>Game Type</label>

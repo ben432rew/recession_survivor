@@ -62,7 +62,7 @@ class Profile(View):
         else:
             request.context_dict['game'] = Whole_Game.objects.filter(final_score=0)
             request.context_dict['saved_game'] = True if len( request.context_dict['game'] ) > 0 else False
-            request.context_dict['scores'] = Whole_Game.objects.all().order_by('final_score')[:9]
+            request.context_dict['highscores'] = Whole_Game.objects.all().order_by('final_score')[:9]
             request.context_dict['form'] = PasswordChangeForm(request.user)
             return render( request, 'users/profile.html', request.context_dict)
 
