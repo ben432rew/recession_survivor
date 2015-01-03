@@ -21,6 +21,7 @@ class Index( View ):
 	def get( self, request):
 		user = User.objects.get( id=request.user.id )
 		request.context_dict['portfolios'] = Portfolio.objects.filter( user=user )
+		request.context_dict['form'] = GameCreateForm()
 
 		return render( request, 'game/index.html', request.context_dict )
 
@@ -105,15 +106,14 @@ class StatsView( View ):
 
 	def get(self, request):
 		if request.session['game_type'] == 'weekly':
-				print(request.session['round'])
 				days = request.session['round']*7
 				start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
 				time = datetime.timedelta(days=days)
 				end = start + time
 				search_start = end - datetime.timedelta(days=7)
 				stocks = Stock_history.objects.filter(date__range=[search_start, end])
-				print(stocks)
-				return render(request, self.template_name, {'stocks':stocks})
+				game = Whole_Game.objects.get(id=request.session['game_id'])
+				return render(request, self.template_name, {'stocks':stocks, 'game':game})
 		elif request.session['game_type'] == 'monthly':
 			days = request.session['round']*31
 			start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
@@ -161,7 +161,6 @@ class BuyView( View ):
 
 	def get(self, request):
 		current = datetime.datetime.strptime(request.session['current_date'][0:10],"%Y-%m-%d")
-		print(current)
 		stocks = Stock_history.objects.filter(date=current)
 		game = Whole_Game.objects.get(id=request.session['game_id'])
 		portfolio = Portfolio.objects.get(id=request.session['portfolio_id'])
