@@ -98,7 +98,19 @@ class Manage_add( View ):
 
 class Manage_remove( View ):
     def post( self, request, game_id ):
-        pass
+        game = get_game( game_id )
+        symbol = request.POST.get( 'symbol', None )
+        amount = request.POST.get( 'amount', None )
+        results = game.portfolio.remove_holding( symbol, amount )
+
+        if results:
+            game.balance += results
+            game.save( update_fields=["balance"] )
+
+            return redirect( '/game/{}/manage'.format( game_id ) )
+        else:
+            # add error here, but this should never be called?
+            return redirect( '/game/{}/manage'.format( game_id ) )
 
 class RoundView( View ):
     template_name = 'game/round.html'
