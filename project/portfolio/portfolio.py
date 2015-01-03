@@ -27,7 +27,7 @@ class Portfolio:
             self.current_date = self.check_date( arg2 )
         else:
             # as soon as check date works this should be set today.
-            self.current_date = check_date( '2014-12-30' ) # datetime.strftime( datetime.today() ,"%Y-%m-%d")
+            self.current_date = self.check_date( '2014-12-30' ) # datetime.strftime( datetime.today() ,"%Y-%m-%d")
 
         ## get portfolio based on ID or slug(title)
         arg1_type = type( arg1 )
@@ -53,7 +53,12 @@ class Portfolio:
         holdings = models.Holding.objects.filter( portfolio=self.current )
 
         for hold in holdings:
-            stock_hist = models.Stock_history.objects.filter( symbol=hold.symbol, date=self.current_date )[0]
+            pprint( hold.__dict__ )
+            try:
+                stock_hist = models.Stock_history.objects.filter( symbol=hold.symbol )[0]
+            except:
+                continue
+
             holding_value = hold.shares*stock_hist.close
             self.value += holding_value
 
@@ -100,10 +105,16 @@ class Portfolio:
     
     def add_holding( self, form, user_id ):
         if form.is_valid():
+
             data = form.cleaned_data
+
+            value = data['shares']*data['price']
+
             data['portfolio'] = self.current
             data = models.Holding.objects.create( **data )
-            return data
+
+
+            return value
         else:
             return False
 
