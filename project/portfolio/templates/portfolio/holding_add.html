@@ -12,6 +12,9 @@
 	</div>
 
 	<div class="panel-body">
+		{% if errors %}
+	    	{{errors}}
+	    {% endif %}
 		<form action="/portfolio/{{ slug }}/manage/add/" method="POST">
 		{% csrf_token %}
 

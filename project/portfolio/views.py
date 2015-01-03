@@ -63,7 +63,6 @@ class Holding_add( View ):
 
     def post( self, request, slug ):
         form = holding_form( request.POST )
-        print(request.POST)
         portfolio = p.Portfolio(slug)
         results = portfolio.add_holding( form, request.user.id, request )
         if results:
@@ -88,7 +87,7 @@ class Holding_update( View ):
     def post(self,request,slug):
         portfolio = p.Portfolio(slug)
         portfolio.remove_holding(request)
-        return redirect("/portfolio/"+slug+"/manage")
+        return redirect("/portfolio/"+slug+"/manage/")
 
 # needs to be converted to portfolio.py and template created
 class Edit( View ):

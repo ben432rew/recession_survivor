@@ -1,6 +1,7 @@
 import portfolio.models as models
 from portfolio.forms import portfolio_form, holding_form
 from django.utils.text import slugify
+from game.models import Whole_Game
 from django.contrib.auth.models import User
 import datetime
 # from pprint import pprint as print
@@ -25,11 +26,9 @@ class Portfolio:
             self.set_current( models.Portfolio.objects.get( id=arg1 ) )
 
         elif isinstance( arg1, str ):
-            print('string')
             port = models.Portfolio.objects.get( slug=arg1 )
             self.set_current( port )
             self.set_value_all_holding( port )
-            print(self.value)
 
     def set_current( self, portfolio ):
         self.current = portfolio
@@ -47,8 +46,6 @@ class Portfolio:
 
     @classmethod
     def create( cls, form, user_id ):
-        print
-
         if form.is_valid():
             data = form.cleaned_data
             data[ 'user' ] = User.objects.get( id=user_id )
@@ -65,13 +62,14 @@ class Portfolio:
         if form.is_valid():
             data = form.cleaned_data
             data[ 'portfolio' ] = self.current
-            print(data, 'data')
-            print(request.POST)
             data[ 'shares' ] = request.POST['shares']
             data[ 'date' ] = datetime.datetime.strptime(request.POST['date'][0:10],"%Y-%m-%d")
             info = str.split(request.POST['stock'], '-')
             data[ 'symbol' ] = info[0]
             data[ 'price' ] = float(info[1])
+            game =  Whole_Game.objects.get(id=request.session['game_id'])
+            game.balance -= float(data['price']) * int(data['shares'])
+            game.save()
             data = models.Holding.objects.create( **data )
             return data
         else:
@@ -84,11 +82,16 @@ class Portfolio:
     def remove_holding(self,request):
         data = request.POST
         holding = models.Holding.objects.get(id=data['stockid'])
-        if holding.shares < int(data['sellstock']):
+        if holding.shares < int(data['shares']):
             return False
         else:
-            holding.shares -= int(data['sellstock'])
+            holding.shares -= int(data['shares'])
             holding.save()
+            game =  Whole_Game.objects.get(id=request.session['game_id'])
+            print('before', game.balance)
+            game.balance += float(data['price']) * int(data['shares'])
+            print('after', game.balance)
+            game.save()
             self.clear_zeros_shares()
             return True
 

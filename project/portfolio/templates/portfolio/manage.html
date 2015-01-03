@@ -24,11 +24,15 @@
 	<ul class="list-group">
 	{% for stock in portfolio.stocks %}
 	    <li id="{{ stock.id }}"class="list-group-item">{{ stock.shares }} shares of {{ stock.symbol }} @ ${{ stock.price }} 
-	    	 <form action="/portfolio/{{ slug }}/manage/update" method="POST">
+	    	{% if errors %}
+	    		{{errors}}
+	    	{% endif %}
+	    	 <form action="/portfolio/{{ slug }}/manage/update/" method="POST">
 	    	 {%csrf_token%}
-			  <input type="number" name="sellstock">
+			  <input type="number" name="shares">
 			  <input type="hidden" name="stockid" value="{{stock.id }}" />
 			  <input type="submit" value="sell">
+			  <input type='hidden' name='price' value = '{{stock.price}}' />
 			</form> 
 	    </li>
 	{% empty %}
