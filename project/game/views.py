@@ -31,7 +31,7 @@ class CreateGame( View ):
         request.context_dict['form'] = GameCreateForm()
 
         return render( request, 'game/index.html', request.context_dict )
-#untested:
+
     def post(self, request):
         form = GameCreateForm( request.POST )
         if form.is_valid():
