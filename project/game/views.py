@@ -1,9 +1,10 @@
+from portfolio.models import Stock_history, Holding
 from django.shortcuts import render,redirect
+from portfolio.portfolio import Portfolio
 from django.views.generic import View
 from django.utils.text import slugify
-from portfolio.models import *
-from game.models import *
 from game.forms import GameCreateForm
+from game.models import *
 import datetime
 
 
@@ -38,7 +39,7 @@ class CreateGame( View ):
 #how do we redirect and let the round know which game we're sending? whatever we do will also be needed for the Resume button on the unfinished games page
 		return redirect('/game/round/')
 
-
+#THIS FUNCTION NEEDS TO BE TOTALLY REDONE
 class RoundView( View ):
 	template_name = 'game/round.html'
 # the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
