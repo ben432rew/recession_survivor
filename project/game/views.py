@@ -20,23 +20,13 @@ class CreateGame( View ):
 	def get( self, request):
 		request.context_dict['form'] = GameCreateForm()
 		return render( request, 'game/index.html', request.context_dict )
-
+#untested:
 	def post(self, request):
 		form = GameCreateForm(request.POST)
 		user = User.objects.get(id=request.user.id)
-		if port == 'new_portfolio':
-			Portfolio.objects.create(user=user, title=request.session['game_name'], description=request.session['game_name'], slug=slugify(request.POST['game_name']))
-			portfolio = Portfolio.objects.last()
-			request.session['portfolio_id'] = portfolio.id
-			request.session['slug'] = portfolio.slug
-		start = datetime.datetime.strptime(request.POST['start_date'],"%Y-%m-%d")
-		game = Whole_Game.objects.create(user=user, balance=request.POST['initial_balance'], game_type=request.session['game_type'], name=request.session['game_name'], end_date=None, current_date=request.POST['start_date'], current_round=0, total_rounds=request.session['total_rounds'], portfolio=portfolio)
-		request.session['game_id'] = game.id
-		if request.session['game_type'] == 'weekly':
-			start = str( request.POST['start_date'] )
-			request.session['round'] = 0
-			request.session['add'] = True
-#how do we redirect and let the round know which game we're sending? whatever we do will also be needed for the Resume button on the unfinished games page
+		port = Portfolio.create(form, user.id)
+		game = Whole_Game.objects.create(user=user, balance=form.get['initial_balance'], game_type=form.get['game_type'], name=form.get['game_name'], current_date=form.get['start_date'], current_round=0, total_rounds=request.session['total_rounds'], portfolio=port)
+#how do we redirect and let the round know which game object we're using? whatever we do will also be needed for the Resume button on the unfinished games page
 		return redirect('/game/round/')
 
 #THIS FUNCTION NEEDS TO BE TOTALLY REDONE
@@ -76,7 +66,7 @@ class RoundView( View ):
 			return render(request, self.template_name, {'stocks':stocks, 'game':game})
 		else:
 			return render(request, 'results.html')
-#everything else in the round should happen in a post
+#everything else in the round should happen in a post except the initial setting of session variables in get
 	def post(self, request):
 		pass
 

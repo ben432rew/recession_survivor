@@ -20,7 +20,7 @@ class Stocks_Tracked( models.Model ):
 
 class Portfolio( models.Model ):
     title = models.CharField( max_length=200, unique=True  )
-    description = models.TextField()
+    description = models.TextField(null=True)
     slug = models.CharField( max_length=200 )
     date_created = models.DateField( auto_now_add=True )
     user = models.ForeignKey( User )

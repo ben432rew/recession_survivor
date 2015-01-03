@@ -20,7 +20,7 @@ class Whole_Game(models.Model):
     balance = models.FloatField(default=10000)
     final_score = models.FloatField(default=0)
     start_date = models.DateField(auto_now_add=True)
-    end_date = models.DateField(null=True)
+    end_date = models.DateField(null=True, default=None)
     current_date = models.DateField()
     current_round = models.IntegerField(default=0)
     total_rounds = models.IntegerField(default=12)
