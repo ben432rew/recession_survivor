@@ -15,7 +15,7 @@
 	</div>
 	<div class="panel-body">
 		<div class = 'game_form'>
-			<form action = "/game/create/" method = "POST">
+			<form action = "/game/" method = "POST">
 			{% csrf_token %}
 				
 				{% boot_form_fields form %}

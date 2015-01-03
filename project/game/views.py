@@ -15,53 +15,37 @@ def incrementer(time_span):
 	else:
 		return 365
 
-class Index( View ):
-	form_class = GameCreateForm()
-
+class CreateGame( View ):
 	def get( self, request):
-		user = User.objects.get( id=request.user.id )
-		request.context_dict['portfolios'] = Portfolio.objects.filter( user=user )
 		request.context_dict['form'] = GameCreateForm()
-
 		return render( request, 'game/index.html', request.context_dict )
 
-class CreateView( View ):
-
 	def post(self, request):
-		# this is confusing naming because in the Whole_Game model start_date refers to the date the user started the game
-		# whereas in the request.session the 'current_date' is the historical date of the day the round represents in the game
-		# the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
-		# which actually doesn't work because it doesn't account for leap years, months not 30 days long and most importantly, THE USER CAN ONLY ACTUALLY PLAY ON WEEKDAYS NOT WEEKENDS OR HOLIDAYS
-		request.session['current_date'] = request.POST['start_date']
-		request.session['game_type'] = request.POST['game_type']
-		request.session['game_name'] = request.POST['game_name']
-		request.session['total_rounds'] = request.POST['total_rounds']
+		form = GameCreateForm(request.POST)
 		user = User.objects.get(id=request.user.id)
-		if request.POST['portfolio'] == 'new_portfolio':
+		if port == 'new_portfolio':
 			Portfolio.objects.create(user=user, title=request.session['game_name'], description=request.session['game_name'], slug=slugify(request.POST['game_name']))
 			portfolio = Portfolio.objects.last()
-			request.session['portfolio_id'] = portfolio.id
-			request.session['slug'] = portfolio.slug
-		else:
-			portfolio = Portfolio.objects.get(user=user, slug=request.POST['portfolio'])
 			request.session['portfolio_id'] = portfolio.id
 			request.session['slug'] = portfolio.slug
 		start = datetime.datetime.strptime(request.POST['start_date'],"%Y-%m-%d")
 		game = Whole_Game.objects.create(user=user, balance=request.POST['initial_balance'], game_type=request.session['game_type'], name=request.session['game_name'], end_date=None, current_date=request.POST['start_date'], current_round=0, total_rounds=request.session['total_rounds'], portfolio=portfolio)
 		request.session['game_id'] = game.id
-		# what if the game_type isn't weekly?  what is this if statement even doing?
 		if request.session['game_type'] == 'weekly':
 			start = str( request.POST['start_date'] )
 			request.session['round'] = 0
 			request.session['add'] = True
-			request.session.set_expiry(300)
+#how do we redirect and let the round know which game we're sending? whatever we do will also be needed for the Resume button on the unfinished games page
 		return redirect('/game/round/')
 
 
 class RoundView( View ):
 	template_name = 'game/round.html'
-
+# the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
+# which actually doesn't work because it doesn't account for leap years, months not 30 days long and most importantly, THE USER CAN ONLY ACTUALLY PLAY ON WEEKDAYS NOT WEEKENDS OR HOLIDAYS
+# get should be used at the beginning of the first round.  Here the request.session variables should be set
 	def get(self, request):
+		request.session.set_expiry(300)
 		if request.session['round'] < int(request.session["total_rounds"]) and request.session['add'] == True:
 			request.session['round']+=1
 			increment = incrementer(request.session['game_type'])
@@ -91,9 +75,12 @@ class RoundView( View ):
 			return render(request, self.template_name, {'stocks':stocks, 'game':game})
 		else:
 			return render(request, 'results.html')
+#everything else in the round should happen in a post
+	def post(self, request):
+		pass
 
 
-class SeeSavedGames( View ):
+class UnfinishedGames( View ):
 	template_name = 'game/find.html'
 
 	def get(self, request):
