@@ -102,19 +102,17 @@ class Portfolio:
     # notice different naming
     create_holding = holding_form
     
-    def add_holding( self, form, user_id ):
-        if form.is_valid():
+    def add_holding( self, data ):
 
-            data = form.cleaned_data
+        value = data['shares']*data['price']
+        
+        data['portfolio'] = self.current
 
-            value = data['shares']*data['price']
+        data = models.Holding.objects.create( **data )
 
-            data['portfolio'] = self.current
-            data = models.Holding.objects.create( **data )
+        self.__load_stocks()
 
-            return value
-        else:
-            return False
+        return value
 
     def remove_holding( self, symbol, amount ):
 
@@ -176,8 +174,10 @@ class Portfolio:
             date_in -= datetime.timedelta(days=1)
             return date_in
 
-    def strock_date( self, symbol, date=False ):
+    def stock_date( self, symbol, date=False ):
         if not date:
             date = self.current_date
 
-        return Stocks_Tracked.objects.get( symbol=symbol, date=date )
+        results = models.Stock_history.objects.get( symbol=symbol, date=date )
+
+        return results

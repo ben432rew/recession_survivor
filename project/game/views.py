@@ -21,7 +21,6 @@ def incrementer(time_span):
 
 def get_game( game_id ):
     game = Whole_Game.objects.get( id=game_id )
-    pprint( game.portfolio )
     setattr( game, 'portfolio', Portfolio( game.portfolio ) )
     game.portfolio.chage_date( game.current_date )
     return game
@@ -78,9 +77,13 @@ class Manage_add( View ):
         form = Portfolio.create_holding( request.POST )
 
         # logic here to make sure user can afford stocks
+        if form.is_valid():
+            form_data = form.cleaned_data
+            form_data['date'] = str( request.context_dict['game'].current_date )
 
-        results = request.context_dict['game'].portfolio.add_holding( form, request.user.id )
-        if results:
+            form_data['price'] = request.context_dict['game'].portfolio.stock_date( form_data['symbol'] ).close
+
+            results = request.context_dict['game'].portfolio.add_holding( form_data )
 
             request.context_dict['game'].balance -= results
             request.context_dict['game'].save( update_fields=["balance"] )
