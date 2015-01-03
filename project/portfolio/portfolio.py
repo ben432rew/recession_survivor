@@ -87,13 +87,12 @@ class Portfolio:
     create_form = portfolio_form
 
     @classmethod
-    def create( cls, data, user_id ):
+    def create( cls, data):
 
         '''
         Create new portfolio from create_form data and user_id argument
         '''
-
-        data['user'] = User.objects.get( id=user_id )
+        
         data['slug'] = slugify( data[ 'title' ] )
         data = models.Portfolio.objects.create( **data )
 
@@ -105,7 +104,7 @@ class Portfolio:
     def add_holding( self, data ):
 
         value = data['shares']*data['price']
-        
+
         data['portfolio'] = self.current
 
         data = models.Holding.objects.create( **data )

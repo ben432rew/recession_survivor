@@ -39,10 +39,11 @@ class CreateGame( View ):
 
             portfolio_data = {
                 'title': "game_{}".format( form_data['name'] ),
-                'description': "Portfolio for game play."
+                'description': "Portfolio for game play.",
+                'user': form_data['user']
             }
 
-            portfolio = Portfolio.create( portfolio_data, request.user.id )
+            portfolio = Portfolio.create( portfolio_data )
 
             form_data['current_round'] = 0
 
