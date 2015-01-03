@@ -27,6 +27,10 @@ class Index( View ):
 class CreateView( View ):
 
 	def post(self, request):
+		# this is confusing naming because in the Whole_Game model start_date refers to the date the user started the game
+		# whereas in the request.session the 'current_date' is the historical date of the day the round represents in the game
+		# the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
+		# which actually doesn't work because it doesn't account for leap years, months not 30 days long and most importantly, THE USER CAN ONLY ACTUALLY PLAY ON WEEKDAYS NOT WEEKENDS OR HOLIDAYS
 		request.session['current_date'] = request.POST['start_date']
 		request.session['game_type'] = request.POST['game_type']
 		request.session['game_name'] = request.POST['game_name']
