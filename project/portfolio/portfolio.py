@@ -24,7 +24,7 @@ class Portfolio:
 
         ## set date for price eval
         if arg2:
-            self.current_date = check_date( date )
+            self.current_date = self.check_date( arg2 )
         else:
             # as soon as check date works this should be set today.
             self.current_date = check_date( '2014-12-30' ) # datetime.strftime( datetime.today() ,"%Y-%m-%d")
@@ -141,7 +141,7 @@ class Portfolio:
         Changes the date of the eval history date. This will update prices in self.stocks as well.
         This should also handle splits and set the correct shares
         ''' 
-        self.current_date = check_date( date )
+        self.current_date = self.check_date( date )
         self.__load_stocks()
         return date
 
