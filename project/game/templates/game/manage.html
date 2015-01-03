@@ -30,10 +30,10 @@
 
 	<ul class="list-group">
 	{% for stock, value in game.portfolio.stocks.items %} 
-	    <li class="list-group-item">
-	    	{{ value.shares }} shares of {{ value.name }} @ ${{ value.close }} Worth {{ value.current_value }}
+		<li class="list-group-item">
+			{{ value.shares }} shares of {{ value.name }} @ ${{ value.close }} Worth {{ value.current_value }}
 
-	    	<form action="/mange/{{ game_id }}/manage/remove" method="POST" class="form-inline">
+			<form action="/mange/{{ game_id }}/manage/remove" method="POST" class="form-inline">
 				{%csrf_token%}
 				<input type="hidden" name="symbol" value="{{ stock }}" />
 
@@ -47,9 +47,9 @@
 				</button>
 
 			</form>
-	    </li>
+		</li>
 	{% empty %}
-	    <li class="list-group-item">You do not seem to have any holdings.</li>
+		<li class="list-group-item">You do not seem to have any holdings.</li>
 	{% endfor %}
 	</ul>
 
