@@ -19,10 +19,10 @@ class Index( View ):
 	form_class = GameCreateForm()
 
 	def get( self, request):
-		request.context_dict['user'] = user = User.objects.get(id=request.user.id)
-		request.context_dict['portfolios'] = Portfolio.objects.filter( user=user ) 
-		return render( request, 'game/index.html', request.context_dict )
+		user = User.objects.get( id=request.user.id )
+		request.context_dict['portfolios'] = Portfolio.objects.filter( user=user )
 
+		return render( request, 'game/index.html', request.context_dict )
 
 class CreateView( View ):
 
