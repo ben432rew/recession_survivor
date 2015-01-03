@@ -148,6 +148,7 @@ class Portfolio:
 
     def check_date( self, date_in ):
         ''' issue #125 '''
+        date_in = datetime.strptime( date_in,"%Y-%m-%d")
         if date_in.weekday(6):
             date_in -= datetime.timedelta(days=2)
             return date_in
