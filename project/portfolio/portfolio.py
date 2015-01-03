@@ -89,6 +89,7 @@ class Portfolio:
             data['user'] = User.objects.get( id=user_id )
             data['slug'] = slugify( data[ 'title' ] )
             data = models.Portfolio.objects.create( **data )
+
             return data
         else:
             return False
@@ -130,4 +131,8 @@ class Portfolio:
 
         self.__load_stocks() # update stock data
         return True
+
+    def check_date( self, date_in ):
+        ''' issue #125 '''
+        return date_in
  
