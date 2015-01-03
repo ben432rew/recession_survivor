@@ -1,6 +1,5 @@
 from portfolio.models import *
 from django.forms import ModelForm
-from portfolio.models import Stocks_Tracked
 from django import forms
 from pprint import pprint as print
 

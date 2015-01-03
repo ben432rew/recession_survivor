@@ -21,6 +21,7 @@ class Index( View ):
 	def get( self, request):
 		user = User.objects.get( id=request.user.id )
 		request.context_dict['portfolios'] = Portfolio.objects.filter( user=user )
+		request.context_dict['form'] = GameCreateForm()
 
 		return render( request, 'game/index.html', request.context_dict )
 
