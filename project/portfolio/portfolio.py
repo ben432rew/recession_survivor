@@ -103,7 +103,10 @@ class Portfolio:
             data = form.cleaned_data
             data['portfolio'] = self.current
             data = models.Holding.objects.create( **data )
-            return data
+
+            value = data['shares']*data['price']
+
+            return value
         else:
             return False
 
