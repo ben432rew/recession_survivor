@@ -116,6 +116,8 @@ class Portfolio:
         if self.stocks[symbol]['shares'] < amount:
             return False
 
+        value = amount*self.stocks[symbol]['close']
+
         holdings = models.Holding.objects.filter( portfolio=self.current, symbol=symbol )
 
         for hold in holdings:
@@ -130,7 +132,8 @@ class Portfolio:
                 hold.save()
 
         self.__load_stocks() # update stock data
-        return True
+        print( value)
+        return value
 
     def check_date( self, date_in ):
         ''' issue #125 '''
