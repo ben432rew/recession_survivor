@@ -50,9 +50,6 @@ class CreateGame( View ):
             form_data['portfolio'] = portfolio.id
 
             game = Whole_Game.objects.create( **form_data )
-    #Q. how do we redirect and let the round know which game object we're using? whatever we do will also be needed for the Resume button on the unfinished games page
-    #A. We can pass it a GET query sting of the game ID, and should a page for setting a game up
-
             return redirect( '/game/{}/start'.format( game.id ) )
         else:
             request.context_dict['form'] = form 

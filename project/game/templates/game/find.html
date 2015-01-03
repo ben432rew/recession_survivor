@@ -10,6 +10,7 @@
         Here are your unfinished games:
     </div>
     <div class="panel-body">
+    <!-- need an if statement here for when there's no saved games -->
         {% for game in games %}
             <p> {{game.name}} <a href = "#" class="btn btn-default ajax">Resume</a> </p>
         {% endfor %}
