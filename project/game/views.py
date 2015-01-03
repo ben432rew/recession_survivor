@@ -111,7 +111,6 @@ class Manage_remove( View ):
             # add error here, but this should never be called?
             return redirect( '/game/{}/manage'.format( game_id ) )
 
-
 class RoundView( View ):
     template_name = 'game/round.html'
 # the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
