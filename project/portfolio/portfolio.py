@@ -24,9 +24,10 @@ class Portfolio:
 
         ## set date for price eval
         if arg2:
-            self.current_date = arg2
+            self.current_date = check_date( date )
         else:
-            self.current_date = '2014-12-30' # datetime.strftime( datetime.today() ,"%Y-%m-%d")
+            # as soon as check date works this should be set today.
+            self.current_date = check_date( '2014-12-30' ) # datetime.strftime( datetime.today() ,"%Y-%m-%d")
 
         ## get portfolio based on ID or slug(title)
         arg1_type = type( arg1 )
@@ -112,7 +113,7 @@ class Portfolio:
             return False
 
         amount = int( amount )
-        # print( 'amount', amount, 'has', self.stocks[symbol]['shares'] )
+
         if self.stocks[symbol]['shares'] < amount:
             return False
 
@@ -121,7 +122,7 @@ class Portfolio:
         holdings = models.Holding.objects.filter( portfolio=self.current, symbol=symbol )
 
         for hold in holdings:
-            print( 'amount', amount, 'has', hold.shares )
+
             if amount == 0: 
                 break
 
@@ -134,6 +135,15 @@ class Portfolio:
         self.__load_stocks() # update stock data
         print( value)
         return value
+
+    def chage_date( self, date ):
+        '''
+        Changes the date of the eval history date. This will update prices in self.stocks as well.
+        This should also handle splits and set the correct shares
+        ''' 
+        self.current_date = check_date( date )
+        self.__load_stocks()
+        return date
 
     def check_date( self, date_in ):
         ''' issue #125 '''
