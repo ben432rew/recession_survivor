@@ -1,6 +1,5 @@
 from portfolio.models import *
 from django.forms import ModelForm
-from portfolio.models import Stocks_Tracked
 from django import forms
 from pprint import pprint as print
 
@@ -20,7 +19,7 @@ class holding_form( ModelForm ):
     symbol = forms.fields.ChoiceField( Stocks_Tracked.objects.all().values_list('symbol', 'name')  )
     class Meta:
         model = Holding
-        fields = ( 'symbol', 'price', 'shares', 'date' )
+        fields = ( 'symbol', 'shares' )
         widgets = {
             'date': DateInput(),
         }

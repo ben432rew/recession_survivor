@@ -2,6 +2,11 @@ from django.contrib.auth.models import User
 from portfolio.models import Portfolio
 from django.db import models
 
+game_type_choices = (
+    ('weekly', 'Weekly' ),
+    ( 'monthly', 'Monthly' ),
+    ( 'yearly', 'Yearly' ),
+)
 
 class Stock(models.Model):
     symbol = models.CharField(max_length=50)
@@ -10,18 +15,17 @@ class Stock(models.Model):
     volume = models.FloatField()
 
 class Whole_Game(models.Model):
-    game_type = models.CharField(max_length=30)
+    game_type = models.CharField(max_length=30, choices=game_type_choices)
     name = models.CharField(max_length=30)
     balance = models.FloatField(default=10000)
     final_score = models.FloatField(default=0)
     start_date = models.DateField(auto_now_add=True)
-    end_date = models.DateField(null=True)
+    end_date = models.DateField(null=True, default=None)
     current_date = models.DateField()
     current_round = models.IntegerField(default=0)
     total_rounds = models.IntegerField(default=12)
     user = models.ForeignKey(User)
-    portfolio = models.ForeignKey(Portfolio)
-
+    portfolio = models.IntegerField()
 
 class Transaction(models.Model):
     symbol = models.CharField(max_length=50)
