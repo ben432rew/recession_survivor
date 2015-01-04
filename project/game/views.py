@@ -233,6 +233,15 @@ class StatsView( View ):
         else:
             pass
 
+class Leaderboard(View):
+    def get(self, request):
+        if request.user.is_anonymous():
+            return redirect( '/')
+        else:
+            request.context_dict['games'] = Whole_Game.objects.filter(user=request.user)
+            request.context_dict['highscores'] = Whole_Game.objects.all().order_by('final_score')[:9]
+            return render( request, 'game/profile.html', request.context_dict)
+
 
 class EndGame( View ):
     def get(self, request):
