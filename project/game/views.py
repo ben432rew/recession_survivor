@@ -128,14 +128,13 @@ class RoundView( View ):
 #Just in case the current date lands on a weekend or holiday, here we check if 
 #current date has stocks from that day, if not, increment by another day
         stocks = Stock_history.objects.all()
-        # for stock in stocks:
-        #     print(stock.date)
-        pprint(game.current_date)
+        print(stocks[0].date)
+        print(game.current_date)
         while len(Stock_history.objects.filter(date=game.current_date)) != 0:
             pprint('IN DA LOOOOOOP')
             game.current_date += datetime.timedelta(days=1)
         pprint("HERE YET?")     
-        game.save()   
+        game.save( update_fields=["current_date", "current_round"])   
         return redirect( '/game/{}/manage'.format( game_id ) )
 
 class StatsView( View ):
