@@ -6,9 +6,6 @@ from django.contrib.auth.models import User
 import datetime
 from pprint import pprint
 
-# portfolio should have a "value"  of all holdings
-# and it should take a "current_date" and reference the Stocks_history table for pirces
-# there should like "__compute_value" function in the portfolio object 
 
 # today = str( datetime.datetime.date.today() )
 
