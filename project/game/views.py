@@ -87,21 +87,22 @@ class Manage_add( View ):
     def post( self, request, game_id ):
         request.context_dict['game'] = get_game( game_id )
         form = Portfolio.create_holding( request.POST )
+        request.context_dict[ 'form' ] = form
         if form.is_valid():
             form_data = form.cleaned_data
             form_data['date'] = str( request.context_dict['game'].current_date )
 
             form_data['price'] = request.context_dict['game'].portfolio.stock_by_date( form_data['symbol'] ).close
+            if form_data['price'] * form_data["shares"] <= request.context_dict["game"].balance:
+                results = request.context_dict['game'].portfolio.add_holding( form_data )
 
-            results = request.context_dict['game'].portfolio.add_holding( form_data )
+                request.context_dict['game'].balance -= results
+                request.context_dict['game'].save( update_fields=["balance"] )
 
-            request.context_dict['game'].balance -= results
-            request.context_dict['game'].save( update_fields=["balance"] )
-
-            return redirect( '/game/{}/manage'.format( game_id ) )
-
+                return redirect( '/game/{}/manage'.format( game_id ) )
+            else:
+                return render( request, 'game/manage.html', request.context_dict ) 
         else:
-            request.context_dict[ 'form' ] = form
             return render( request, 'game/manage.html', request.context_dict )
 
 
