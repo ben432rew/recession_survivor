@@ -128,8 +128,8 @@ class RoundView( View ):
         pprint("WE'RE GETTING HERE")
 #Just in case the current date lands on a weekend or holiday, here we check if 
 #current date has stocks from that day, if not, increment by another day
-        while len(Stock_history.objects.filter(date=game.current_date)) == 0:
-            game.current_date += datetime.timedelta(days=1)
+        # while len(Stock_history.objects.filter(date=game.current_date)) == 0:
+        #     game.current_date += datetime.timedelta(days=1)
         pprint("BUT NOT HERE")     
         game.save()   
         return redirect( '/game/{}/manage'.format( game_id ) )
