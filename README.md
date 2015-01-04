@@ -32,13 +32,13 @@ You should now be at the postgres user bash prompt
 
 You should now be in the psql prompt -> postgres=#
 
-CREATE ROLE bears WITH login password 'bears';
+`CREATE ROLE bears WITH login password 'bears';`
 
-ALTER ROLE bears WITH superuser createdb createrole;
+`ALTER ROLE bears WITH superuser createdb createrole;`
 
-\q
+`\q`
 
-exit
+`exit`
 
 Then, to seed the database with the historical stocks:
 

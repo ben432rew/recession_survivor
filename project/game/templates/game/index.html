@@ -3,6 +3,10 @@
 {% block title %}Game - {% endblock %}
 
 {% block content %}
+{%  load ui.bootstrap %}
+<a href = "/game/find/" class="btn btn-primary ajax">Load a saved game</a>
+<br>
+<br>
 <div class="panel panel-default">
 
 	<div class="panel-heading panel-title">
@@ -11,40 +15,13 @@
 	</div>
 	<div class="panel-body">
 		<div class = 'game_form'>
-			<form action = "/game/create/" method = "POST">
-			{% csrf_token %}
-			<p>
-				<label for = 'game_name'>Game Name</label>
-				<input type = 'text' name = 'game_name'>
-			</p>
-			<p>
-				<label for = 'initial_balance'>Initial Balance</label>
-				<input type = 'number' name = 'initial_balance' value = '10000'>
-			</p>
-			<p>
-				<label for = 'game_type'>Game Type</label>
-				<select name = 'game_type'>
-					<option value = 'weekly'>Weekly</option>
-					<option value = 'monthly'>Monthly</option>
-					<option value = 'yearly'>Yearly</option>
-				</select>
-			</p>
-			<p>
-				<label for = 'portfolio'>Portfolio</label>
-				<select name = 'portfolio'>
-						<option value = 'new_portfolio'>New Portfolio</option>
-					{% for portfolio in portfolios %}
-						<option value = '{{portfolio.slug}}'>{{portfolio.title}}</option>
-					{% endfor %}
-				</select>
-			</p>
-			<p>
-				<label for = 'start_date'>Start Date</label>
-				<input type = 'date' name = 'start_date' value = '2000-01-01'>
-			</p>
-			<p>
-			<input type = 'submit' value = 'Start'>
-			</p>
+			<form action = "/game/" method = "POST">
+				{% csrf_token %}
+				{% boot_form_fields form %}
+				<button type="submit" class="btn btn-default">
+					<span class="glyphicon glyphicon-share-alt"></span>
+					Create
+				</button>
 			</form>
 		</div>
 	</div>

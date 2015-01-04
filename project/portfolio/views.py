@@ -1,13 +1,9 @@
 from django.views.generic import View
-from game.models import *
 from django.shortcuts import render, redirect
-from portfolio.models import Portfolio, Holding, Stock_history, Stocks_Tracked
-from portfolio.forms import portfolio_form, holding_form
-from django.utils.text import slugify
 from django.contrib.auth.models import User
-from pprint import pprint as print
-import portfolio.portfolio as p
-from django.http import HttpResponse
+from portfolio.portfolio import Portfolio
+from portfolio.models import Stocks_Tracked
+from datetime import datetime
 
 ## nothing about game belongs in this file
 class Display_all( View ):
@@ -17,7 +13,7 @@ class Display_all( View ):
             return redirect( '/' )
         
         user_id = request.GET.get( 'user_id', request.user.id )
-        request.context_dict[ 'portfolios' ] = p.Portfolio.by_user_id( None, user_id )
+        request.context_dict[ 'portfolios' ] = Portfolio.by_user_id( user_id )
         
         return render( request, 'portfolio/display_all.html', request.context_dict )
 
@@ -27,15 +23,17 @@ class Create( View ):
             
             return redirect( '/' )
 
-        request.context_dict[ 'form' ] = p.Portfolio.create_form()
+        request.context_dict[ 'form' ] = Portfolio.create_form()
         
         return render( request, 'portfolio/create.html', request.context_dict )
 
     def post( self, request ):
-        form = p.Portfolio.create_form( request.POST )
-        results = p.Portfolio.create( form, request.user.id )
-        if results:
+        form = Portfolio.create_form( request.POST )
 
+        if form.is_valid():
+            data = form.cleaned_data
+            results = Portfolio.create( data, request.user.id )
+            
             return redirect( '/portfolio/{}/manage'.format( results.slug ) )
 
         request.context_dict[ 'form' ] = form
@@ -45,56 +43,42 @@ class Create( View ):
 
 class Manage( View ):
     def get( self, request, slug ):
-        print(request.session)
-        request.context_dict[ 'portfolio' ] = p.Portfolio( slug , request.session['current_date'])
-        request.context_dict[ 'slug' ] = slug
+        date = request.POST.get( 'date' , '2014-12-30' ) # needs to be set to today if blank
+        request.context_dict[ 'portfolio' ] = Portfolio( slug, date )
 
         return render( request, 'portfolio/manage.html', request.context_dict )
 
 # needs to be converted to portfolio.py 
 class Holding_add( View ):
     def get( self, request, slug ):
-
-        request.context_dict[ 'portfolio' ] = p.Portfolio( slug , request.session['current_date'])
-        request.context_dict[ 'slug' ] = slug
-        request.context_dict[ 'form' ] = p.Portfolio.create_holding()
-        current = request.session['current_date'][0:10]
-        stocks = Stock_history.objects.filter(date=current)
-        request.context_dict[ 'stocks' ] = stocks
+        request.context_dict[ 'portfolio' ] = Portfolio( slug )
+        request.context_dict[ 'form' ] = Portfolio.create_holding()
+        
         return render( request, 'portfolio/holding_add.html', request.context_dict )
 
     def post( self, request, slug ):
-        form = holding_form( request.POST )
-        portfolio = p.Portfolio(slug, request.session['current_date'])
+        form = Portfolio.create_holding( request.POST )
+        portfolio = Portfolio( slug, request.POST['date'] )
+
         results = portfolio.add_holding( form, request.user.id )
-# =======
-#         print(request.POST)
-#         portfolio = p.Portfolio(slug)
-#         results = portfolio.add_holding( form, request.user.id, request )
-# >>>>>>> 44dc4d19341dcbe1e3901aabdcbd80bc420fd38c
         if results:
 
-
-        # this logic was moved to portfolio
-        # if form.is_valid():
-        #     request
-        #     data = form.cleaned_data
-        #     data[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
-        #     data = Holding.objects.create( **data )
-
             return redirect( '/portfolio/{}/manage'.format( slug ) )
+
         else:
             request.context_dict[ 'form' ] = form
-            request.context_dict[ 'slug' ] = slug
-            request.context_dict[ 'error' ] = 'Invalid?'
 
             return render( request, 'portfolio/holding_add.html', request.context_dict )
 
-class Holding_update( View ):
-    def post(self,request,slug):
-        portfolio = p.Portfolio(slug, request.session['current_date'])
-        portfolio.remove_holding(request)
-        return redirect("/portfolio/"+slug+"/manage")
+class Holdin_remove( View ):
+    def post( self, request, slug ):
+        portfolio = Portfolio( slug )
+        symbol = request.POST.get( 'symbol', None )
+        amount = request.POST.get( 'amount', None )
+        if portfolio.remove_holding( symbol, amount ):
+            return redirect( '/portfolio/{}/manage'.format( slug ) )
+        else:
+            return redirect( '/portfolio/{}/manage'.format( slug ) )
 
 # needs to be converted to portfolio.py and template created
 class Edit( View ):
@@ -123,48 +107,3 @@ class Tracked( View ):
         request.context_dict['tracked'] = Stocks_Tracked.objects.all()
         
         return render( request, 'portfolio/tracked.html', request.context_dict )
-
-
-## not sure form here down
-
-class Find_stock_by_name(View):
-    def get(self, request):
-        symbol = request.GET.get["symbol"]
-        stock = Stock.objects.get(symbol=symbol, date__month=(request.session['game_round'] + 6) % 12)
-        game_round = request.session['game_round']
-        return render( request, 'game/round.html', {"game_round":game_round, 'user':request.session.user, 'price':stock.price, 'date':stock.date, 'symbol':stock.symbol})
-
-#lot of overlap Buy_stock and Sell_shares, NOT DRY
-class Buy_stock(View):
-    def post(self, request):
-        balance = request.POST['balance']
-        symbol = request.POST['symbol']
-        shares = int(request.POST['shares'])
-        date = request.POST['date']
-        stock = Stock.objects.get(symbol=symbol, date=date)
-        price = stock.price
-        balance = request.session['balance'] - (shares * price)
-        request.session['balance'] = balance
-        portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
-        t = Transaction.objects.create(symbol=symbol, number_of_shares=shares, date_created=date, account_change=(shares * price * -1), portfolio=portfolio)
-        s = Portfolio.objects.create(symbol=symbol, amount=shares, date_bought=date, price_bought=price, portfolio=portfolio)
-        return redirect( 'game/round.html')
-
-
-class Sell_shares(View):
-    def post(self, request):
-        balance = request.POST['balance']
-        symbol = request.POST['symbol']
-        shares = int(request.POST['shares'])
-        date = request.POST['date']
-        stock = Stock.objects.get(symbol=symbol, date=date)
-        price = stock.price
-        balance = request.session['balance'] + (shares * price)
-        request.session['balance'] = balance        
-        portfolio = Portfolio.objects.filter(user=request.user).order_by('date')[0]
-        t = Transaction.objects.create(symbol=symbol, number_of_shares=shares, date_created=date, account_change=(shares * price), portfolio=portfolio)
-        #this function will break if there are more than one entry for that stock, which is likely
-        s = Portfolio.objects.get(symbol=symbol, portfolio=portfolio)
-        s.amount -= shares 
-        s.save()
-        return redirect( 'game/round.html')
