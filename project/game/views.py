@@ -1,6 +1,7 @@
 from django.views.generic import View
 from django.utils.text import slugify
 from django.shortcuts import render, redirect
+from django.forms.util import ErrorList
 
 from game.forms import GameCreateForm
 from game.models import *
@@ -103,6 +104,8 @@ class Manage_add( View ):
 
                 return redirect( '/game/{}/manage'.format( game_id ) )
             else:
+                errors = request.context_dict[ 'form' ]._errors.setdefault("shares", ErrorList())
+                errors.append(u"You cannot afford that")
                 return render( request, 'game/manage.html', request.context_dict ) 
         else:
             return render( request, 'game/manage.html', request.context_dict )
