@@ -13,8 +13,8 @@
 
     <div class="panel-body">
         <ul>
-        <li>Starting Balance:  ${{ game.start_balance }}</li>
-        <li>Final Score: ${{ game.final_score }}</li>
+        <li>Starting Balance:  ${{ game.start_balance|floatformat:2 }}</li>
+        <li>Final Score: ${{ game.final_score|floatformat:2 }}</li>
         </ul>
     </div>
 
