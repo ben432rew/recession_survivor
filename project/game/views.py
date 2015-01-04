@@ -42,7 +42,7 @@ class CreateGame( View ):
         if form.is_valid():
             form_data = form.cleaned_data
             form_data['user'] = User.objects.get( id=request.user.id )
-            form_date['balance'] = form_date['start_balance']
+            form_data['balance'] = form_data['start_balance']
 
             portfolio_data = {
                 'title': "game_{}".format( form_data['name'] ),
