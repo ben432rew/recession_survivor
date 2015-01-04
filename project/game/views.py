@@ -117,7 +117,7 @@ class Manage_remove( View ):
             # add error here, but this should never be called?
             return redirect( '/game/{}/manage'.format( game_id ) )
 
-#not working, gets to first pprint but not second one
+#not working, infinite loop
 class RoundView( View ):
     def get(self, request, game_id):
         game = get_game( game_id )
@@ -125,13 +125,16 @@ class RoundView( View ):
             return redirect( '/game/endgame')
         game.current_round += 1
         game.current_date += datetime.timedelta(days=incrementer(game.game_type))
-        pprint("WE'RE GETTING HERE")
 #Just in case the current date lands on a weekend or holiday, here we check if 
 #current date has stocks from that day, if not, increment by another day
-        while len(Stock_history.objects.filter(date=game.current_date)) == 0:
+        stocks = Stock_history.objects.all()
+        print(stocks[0].date)
+        print(game.current_date)
+        while len(Stock_history.objects.first(date=game.current_date)) == None:
+            pprint('IN DA LOOOOOOP')
             game.current_date += datetime.timedelta(days=1)
-        pprint("BUT NOT HERE")     
-        game.save()   
+        pprint("HERE YET?")     
+        game.save( update_fields=["current_date", "current_round"])   
         return redirect( '/game/{}/manage'.format( game_id ) )
 
 class StatsView( View ):
