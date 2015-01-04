@@ -56,8 +56,18 @@ class CreateGame( View ):
             return render( request, 'game/index.html', request.context_dict )
 
 
+class UnfinishedGames( View ):
+    template_name = 'game/find.html'
+
+    def get(self, request):
+        request.context_dict['games'] = Whole_Game.objects.filter(user=request.user, end_date=None)
+        request.context_dict['starturl'] = "/game/{}/start"
+        return render(request, self.template_name, request.context_dict)
+
+
 class Start( View ):
     def get( self, request, game_id ):
+        request.session.set_expiry(300)
         game = get_game( game_id )
         request.session['game_id'] = game_id
         return redirect( '/game/{}/manage'.format( game_id ) )
@@ -114,24 +124,18 @@ class Manage_remove( View ):
 
 class RoundView( View ):
     template_name = 'game/round.html'
-# the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
-# which actually doesn't work because it doesn't account for leap years, months not 30 days long and most importantly, THE USER CAN ONLY ACTUALLY PLAY ON WEEKDAYS NOT WEEKENDS OR HOLIDAYS
     def get(self, request):
-        request.session.set_expiry(300)
         game = get_game( game_id )
-
-        #add the round, update the date
-        request.session['game_id'] = game_id
+        if game.total_rounds == game.current_round:
+            return redirect( '/game/endgame')
+        game.current_round += 1
+        game.current_date += datetime.timedelta(days=incrementer(game.game_type))
+#Just in case the current date lands on a weekend or holiday, here we check if 
+#current date has stocks from that day, if not, increment by another day
+        while len(Stock_history.objects.filter(date=game.current_date)) == 0:
+            game.current_date += datetime.timedelta(days=1)
+        game.save()        
         return redirect( '/game/{}/manage'.format( game_id ) )
-
-
-class UnfinishedGames( View ):
-    template_name = 'game/find.html'
-
-    def get(self, request):
-        request.context_dict['games'] = Whole_Game.objects.filter(user=request.user, end_date=None)
-        request.context_dict['starturl'] = "/game/{}/start"
-        return render(request, self.template_name, request.context_dict)
 
 
 class StatsView( View ):
@@ -174,5 +178,6 @@ class StatsView( View ):
 class EndGame( View ):
     template_name = 'game/endgame.html'
     def get(self, request):
-#get all the stuff to show at the end of the game
+#sell all the shares in the portfolio
+#display final score and other stuff
         return render (request, self.template_name, request.context_dict)
