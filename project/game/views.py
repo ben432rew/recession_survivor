@@ -129,13 +129,11 @@ class RoundView( View ):
     def get(self, request, game_id):
         game = get_game( game_id )
         if game.total_rounds == game.current_round:
-            return redirect( '/game/endgame')
+            return redirect( "/game/" + game_id + "/endgame")
         game.current_round += 1
-        print(game.current_date)
         game.current_date += datetime.timedelta(days=incrementer(game.game_type))
         game.current_date = game.change_date(game.current_date)
-        print(game.current_date)
-        game.save( update_fields=["current_date", "current_round"] )   
+        game.save()   
         return redirect( '/game/{}/manage'.format( game_id ) )
 
 
@@ -144,14 +142,14 @@ class StatsView( View ):
 
     def get(self, request):
         if request.session['game_type'] == 'weekly':
-                days = request.session['round']*7
-                start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-                time = datetime.timedelta(days=days)
-                end = start + time
-                search_start = end - datetime.timedelta(days=7)
-                stocks = Stock_history.objects.filter(date__range=[search_start, end])
-                game = Whole_Game.objects.get(id=request.session['game_id'])
-                return render(request, self.template_name, {'stocks':stocks, 'game':game})
+            days = request.session['round']*7
+            start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+            time = datetime.timedelta(days=days)
+            end = start + time
+            search_start = end - datetime.timedelta(days=7)
+            stocks = Stock_history.objects.filter(date__range=[search_start, end])
+            game = Whole_Game.objects.get(id=request.session['game_id'])
+            return render(request, self.template_name, {'stocks':stocks, 'game':game})
         elif request.session['game_type'] == 'monthly':
             days = request.session['round']*31
             start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
@@ -187,7 +185,13 @@ class Leaderboard(View):
 
 
 class EndGame( View ):
-    def get(self, request):
+    def get(self, request, game_id):
 #first, sell all the shares in the portfolio
+        game = get_game( game_id )
+        for stock in game.portfolio.stocks:
+            price = game.portfolio.remove_holding( stock.symbol, stock.amount )
+            game.balance += price
+        game.save()
 #then display final score and other stuff
+        request.context_dict["game"] = game
         return render (request, 'game/endgame.html', request.context_dict)

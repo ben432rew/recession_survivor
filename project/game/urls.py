@@ -12,6 +12,5 @@ urlpatterns = patterns('',
     url(r'^leaderboard$', Leaderboard.as_view(), name='leaderboard' ),
     url(r'^round/stats$', StatsView.as_view(), name='stats' ),
     url(r'^find$', UnfinishedGames.as_view(), name='unfinished' ),
-    url(r'^endgame$', EndGame.as_view(), name='endgame' ),
+    url(r'^(?P<game_id>[\d]+)/endgame$', EndGame.as_view(), name='endgame' ),
 )
-

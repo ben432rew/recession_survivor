@@ -1,10 +1,18 @@
-{% extends "game/base.html" %}
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}Final Score for {{ game.name }} - {% endblock %}
 
 {% block content %}
-	<h3>{{ balance }}</h3>
-	<p>
-	{% for tran in trans %}
-		<h4>{{ tran }}</h4>
-	{% endfor %}
-	</p>
+{% load ui.bootstrap %}
+<div class="panel panel-default">
+
+    <div class="panel-heading panel-title">
+        <span class="glyphicon glyphicon-usd"></span>
+        Final Results
+    </div>
+
+    <div class="panel-body">
+        Final Score: ${{ game.balance }}
+    </div>
+
 {% endblock %}
