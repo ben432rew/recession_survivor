@@ -119,6 +119,7 @@ class RoundView( View ):
     def get(self, request):
         request.session.set_expiry(300)
         game = get_game( game_id )
+
         #add the round, update the date
         request.session['game_id'] = game_id
         return redirect( '/game/{}/manage'.format( game_id ) )
@@ -168,3 +169,9 @@ class StatsView( View ):
             return render(request, self.template_name, {'stocks':stocks})
         else:
             pass
+
+
+class EndGame( View ):
+    template_name = 'game/endgame.html'
+    #get all the stuff to show
+    return render (request, self.template_name, request.context_dict)
