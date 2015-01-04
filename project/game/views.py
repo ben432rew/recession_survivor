@@ -10,6 +10,7 @@ from portfolio.portfolio import Portfolio
 
 import datetime
 from pprint import pprint
+from types import MethodType
 
 def incrementer(time_span):
     if time_span == "weekly":
@@ -20,13 +21,17 @@ def incrementer(time_span):
         return 365
 
 def get_game( game_id ):
+
     game = Whole_Game.objects.get( id=game_id )
     setattr( game, 'portfolio', Portfolio( game.portfolio_id ) )
-    game.portfolio.change_date( game.current_date )
+    game.change_date( game.current_date )
+
     return game
 
 class CreateGame( View ):
     def get( self, request ):
+        if request.user.is_anonymous():
+            return redirect( '/')        
         request.context_dict['form'] = GameCreateForm()
 
         return render( request, 'game/index.html', request.context_dict )
@@ -56,6 +61,8 @@ class CreateGame( View ):
 
 class UnfinishedGames( View ):
     def get(self, request):
+        if request.user.is_anonymous():
+            return redirect( '/')        
         request.context_dict['games'] = Whole_Game.objects.filter(user=request.user, end_date=None)
         request.context_dict['starturl'] = "/game/{}/start"
         return render(request, 'game/find.html', request.context_dict)
@@ -86,7 +93,7 @@ class Manage_add( View ):
             form_data = form.cleaned_data
             form_data['date'] = str( request.context_dict['game'].current_date )
 
-            form_data['price'] = request.context_dict['game'].portfolio.stock_date( form_data['symbol'] ).close
+            form_data['price'] = request.context_dict['game'].portfolio.stock_by_date( form_data['symbol'] ).close
 
             results = request.context_dict['game'].portfolio.add_holding( form_data )
 
@@ -117,22 +124,20 @@ class Manage_remove( View ):
             # add error here, but this should never be called?
             return redirect( '/game/{}/manage'.format( game_id ) )
 
-#not working, gets to first pprint but not second one
+#untested
 class RoundView( View ):
     def get(self, request, game_id):
         game = get_game( game_id )
         if game.total_rounds == game.current_round:
             return redirect( '/game/endgame')
         game.current_round += 1
+        print(game.current_date)
         game.current_date += datetime.timedelta(days=incrementer(game.game_type))
-        pprint("WE'RE GETTING HERE")
-#Just in case the current date lands on a weekend or holiday, here we check if 
-#current date has stocks from that day, if not, increment by another day
-        # while len(Stock_history.objects.filter(date=game.current_date)) == 0:
-        #     game.current_date += datetime.timedelta(days=1)
-        pprint("BUT NOT HERE")     
-        game.save()   
+        game.current_date = game.change_date(game.current_date)
+        print(game.current_date)
+        game.save( update_fields=["current_date", "current_round"] )   
         return redirect( '/game/{}/manage'.format( game_id ) )
+
 
 class StatsView( View ):
     template_name = 'game/stats.html'
@@ -169,6 +174,16 @@ class StatsView( View ):
             return render(request, self.template_name, {'stocks':stocks})
         else:
             pass
+
+
+class Leaderboard(View):
+    def get(self, request):
+        if request.user.is_anonymous():
+            return redirect( '/')
+        else:
+            request.context_dict['games'] = Whole_Game.objects.filter(user=request.user)
+            request.context_dict['highscores'] = Whole_Game.objects.all().order_by('final_score')[:9]
+            return render( request, 'game/profile.html', request.context_dict)
 
 
 class EndGame( View ):

@@ -27,6 +27,16 @@ class Whole_Game(models.Model):
     user = models.ForeignKey(User)
     portfolio_id = models.IntegerField()
 
+    def change_date( self, date ):
+
+        # up date the current portfolio date
+        self.portfolio.change_date( self.current_date )
+
+        # sync with portfolio date
+        self.current_date = self.portfolio.current_date
+
+        return date
+
 class Transaction(models.Model):
     symbol = models.CharField(max_length=50)
     number_of_shares = models.IntegerField()

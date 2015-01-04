@@ -117,7 +117,6 @@
 				</main>
 			</div>
 
-		{% if 'slug' in request.session %}
 			<div class="col-md-3">
 				<div class="panel panel-default">
 
@@ -128,19 +127,18 @@
 
 					<div class="panel-body">
 						<ul>
-							<li><a href = "/game/round/stats/">Current Round Statistics</a></li>
-							<li><a href = "/portfolio/{{request.session.slug}}/manage/">Current Round Portfolio Stats</a>
-								<ul>
-									<a href = "/portfolio/{{request.session.slug}}/manage/add/"><li>Buy Stocks</li></a>
-									<a href = "/portfolio/{{request.session.slug}}/manage/"><li>Sell Stocks</li></a>
-								</ul>
-							</li>
+							<li><a href = "/game/round">Current Round Statistics</a></li>
+							<li><a href = "/game/find">Resume a game</a></li>
+							<li><a href = "/game/leaderboard">High Scores</a></li>
+							{% if game %}
+							<li><a href = "/game/{{game.id}}/round/add">Next Round</a></li>
+							<li><a href = "/game/{{game.id}}/manage">Manage Current Portfolio</a></li>
+							{% endif %}
 						</ul>
 					</div>
 
 				</div>
 			</div>
-		{%endif%}
 		</div>
 		
 	</div>

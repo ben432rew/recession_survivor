@@ -32,7 +32,8 @@ class Create( View ):
 
         if form.is_valid():
             data = form.cleaned_data
-            results = Portfolio.create( data, request.user.id )
+            data['user'] = User.objects.get( id=request.user.id )
+            results = Portfolio.create( data )
             
             return redirect( '/portfolio/{}/manage'.format( results.slug ) )
 
@@ -60,8 +61,12 @@ class Holding_add( View ):
         form = Portfolio.create_holding( request.POST )
         portfolio = Portfolio( slug, request.POST['date'] )
 
-        results = portfolio.add_holding( form, request.user.id )
-        if results:
+        if form.is_valid():
+            form_data = form.cleaned_data
+            form_data['date'] = request.POST['date']
+            form_data['price'] = portfolio.stock_by_date( form_data['symbol'] ).close
+
+            portfolio.add_holding( form_data )
 
             return redirect( '/portfolio/{}/manage'.format( slug ) )
 
