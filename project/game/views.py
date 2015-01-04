@@ -119,39 +119,9 @@ class RoundView( View ):
     def get(self, request):
         request.session.set_expiry(300)
         game = get_game( game_id )
+        #add the round, update the date
         request.session['game_id'] = game_id
-        return redirect( '/game/{}/manage'.format( game_id ) )        
-        if request.session['round'] < int(request.session["total_rounds"]) and request.session['add'] == True:
-            request.session['round'] += 1
-            increment = incrementer(request.session['game_type'])
-            days = request.session['round']*increment
-            start = datetime.datetime.strptime(request.session['current_date'],"%Y-%m-%d")
-            time = datetime.timedelta(days=increment)
-            end = start + time
-            search_start = end - datetime.timedelta(days=increment)
-            request.session['search_start'] = str( search_start )
-            request.session['current_date'] = str( end )
-            stocks = Stock_history.objects.filter(date__range=[search_start, end])
-            request.session['add'] = True
-            game = Whole_Game.objects.get(id=request.session['game_id'])
-            return render(request, self.template_name, {'stocks':stocks, 'game':game})
-        elif request.session['round'] < int(request.session["total_rounds"]) and request.session['add'] == False:
-            increment = incrementer(request.session['game_type'])
-            days = request.session['round']*increment
-            start = datetime.datetime.strptime(request.session['current_date'],"%Y-%m-%d")
-            time = datetime.timedelta(days=days)
-            end = start + time
-            search_start = end - datetime.timedelta(days=increment)
-            request.session['search_start'] = search_start
-            request.session['current_date'] = end
-            stocks = Stock.objects.filter(date__range=[search_start, end])
-            request.session['add'] = True
-            game = Whole_Game.objects.get(id=request.session['game_id'])
-            return render(request, self.template_name, {'stocks':stocks, 'game':game})
-        else:
-            return render(request, 'results.html')
-    def post(self, request):
-        pass
+        return redirect( '/game/{}/manage'.format( game_id ) )
 
 
 class UnfinishedGames( View ):
