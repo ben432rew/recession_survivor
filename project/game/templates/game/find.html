@@ -13,6 +13,8 @@
     <!-- need an if statement here for when there's no saved games -->
         {% for game in games %}
             <p> {{game.name}} <a href='/game/{{ game.id }}/manage' class="btn btn-default ajax">Resume</a> </p>
+        {% empty %}
+            <p> I'm sorry but you have now games </p>
         {% endfor %}
     </div>
 
