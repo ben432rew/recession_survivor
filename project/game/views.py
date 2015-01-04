@@ -45,8 +45,6 @@ class CreateGame( View ):
 
             portfolio = Portfolio.create( portfolio_data )
 
-            form_data['current_round'] = 0
-
             form_data['portfolio'] = portfolio.id
 
             game = Whole_Game.objects.create( **form_data )
@@ -55,9 +53,17 @@ class CreateGame( View ):
             request.context_dict['form'] = form 
             return render( request, 'game/index.html', request.context_dict )
 
-#here game is gotten
+
+class UnfinishedGames( View ):
+    def get(self, request):
+        request.context_dict['games'] = Whole_Game.objects.filter(user=request.user, end_date=None)
+        request.context_dict['starturl'] = "/game/{}/start"
+        return render(request, 'game/find.html', request.context_dict)
+
+
 class Start( View ):
     def get( self, request, game_id ):
+        request.session.set_expiry(300)
         game = get_game( game_id )
         request.session['game_id'] = game_id
         return redirect( '/game/{}/manage'.format( game_id ) )
@@ -165,7 +171,6 @@ class UnfinishedGames( View ):
         request.context_dict['starturl'] = "/game/{}/start"
         return render(request, self.template_name, request.context_dict)
 
-
 class StatsView( View ):
     template_name = 'game/stats.html'
 
@@ -201,3 +206,10 @@ class StatsView( View ):
             return render(request, self.template_name, {'stocks':stocks})
         else:
             pass
+
+
+class EndGame( View ):
+    def get(self, request):
+#first, sell all the shares in the portfolio
+#then display final score and other stuff
+        return render (request, 'game/endgame.html', request.context_dict)

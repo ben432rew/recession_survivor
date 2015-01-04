@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url( r'^(?P<game_id>[\d]+)/round/add$', NextRoundView.as_view(), name='round_add' ),
     url(r'^round/stats/$', StatsView.as_view(), name='stats' ),
     url(r'^find/$', UnfinishedGames.as_view(), name='unfinished' ),
+    url(r'^endgame/$', EndGame.as_view(), name='endgame' ),
 )
