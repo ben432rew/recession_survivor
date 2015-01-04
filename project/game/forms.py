@@ -24,8 +24,8 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 class GameCreateForm( ModelForm ):
-    balance = forms.DecimalField(validators=[val_bal])
-    total_rounds = forms.IntegerField(validators=[val_round])
+    balance = forms.DecimalField(validators=[val_bal], initial=10000)
+    total_rounds = forms.IntegerField(validators=[val_round], initial=12)
     current_date = forms.CharField(validators=[val_date],widget=forms.DateInput(attrs={'type': 'date'}))
     
     class Meta:
