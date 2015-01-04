@@ -21,8 +21,14 @@
                     High Scores:
                 </div>
                 <div class="panel-body">                
-                    {% for score in highscores %}
-                        <p> score </p>
+                    {% for game in highscores %}
+                        <p> {{game.user}} </p>
+                        <p> {{game.final_score}} </p>
+                        <p> {{game.name}} </p>
+                        <p> {{game.game_type}} </p>
+                        <p> {{game.total_rounds}} </p>
+                        <p> {{game.start_date}} </p>
+                        <p> {{game.end_date}} </p>
                     {% endfor %}
                 </div>
             </div>
@@ -34,7 +40,12 @@
                 </div>
                 <div class="panel-body">                
                     {% for game in mygames %}
-                        <p> score </p>
+                        <p> {{game.name}} </p>
+                        <p> {{game.game_type}} </p>
+                        <p> {{game.total_rounds}} </p>
+                        <p> {{game.start_date}} </p>
+                        <p> {{game.end_date}} </p>
+                        <p> {{game.final_score}} </p>
                     {% endfor %}
                 </div>
             </div>
