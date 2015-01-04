@@ -16,8 +16,8 @@ def val_bal(bal):
 
 def val_date(date):
     d = datetime.now()
-    print(type(date))
-    if (date == d.date()):
+    dated = datetime.strptime(date, '%Y-%m-%d').date()
+    if (dated == d.date()):
         raise ValidationError("This date must be in the past")
 
 class DateInput(forms.DateInput):
@@ -25,15 +25,12 @@ class DateInput(forms.DateInput):
 
 class GameCreateForm( ModelForm ):
     balance = forms.DecimalField(validators=[val_bal])
-    current_date = forms.CharField(validators=[val_date])
     total_rounds = forms.IntegerField(validators=[val_round])
+    current_date = forms.CharField(validators=[val_date],widget=forms.DateInput(attrs={'type': 'date'}))
     
     class Meta:
         model = Whole_Game
         fields = ( 'name', 'balance', 'total_rounds' , 'game_type', 'current_date' )
-        widgets = {
-            'current_date' : DateInput()
-        }
         labels = {
             'current_date': _('Starting Day of Your Game (use format 9/20/2011)')
         }
