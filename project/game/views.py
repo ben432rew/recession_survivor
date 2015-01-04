@@ -121,17 +121,17 @@ class NextRoundView( View ):
         if game.current_round < game.total_rounds:
             print(game.current_round)
             game.current_round += 1
-            game.save()
             increment = incrementer(game.game_type)
             days = game.current_round * increment
             start = game.current_date
             print(start.strftime("%A"))
             time = datetime.timedelta(days=increment)
             end = start + time
-            print(end.strftime("%A"))
+            game.current_date = end
+            game.save(update_fields=['current_round', 'current_date'])
+            print(game.current_date)
             search_start = end - datetime.timedelta(days=increment)
             stocks = Stock_history.objects.filter(date__range=[search_start, end])
-            request.session['add'] = True
             return render(request, self.template_name, {'stocks':stocks, 'game':game})
         else:
             return render(request, 'results.html')
@@ -154,7 +154,6 @@ class CurrentRoundView( View ):
         end = start + time
         search_start = end - datetime.timedelta(days=increment)
         stocks = Stock_history.objects.filter(date__range=[search_start, end])
-        request.session['add'] = True
         return render(request, self.template_name, {'stocks':stocks, 'game':game})
 
 

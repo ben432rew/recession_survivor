@@ -1,5 +1,11 @@
 {% extends base_template|default:"ui/base.html" %}
 {% block content %}
+	<button class="btn btn-sm btn-success">
+	<a href="/game/{{ game.id }}/manage">
+	<span class="glyphicon glyphicon-forward"></span>
+		manage portfolio
+	</a>
+	</button>
 	<h1>Round {{game.current_round}}</h1>
 	<h1>Balance: {{game.balance}}</h1>
 	<table>
