@@ -17,7 +17,7 @@
 		<form action="/game/{{ game.id }}/manage/add" method="POST">
 			{% csrf_token %}
 
-			{% boot_form_fields game.portfolio.create_holding %}
+			{% boot_form_fields form %}
 
 			<button class="btn btn-default">
 				<span class="glyphicon glyphicon-share-alt"></span>
