@@ -111,45 +111,51 @@ class Manage_remove( View ):
             # add error here, but this should never be called?
             return redirect( '/game/{}/manage'.format( game_id ) )
 
-class RoundView( View ):
+class NextRoundView( View ):
     template_name = 'game/round.html'
 # the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
 # which actually doesn't work because it doesn't account for leap years, months not 30 days long and most importantly, THE USER CAN ONLY ACTUALLY PLAY ON WEEKDAYS NOT WEEKENDS OR HOLIDAYS
 # get should be used at the beginning of the first round.  Here the request.session variables should be set
     def get(self, request, game_id):
         game = get_game( game_id )
-        if request.session['round'] < int(request.session["total_rounds"]) and request.session['add'] == True:
-            request.session['round'] += 1
-            increment = incrementer(request.session['game_type'])
-            days = request.session['round']*increment
-            start = datetime.datetime.strptime(request.session['current_date'],"%Y-%m-%d")
+        if game.current_round < game.total_rounds:
+            print(game.current_round)
+            game.current_round += 1
+            game.save()
+            increment = incrementer(game.game_type)
+            days = game.current_round * increment
+            start = game.current_date
+            print(start.strftime("%A"))
             time = datetime.timedelta(days=increment)
             end = start + time
+            print(end.strftime("%A"))
             search_start = end - datetime.timedelta(days=increment)
-            request.session['search_start'] = str( search_start )
-            request.session['current_date'] = str( end )
             stocks = Stock_history.objects.filter(date__range=[search_start, end])
             request.session['add'] = True
-            game = Whole_Game.objects.get(id=request.session['game_id'])
-            return render(request, self.template_name, {'stocks':stocks, 'game':game})
-        elif request.session['round'] < int(request.session["total_rounds"]) and request.session['add'] == False:
-            increment = incrementer(request.session['game_type'])
-            days = request.session['round']*increment
-            start = datetime.datetime.strptime(request.session['current_date'],"%Y-%m-%d")
-            time = datetime.timedelta(days=days)
-            end = start + time
-            search_start = end - datetime.timedelta(days=increment)
-            request.session['search_start'] = search_start
-            request.session['current_date'] = end
-            stocks = Stock.objects.filter(date__range=[search_start, end])
-            request.session['add'] = True
-            game = Whole_Game.objects.get(id=request.session['game_id'])
             return render(request, self.template_name, {'stocks':stocks, 'game':game})
         else:
             return render(request, 'results.html')
 #everything else in the round should happen in a post except the initial setting of session variables in get
     def post(self, request):
         pass
+
+
+class CurrentRoundView( View ):
+    template_name = 'game/round.html'
+# the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
+# which actually doesn't work because it doesn't account for leap years, months not 30 days long and most importantly, THE USER CAN ONLY ACTUALLY PLAY ON WEEKDAYS NOT WEEKENDS OR HOLIDAYS
+# get should be used at the beginning of the first round.  Here the request.session variables should be set
+    def get(self, request, game_id):
+        game = get_game( game_id )
+        increment = incrementer(game.game_type)
+        days = game.current_round * increment
+        start = game.current_date
+        time = datetime.timedelta(days=increment)
+        end = start + time
+        search_start = end - datetime.timedelta(days=increment)
+        stocks = Stock_history.objects.filter(date__range=[search_start, end])
+        request.session['add'] = True
+        return render(request, self.template_name, {'stocks':stocks, 'game':game})
 
 
 class UnfinishedGames( View ):
