@@ -3,7 +3,7 @@ from portfolio.forms import portfolio_form, holding_form
 from django.utils.text import slugify
 from game.models import Whole_Game
 from django.contrib.auth.models import User
-from datetime import datetime
+from datetime import datetime, timedelta
 from pprint import pprint
 
 # portfolio should have a "value"  of all holdings
@@ -28,7 +28,7 @@ class Portfolio:
             self.current_date = self.check_date( date )
         else:
             # as soon as check date works this should be set today.
-            self.current_date = self.check_date( '2014-12-30' ) # datetime.strftime( datetime.today() ,"%Y-%m-%d")
+            self.current_date =  datetime.strftime( datetime.today() ,"%Y-%m-%d")
 
         ## get portfolio based on ID or slug(title)
         id_or_slug_type = type( id_or_slug )
@@ -153,7 +153,7 @@ class Portfolio:
         # return value of effected holdings
         return value
 
-    def chage_date( self, date ):
+    def change_date( self, date ):
         '''
         Changes the date of the eval history date. This will update prices in self.stocks as well.
         This should also handle splits and set the correct shares
@@ -166,17 +166,23 @@ class Portfolio:
         ''' issue #125 '''
         return date_in
         date_in = datetime.strptime( date_in,"%Y-%m-%d")
-        if date_in.weekday(6):
+        if date_in.strftime("%A") == "Sunday":
             date_in -= datetime.timedelta(days=2)
             return date_in
-        elif date_in.weekday(5):
+        elif date_in.strftime("%A") == "Saturday":
             date_in -= datetime.timedelta(days=1)
+            return date_in
+        else:
             return date_in
 
     def stock_date( self, symbol, date=False ):
         if not date:
             date = self.current_date
-
-        results = models.Stock_history.objects.get( symbol=symbol, date=date )
+        print(date)
+        results = models.Stock_history.objects.filter( symbol=symbol, date=date )
+        while(len(results)==0):
+            date -= timedelta(days=1)
+            results = models.Stock_history.objects.filter( symbol=symbol, date=date )
+        results = results[0]
 
         return results
