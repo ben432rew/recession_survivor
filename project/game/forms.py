@@ -13,12 +13,12 @@ def val_round(val_round):
 def val_bal(bal):
     if(bal<=0):
         raise ValidationError("Balance must be greater than 0")
-
-def val_date(date):
+def val_date( date):
     d = datetime.now()
     dated = datetime.strptime(date, '%Y-%m-%d').date()
-    if (dated == d.date()):
+    if (dated >= d.date()):
         raise ValidationError("This date must be in the past")
+
 
 class DateInput(forms.DateInput):
     input_type = 'date'
