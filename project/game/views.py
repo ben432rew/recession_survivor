@@ -30,6 +30,8 @@ def get_game( game_id ):
 
 class CreateGame( View ):
     def get( self, request ):
+        if request.user.is_anonymous():
+            return redirect( '/')        
         request.context_dict['form'] = GameCreateForm()
 
         return render( request, 'game/index.html', request.context_dict )
@@ -59,6 +61,8 @@ class CreateGame( View ):
 
 class UnfinishedGames( View ):
     def get(self, request):
+        if request.user.is_anonymous():
+            return redirect( '/')        
         request.context_dict['games'] = Whole_Game.objects.filter(user=request.user, end_date=None)
         request.context_dict['starturl'] = "/game/{}/start"
         return render(request, 'game/find.html', request.context_dict)
