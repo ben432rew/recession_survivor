@@ -21,7 +21,7 @@ def incrementer(time_span):
 
 def get_game( game_id ):
     game = Whole_Game.objects.get( id=game_id )
-    setattr( game, 'portfolio', Portfolio( game.portfolio ) )
+    setattr( game, 'portfolio', Portfolio( game.portfolio_id ) )
     game.portfolio.change_date( game.current_date )
     return game
 
@@ -45,7 +45,7 @@ class CreateGame( View ):
 
             portfolio = Portfolio.create( portfolio_data )
 
-            form_data['portfolio'] = portfolio.id
+            form_data['portfolio_id'] = portfolio.id
 
             game = Whole_Game.objects.create( **form_data )
             return redirect( '/game/{}/start'.format( game.id ) )

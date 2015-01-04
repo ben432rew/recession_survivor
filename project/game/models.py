@@ -25,7 +25,7 @@ class Whole_Game(models.Model):
     current_round = models.IntegerField(default=0)
     total_rounds = models.IntegerField(default=12)
     user = models.ForeignKey(User)
-    portfolio = models.IntegerField()
+    portfolio_id = models.IntegerField()
 
 class Transaction(models.Model):
     symbol = models.CharField(max_length=50)
