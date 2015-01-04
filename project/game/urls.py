@@ -10,8 +10,8 @@ urlpatterns = patterns('',
     url( r'^(?P<game_id>[\d]+)/manage/remove$', Manage_remove.as_view(), name='manage_remove' ),
     url( r'^(?P<game_id>[\d]+)/round$', RoundView.as_view(), name='round' ),
     url(r'^leaderboard$', Leaderboard.as_view(), name='leaderboard' ),
-    url(r'^round/stats/$', StatsView.as_view(), name='stats' ),
-    url(r'^find/$', UnfinishedGames.as_view(), name='unfinished' ),
-    url(r'^endgame/$', EndGame.as_view(), name='endgame' ),
+    url(r'^round/stats$', StatsView.as_view(), name='stats' ),
+    url(r'^find$', UnfinishedGames.as_view(), name='unfinished' ),
+    url(r'^endgame$', EndGame.as_view(), name='endgame' ),
 )
 

@@ -53,12 +53,10 @@
 
 	<div class="panel-footer">
 		Current Cash: ${{ game.balance }}, Portfolio value: $ {{ game.portfolio.value }}  Game Round: {{ game.current_round }} of {{ game.total_rounds}}
-		<button type="submit" class="btn btn-sm btn-default pull-right">
-		<a href="/game/{{ game.id }}/round" >
+		<a class="btn btn-sm btn-default pull-right ajax" href="/game/{{ game.id }}/round" >
 			<span class="glyphicon glyphicon-play"></span>
 			All finished?  Next Round!
 		</a>
-		</button>
 	</div>
 
 </div>
