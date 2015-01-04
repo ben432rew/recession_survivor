@@ -22,7 +22,7 @@ class ModelChoiceField( forms.ModelChoiceField ):
         return str( obj['name'] )
 
 class holding_form( ModelForm ):
-    shares = froms.IntegerField(validators=[val_share])
+    shares = forms.IntegerField(validators=[val_share])
     symbol = forms.fields.ChoiceField( Stocks_Tracked.objects.all().values_list('symbol', 'name')  )
     class Meta:
         model = Holding

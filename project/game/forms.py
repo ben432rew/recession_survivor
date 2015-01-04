@@ -8,8 +8,11 @@ from datetime import datetime
 
 def val_round(val_round):
     if (val_round<=0):
-        raise ValidationError("Round must be greater 1")
+        raise ValidationError("Round must be greater 0")
 
+def val_bal(bal):
+    if(bal<=0):
+        raise ValidationError("Balance must be greater than 0")
 
 def val_date(date):
     d = datetime.now()
@@ -21,8 +24,10 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 class GameCreateForm( ModelForm ):
+    balance = forms.DecimalField(validators=[val_bal])
     current_date = forms.CharField(validators=[val_date])
     total_rounds = forms.IntegerField(validators=[val_round])
+    
     class Meta:
         model = Whole_Game
         fields = ( 'name', 'balance', 'total_rounds' , 'game_type', 'current_date' )
