@@ -174,7 +174,7 @@ class Portfolio:
 
         # Check if the passed date is a string, convert it into a datetime object
         if date_str:
-            date = datetime.datetime.strptime( date, "%Y-%m-%d" )
+            date = datetime.datetime.strptime( date, "%Y-%m-%d" ).date()
 
         if date.strftime("%A") == "Sunday":
             date -= datetime.timedelta(days=2)
@@ -184,14 +184,14 @@ class Portfolio:
 
         # Check of passed date type was a string, and return the same type of object that was passed
         if date_str:
-            date = str( date.date() )
+            date = str( date )
 
-        print( date )
         return date
 
     def stock_by_date( self, symbol, date=False ):
         if not date:
             date = self.current_date
 
-        results = models.Stock_history.objects.first( symbol=symbol, date=date )
+        print('stock_by_date',date)
+        results = models.Stock_history.objects.filter( symbol=symbol, date=date )[0]
         return results
