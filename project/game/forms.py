@@ -30,7 +30,7 @@ class GameCreateForm( ModelForm ):
     
     class Meta:
         model = Whole_Game
-        fields = ( 'name', 'balance', 'total_rounds' , 'game_type', 'current_date' )
+        fields = ( 'name', 'start_balance', 'total_rounds' , 'game_type', 'current_date' )
         widgets = {
             'current_date' : DateInput()
         }
