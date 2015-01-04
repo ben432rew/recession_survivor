@@ -6,36 +6,10 @@ from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 from pprint import pprint
 
-# portfolio should have a "value"  of all holdings
-# and it should take a "current_date" and reference the Stocks_history table for pirces
-# there should like "__compute_value" function in the portfolio object 
 
 # today = str( datetime.date.today() )
 
 class Portfolio:
-<<<<<<< HEAD
-    current = None
-    title = None
-    description = None
-    # all the holding price added up
-    value = 0
-    current_date = ""
-
-
-    def __init__( self, arg1 , date):
-        arg1_type = type( arg1 )
-        if isinstance( arg1, int ):
-            port = models.Portfolio.objects.get( id=arg1 )
-            self.set_current( port )
-            self.set_value_all_holding( port , date)
-
-        elif isinstance( arg1, str ):
-            port = models.Portfolio.objects.get( slug=arg1 )
-            self.set_current( port )
-            self.set_value_all_holding( port , date)
-
-    def set_current( self, portfolio ):
-=======
     current = None # current portfolio model
     title = None # current portfolio title
     description = None # current portfolio title
@@ -65,22 +39,8 @@ class Portfolio:
         for key, value in portfolio.__dict__.items():
             setattr( self, key, value )
 
->>>>>>> cb5a932292eba2ac2b2c44a19fdfa895383e2191
         self.current = portfolio
 
-<<<<<<< HEAD
-    def set_value_all_holding(self,portfolio, date):
-        stocks = self.stocks
-        for stock in stocks:
-            self.value += (self.get_price_at_date(date,stock.symbol) * stock.shares)
-
-    def get_price_at_date(self , date_string, stock_symbol):
-        # "2014-12-30" = date_string
-        b = datetime.datetime.strptime( date_string , "%Y-%m-%d")
-        current_date = b.date()
-        stock_found = Stock_history.objects.filter( date=current_date , symbol=stock_symbol)
-        return stock_found[0].close
-=======
         self.__load_stocks()
 
     def __load_stocks( self ):
@@ -89,7 +49,6 @@ class Portfolio:
         '''
         self.stocks = {} # clear old data
         holdings = models.Holding.objects.filter( portfolio=self.current )
->>>>>>> cb5a932292eba2ac2b2c44a19fdfa895383e2191
 
         for hold in holdings:
 
@@ -125,18 +84,6 @@ class Portfolio:
     create_form = portfolio_form
 
     @classmethod
-<<<<<<< HEAD
-    def create( cls, form, user_id ):
-
-        if form.is_valid():
-            data = form.cleaned_data
-            data[ 'user' ] = User.objects.get( id=user_id )
-            data[ 'slug' ] = slugify( data[ 'title' ] )
-            data = models.Portfolio.objects.create( **data )
-            return data
-        else:
-            return False
-=======
     def create( cls, data):
 
         '''
@@ -147,25 +94,10 @@ class Portfolio:
         data = models.Portfolio.objects.create( **data )
 
         return data
->>>>>>> cb5a932292eba2ac2b2c44a19fdfa895383e2191
 
     # notice different naming
     create_holding = holding_form
     
-<<<<<<< HEAD
-    def add_holding( self, form, user_id, request ):
-        if form.is_valid():
-            data = form.cleaned_data
-            data[ 'portfolio' ] = self.current
-            data[ 'shares' ] = request.POST['shares']
-            data[ 'date' ] = datetime.datetime.strptime(request.POST['date'][0:10],"%Y-%m-%d")
-            info = str.split(request.POST['stock'], '-')
-            data[ 'symbol' ] = info[0]
-            data[ 'price' ] = float(info[1])
-            data = models.Holding.objects.create( **data )
-            return data
-        else:
-=======
     def add_holding( self, data ):
 
         value = data['shares']*data['price']
@@ -182,7 +114,6 @@ class Portfolio:
 
         # checks to see if 
         if symbol not in self.stocks:
->>>>>>> cb5a932292eba2ac2b2c44a19fdfa895383e2191
             return False
 
         amount = int( amount )
