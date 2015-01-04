@@ -79,6 +79,7 @@ class Start( View ):
 class Manage( View ):
     def get( self, request, game_id ):
         request.context_dict['game'] = get_game( game_id )
+        request.context_dict['form'] = Portfolio.create_holding()
 
         return render( request, 'game/manage.html', request.context_dict )
 
