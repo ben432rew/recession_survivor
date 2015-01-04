@@ -131,6 +131,7 @@ class RoundView( View ):
         game.current_date += datetime.timedelta(days=incrementer(game.game_type))
 #Just in case the current date lands on a weekend or holiday, here we check if 
 #current date has stocks from that day, if not, increment by another day
+
         stocks = Stock_history.objects.all()
         print(stocks[0].date)
         print(game.current_date)
