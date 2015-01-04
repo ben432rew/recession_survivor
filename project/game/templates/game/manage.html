@@ -53,7 +53,7 @@
 
 	<div class="panel-footer">
 		<div class="pull-left">
-			Current Cash: <b>$ {{ game.balance }}</b>, Portfolio value: <b>$ {{ game.portfolio.value }}</b>
+			Current Cash: <b>$ {{ game.balance|floatformat:2 }}</b>, Portfolio value: <b>$ {{ game.portfolio.value|floatformat:2 }}</b>
 		</div>
 		&nbsp;
 		<div class="pull-right">
