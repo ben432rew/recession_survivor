@@ -3,14 +3,14 @@ from portfolio.forms import portfolio_form, holding_form
 from django.utils.text import slugify
 from game.models import Whole_Game
 from django.contrib.auth.models import User
-from datetime import datetime, timedelta
+import datetime
 from pprint import pprint
 
 # portfolio should have a "value"  of all holdings
 # and it should take a "current_date" and reference the Stocks_history table for pirces
 # there should like "__compute_value" function in the portfolio object 
 
-# today = str( datetime.date.today() )
+# today = str( datetime.datetime.date.today() )
 
 class Portfolio:
     current = None # current portfolio model
@@ -28,7 +28,7 @@ class Portfolio:
             self.current_date = self.check_date( date )
         else:
             # as soon as check date works this should be set today.
-            self.current_date =  datetime.strftime( datetime.today() ,"%Y-%m-%d")
+            self.current_date =  datetime.datetime.strftime( datetime.datetime.today() ,"%Y-%m-%d")
 
         ## get portfolio based on ID or slug(title)
         id_or_slug_type = type( id_or_slug )
@@ -87,7 +87,7 @@ class Portfolio:
     create_form = portfolio_form
 
     @classmethod
-    def create( cls, data):
+    def create( cls, data ):
 
         '''
         Create new portfolio from create_form data and user_id argument
@@ -162,27 +162,36 @@ class Portfolio:
         self.__load_stocks()
         return date
 
-    def check_date( self, date_in ):
-        ''' issue #125 '''
-        return date_in
-        date_in = datetime.strptime( date_in,"%Y-%m-%d")
-        if date_in.strftime("%A") == "Sunday":
-            date_in -= datetime.timedelta(days=2)
-            return date_in
-        elif date_in.strftime("%A") == "Saturday":
-            date_in -= datetime.timedelta(days=1)
-            return date_in
-        else:
-            return date_in
+    @classmethod
+    def check_date( cls, date ):
+        '''
+        Checks a passed date to see if it lands on a weekend
+        Enhancement: check for US bank holidays, this may be best done with a
+            imported tuple of past and future holidays
+        '''
+        # Hold on to type of past date for later
+        date_str = isinstance( date, str )
 
-    def stock_date( self, symbol, date=False ):
+        # Check if the passed date is a string, convert it into a datetime object
+        if date_str:
+            date = datetime.datetime.strptime( date, "%Y-%m-%d" )
+
+        if date.strftime("%A") == "Sunday":
+            date -= datetime.timedelta(days=2)
+            return date
+        elif date.strftime("%A") == "Saturday":
+            date -= datetime.timedelta(days=1)
+
+        # Check of passed date type was a string, and return the same type of object that was passed
+        if date_str:
+            date = str( date.date() )
+
+        print( date )
+        return date
+
+    def stock_by_date( self, symbol, date=False ):
         if not date:
             date = self.current_date
-        print(date)
-        results = models.Stock_history.objects.filter( symbol=symbol, date=date )
-        while(len(results)==0):
-            date -= timedelta(days=1)
-            results = models.Stock_history.objects.filter( symbol=symbol, date=date )
-        results = results[0]
 
+        results = models.Stock_history.objects.first( symbol=symbol, date=date )
         return results

@@ -10,6 +10,7 @@ from portfolio.portfolio import Portfolio
 
 import datetime
 from pprint import pprint
+from types import MethodType
 
 def incrementer(time_span):
     if time_span == "weekly":
@@ -20,9 +21,11 @@ def incrementer(time_span):
         return 365
 
 def get_game( game_id ):
+
     game = Whole_Game.objects.get( id=game_id )
     setattr( game, 'portfolio', Portfolio( game.portfolio_id ) )
-    game.portfolio.change_date( game.current_date )
+    game.change_date( game.current_date )
+
     return game
 
 class CreateGame( View ):
@@ -86,7 +89,7 @@ class Manage_add( View ):
             form_data = form.cleaned_data
             form_data['date'] = str( request.context_dict['game'].current_date )
 
-            form_data['price'] = request.context_dict['game'].portfolio.stock_date( form_data['symbol'] ).close
+            form_data['price'] = request.context_dict['game'].portfolio.stock_by_date( form_data['symbol'] ).close
 
             results = request.context_dict['game'].portfolio.add_holding( form_data )
 
@@ -117,6 +120,7 @@ class Manage_remove( View ):
             # add error here, but this should never be called?
             return redirect( '/game/{}/manage'.format( game_id ) )
 
+# <<<<<<< HEAD
 #not working, infinite loop
 class RoundView( View ):
     def get(self, request, game_id):
@@ -134,8 +138,63 @@ class RoundView( View ):
             pprint('IN DA LOOOOOOP')
             game.current_date += datetime.timedelta(days=1)
         pprint("HERE YET?")     
-        game.save( update_fields=["current_date", "current_round"])   
+        game.save( update_fields=["current_date", "current_round"] )   
         return redirect( '/game/{}/manage'.format( game_id ) )
+# =======
+# class NextRoundView( View ):
+#     template_name = 'game/round.html'
+# # the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
+# # which actually doesn't work because it doesn't account for leap years, months not 30 days long and most importantly, THE USER CAN ONLY ACTUALLY PLAY ON WEEKDAYS NOT WEEKENDS OR HOLIDAYS
+# # get should be used at the beginning of the first round.  Here the request.session variables should be set
+#     def get(self, request, game_id):
+#         game = get_game( game_id )
+#         if game.current_round < game.total_rounds:
+#             print(game.current_round)
+#             game.current_round += 1
+#             increment = incrementer(game.game_type)
+#             days = game.current_round * increment
+#             start = game.current_date
+#             print(start.strftime("%A"))
+#             time = datetime.timedelta(days=increment)
+#             end = start + time
+#             game.current_date = end
+#             game.save(update_fields=['current_round', 'current_date'])
+#             print(game.current_date)
+#             search_start = end - datetime.timedelta(days=increment)
+#             stocks = Stock_history.objects.filter(date__range=[search_start, end])
+#             return render( request, self.template_name, { 'stocks':stocks, 'game':game } )
+#         else:
+#             return render(request, 'results.html')
+# #everything else in the round should happen in a post except the initial setting of session variables in get
+#     def post(self, request):
+#         pass
+
+
+# class CurrentRoundView( View ):
+#     template_name = 'game/round.html'
+# # the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
+# # which actually doesn't work because it doesn't account for leap years, months not 30 days long and most importantly, THE USER CAN ONLY ACTUALLY PLAY ON WEEKDAYS NOT WEEKENDS OR HOLIDAYS
+# # get should be used at the beginning of the first round.  Here the request.session variables should be set
+#     def get(self, request, game_id):
+#         game = get_game( game_id )
+#         increment = incrementer(game.game_type)
+#         days = game.current_round * increment
+#         start = game.current_date
+#         time = datetime.timedelta(days=increment)
+#         end = start + time
+#         search_start = end - datetime.timedelta(days=increment)
+#         stocks = Stock_history.objects.filter(date__range=[search_start, end])
+#         return render(request, self.template_name, {'stocks':stocks, 'game':game})
+
+
+# class UnfinishedGames( View ):
+#     template_name = 'game/find.html'
+
+#     def get(self, request):
+#         request.context_dict['games'] = Whole_Game.objects.filter(user=request.user, end_date=None)
+#         request.context_dict['starturl'] = "/game/{}/start"
+#         return render(request, self.template_name, request.context_dict)
+# >>>>>>> 6f29913cf78b51d9cb41c20c17d35838b8413deb
 
 class StatsView( View ):
     template_name = 'game/stats.html'
