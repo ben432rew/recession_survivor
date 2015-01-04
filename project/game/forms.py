@@ -26,7 +26,7 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 class GameCreateForm( ModelForm ):
-    balance = forms.DecimalField(validators=[val_bal], initial=10000)
+    balance = forms.DecimalField(initial=10000)
     total_rounds = forms.IntegerField(initial=12)
     current_date = forms.CharField( widget=forms.DateInput(attrs={'type': 'date'}))
     
@@ -43,9 +43,8 @@ class GameCreateForm( ModelForm ):
         data = self.cleaned_data
         val_round(data['total_rounds'])
         val_date(data['current_date'])
+        val_bal(data['balance'])
         print(data)
-        if 'name' or 'balance' or 'total_rounds' or 'game_type' or 'current_date' not in data:
-            raise forms.ValidationError('PLease enter Valid Values ')
        
         cur_date = datetime.datetime.strptime( data['current_date'], "%Y-%m-%d" ).date()
         
