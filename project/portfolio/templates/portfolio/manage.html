@@ -24,7 +24,7 @@
 	<ul class="list-group">
 	{% for stock, value in portfolio.stocks.items %} 
 	    <li class="list-group-item">
-	    	{{ value.shares }} shares of {{ value.name }} @ ${{ value.close }} Worth {{ value.current_value }}
+	    	{{ value.shares }} shares of {{ value.name }} @ ${{ value.close }} Worth ${{ value.current_value }}
 
 	    	<form action="/portfolio/{{ portfolio.slug }}/manage/remove" method="POST" class="form-inline">
 				{%csrf_token%}
