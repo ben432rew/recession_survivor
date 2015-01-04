@@ -124,7 +124,7 @@ class Manage_remove( View ):
             # add error here, but this should never be called?
             return redirect( '/game/{}/manage'.format( game_id ) )
 
-#untested
+
 class RoundView( View ):
     def get(self, request, game_id):
         game = get_game( game_id )
