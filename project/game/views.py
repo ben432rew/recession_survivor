@@ -1,6 +1,7 @@
 from django.views.generic import View
 from django.utils.text import slugify
 from django.shortcuts import render, redirect
+from django.forms.util import ErrorList
 
 from game.forms import GameCreateForm
 from game.models import *
@@ -41,6 +42,7 @@ class CreateGame( View ):
         if form.is_valid():
             form_data = form.cleaned_data
             form_data['user'] = User.objects.get( id=request.user.id )
+            form_data['balance'] = form_data['start_balance']
 
             portfolio_data = {
                 'title': "game_{}".format( form_data['name'] ),
@@ -79,6 +81,7 @@ class Start( View ):
 class Manage( View ):
     def get( self, request, game_id ):
         request.context_dict['game'] = get_game( game_id )
+        request.context_dict['form'] = Portfolio.create_holding()
 
         return render( request, 'game/manage.html', request.context_dict )
 
@@ -87,24 +90,24 @@ class Manage_add( View ):
     def post( self, request, game_id ):
         request.context_dict['game'] = get_game( game_id )
         form = Portfolio.create_holding( request.POST )
-
-        # logic here to make sure user can afford stocks
+        request.context_dict[ 'form' ] = form
         if form.is_valid():
             form_data = form.cleaned_data
             form_data['date'] = str( request.context_dict['game'].current_date )
 
             form_data['price'] = request.context_dict['game'].portfolio.stock_by_date( form_data['symbol'] ).close
+            if form_data['price'] * form_data["shares"] <= request.context_dict["game"].balance:
+                results = request.context_dict['game'].portfolio.add_holding( form_data )
 
-            results = request.context_dict['game'].portfolio.add_holding( form_data )
+                request.context_dict['game'].balance -= results
+                request.context_dict['game'].save( update_fields=["balance"] )
 
-            request.context_dict['game'].balance -= results
-            request.context_dict['game'].save( update_fields=["balance"] )
-
-            return redirect( '/game/{}/manage'.format( game_id ) )
-
+                return redirect( '/game/{}/manage'.format( game_id ) )
+            else:
+                errors = request.context_dict[ 'form' ]._errors.setdefault("shares", ErrorList())
+                errors.append(u"You cannot afford that")
+                return render( request, 'game/manage.html', request.context_dict ) 
         else:
-            request.context_dict[ 'form' ] = form
-
             return render( request, 'game/manage.html', request.context_dict )
 
 
@@ -124,18 +127,16 @@ class Manage_remove( View ):
             # add error here, but this should never be called?
             return redirect( '/game/{}/manage'.format( game_id ) )
 
-#untested
+
 class RoundView( View ):
     def get(self, request, game_id):
         game = get_game( game_id )
         if game.total_rounds == game.current_round:
-            return redirect( '/game/endgame')
+            return redirect( "/game/" + game_id + "/endgame")
         game.current_round += 1
-        print(game.current_date)
         game.current_date += datetime.timedelta(days=incrementer(game.game_type))
         game.current_date = game.change_date(game.current_date)
-        print(game.current_date)
-        game.save( update_fields=["current_date", "current_round"] )   
+        game.save()   
         return redirect( '/game/{}/manage'.format( game_id ) )
 
 
@@ -144,14 +145,14 @@ class StatsView( View ):
 
     def get(self, request):
         if request.session['game_type'] == 'weekly':
-                days = request.session['round']*7
-                start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-                time = datetime.timedelta(days=days)
-                end = start + time
-                search_start = end - datetime.timedelta(days=7)
-                stocks = Stock_history.objects.filter(date__range=[search_start, end])
-                game = Whole_Game.objects.get(id=request.session['game_id'])
-                return render(request, self.template_name, {'stocks':stocks, 'game':game})
+            days = request.session['round']*7
+            start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
+            time = datetime.timedelta(days=days)
+            end = start + time
+            search_start = end - datetime.timedelta(days=7)
+            stocks = Stock_history.objects.filter(date__range=[search_start, end])
+            game = Whole_Game.objects.get(id=request.session['game_id'])
+            return render(request, self.template_name, {'stocks':stocks, 'game':game})
         elif request.session['game_type'] == 'monthly':
             days = request.session['round']*31
             start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
@@ -187,7 +188,15 @@ class Leaderboard(View):
 
 
 class EndGame( View ):
-    def get(self, request):
-#first, sell all the shares in the portfolio
-#then display final score and other stuff
+    def get(self, request, game_id):
+        game = get_game( game_id )
+        game.current_date += datetime.timedelta(days=incrementer(game.game_type))
+        game.current_date = game.change_date(game.current_date)
+        game.end_date = game.current_date
+        for symbol,values in game.portfolio.stocks.items():
+            price = game.portfolio.remove_holding( symbol, values["shares"] )
+            game.balance += price
+        game.final_score = game.balance
+        game.save()
+        request.context_dict["game"] = game
         return render (request, 'game/endgame.html', request.context_dict)

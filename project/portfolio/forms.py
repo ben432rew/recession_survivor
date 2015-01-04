@@ -5,9 +5,8 @@ from pprint import pprint as print
 from django.core.exceptions import ValidationError
 
 def val_share(shares):
-    if float(share)<= 0 :
+    if float(shares)<= 0 or shares == "" :
         raise ValidationError("Shares must be greater than zero ")
-
 
 class DateInput( forms.DateInput ):
     input_type = 'date'

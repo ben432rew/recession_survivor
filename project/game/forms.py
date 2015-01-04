@@ -32,11 +32,13 @@ class GameCreateForm( ModelForm ):
     
     class Meta:
         model = Whole_Game
-        fields = ( 'name', 'balance', 'total_rounds' , 'game_type', 'current_date' )
+        fields = ( 'name', 'start_balance', 'total_rounds' , 'game_type', 'current_date' )
+        widgets = {
+            'current_date' : DateInput()
+        }
         labels = {
             'current_date': _('Starting Day of Your Game (use format 9/20/2011)')
         }
-
 
     def clean(self):
         # print(dir(self))
@@ -62,6 +64,5 @@ class GameCreateForm( ModelForm ):
         if(check_date <= cur_date):
             raise forms.ValidationError('Date must be further in the past')
 
-    #     return self.cleaned_data
 
 
