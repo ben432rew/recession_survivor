@@ -57,12 +57,10 @@ class CreateGame( View ):
 
 
 class UnfinishedGames( View ):
-    template_name = 'game/find.html'
-
     def get(self, request):
         request.context_dict['games'] = Whole_Game.objects.filter(user=request.user, end_date=None)
         request.context_dict['starturl'] = "/game/{}/start"
-        return render(request, self.template_name, request.context_dict)
+        return render(request, 'game/find.html', request.context_dict)
 
 
 class Start( View ):
@@ -123,7 +121,6 @@ class Manage_remove( View ):
 
 
 class RoundView( View ):
-    template_name = 'game/round.html'
     def get(self, request):
         game = get_game( game_id )
         if game.total_rounds == game.current_round:
@@ -176,8 +173,7 @@ class StatsView( View ):
 
 
 class EndGame( View ):
-    template_name = 'game/endgame.html'
     def get(self, request):
-#sell all the shares in the portfolio
-#display final score and other stuff
-        return render (request, self.template_name, request.context_dict)
+#first, sell all the shares in the portfolio
+#then display final score and other stuff
+        return render (request, 'game/endgame.html', request.context_dict)
