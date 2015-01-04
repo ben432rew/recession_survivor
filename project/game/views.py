@@ -120,7 +120,6 @@ class Manage_remove( View ):
             # add error here, but this should never be called?
             return redirect( '/game/{}/manage'.format( game_id ) )
 
-
 #untested
 class RoundView( View ):
     def get(self, request, game_id):
@@ -171,6 +170,7 @@ class StatsView( View ):
             return render(request, self.template_name, {'stocks':stocks})
         else:
             pass
+
 
 class Leaderboard(View):
     def get(self, request):
