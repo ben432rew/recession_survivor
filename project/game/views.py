@@ -191,6 +191,7 @@ class EndGame( View ):
         for stock in game.portfolio.stocks:
             price = game.portfolio.remove_holding( stock.symbol, stock.amount )
             game.balance += price
+        game.final_score = game.balance
         game.save()
 #then display final score and other stuff
         request.context_dict["game"] = game
