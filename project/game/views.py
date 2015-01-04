@@ -55,7 +55,7 @@ class CreateGame( View ):
             request.context_dict['form'] = form 
             return render( request, 'game/index.html', request.context_dict )
 
-#here game is gotten
+
 class Start( View ):
     def get( self, request, game_id ):
         game = get_game( game_id )
@@ -111,13 +111,16 @@ class Manage_remove( View ):
             # add error here, but this should never be called?
             return redirect( '/game/{}/manage'.format( game_id ) )
 
+
 class RoundView( View ):
     template_name = 'game/round.html'
 # the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
 # which actually doesn't work because it doesn't account for leap years, months not 30 days long and most importantly, THE USER CAN ONLY ACTUALLY PLAY ON WEEKDAYS NOT WEEKENDS OR HOLIDAYS
-# get should be used at the beginning of the first round.  Here the request.session variables should be set
     def get(self, request):
         request.session.set_expiry(300)
+        game = get_game( game_id )
+        request.session['game_id'] = game_id
+        return redirect( '/game/{}/manage'.format( game_id ) )        
         if request.session['round'] < int(request.session["total_rounds"]) and request.session['add'] == True:
             request.session['round'] += 1
             increment = incrementer(request.session['game_type'])
@@ -147,7 +150,6 @@ class RoundView( View ):
             return render(request, self.template_name, {'stocks':stocks, 'game':game})
         else:
             return render(request, 'results.html')
-#everything else in the round should happen in a post except the initial setting of session variables in get
     def post(self, request):
         pass
 
