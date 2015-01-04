@@ -120,82 +120,20 @@ class Manage_remove( View ):
             # add error here, but this should never be called?
             return redirect( '/game/{}/manage'.format( game_id ) )
 
-# <<<<<<< HEAD
-#not working, infinite loop
+#untested
 class RoundView( View ):
     def get(self, request, game_id):
         game = get_game( game_id )
         if game.total_rounds == game.current_round:
             return redirect( '/game/endgame')
         game.current_round += 1
-        game.current_date += datetime.timedelta(days=incrementer(game.game_type))
-#Just in case the current date lands on a weekend or holiday, here we check if 
-#current date has stocks from that day, if not, increment by another day
-
-        stocks = Stock_history.objects.all()
-        print(stocks[0].date)
         print(game.current_date)
-        while len(Stock_history.objects.first(date=game.current_date)) == None:
-            pprint('IN DA LOOOOOOP')
-            game.current_date += datetime.timedelta(days=1)
-        pprint("HERE YET?")     
+        game.current_date += datetime.timedelta(days=incrementer(game.game_type))
+        game.current_date = game.change_date(game.current_date)
+        print(game.current_date)
         game.save( update_fields=["current_date", "current_round"] )   
         return redirect( '/game/{}/manage'.format( game_id ) )
-# =======
-# class NextRoundView( View ):
-#     template_name = 'game/round.html'
-# # the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
-# # which actually doesn't work because it doesn't account for leap years, months not 30 days long and most importantly, THE USER CAN ONLY ACTUALLY PLAY ON WEEKDAYS NOT WEEKENDS OR HOLIDAYS
-# # get should be used at the beginning of the first round.  Here the request.session variables should be set
-#     def get(self, request, game_id):
-#         game = get_game( game_id )
-#         if game.current_round < game.total_rounds:
-#             print(game.current_round)
-#             game.current_round += 1
-#             increment = incrementer(game.game_type)
-#             days = game.current_round * increment
-#             start = game.current_date
-#             print(start.strftime("%A"))
-#             time = datetime.timedelta(days=increment)
-#             end = start + time
-#             game.current_date = end
-#             game.save(update_fields=['current_round', 'current_date'])
-#             print(game.current_date)
-#             search_start = end - datetime.timedelta(days=increment)
-#             stocks = Stock_history.objects.filter(date__range=[search_start, end])
-#             return render( request, self.template_name, { 'stocks':stocks, 'game':game } )
-#         else:
-#             return render(request, 'results.html')
-# #everything else in the round should happen in a post except the initial setting of session variables in get
-#     def post(self, request):
-#         pass
 
-
-# class CurrentRoundView( View ):
-#     template_name = 'game/round.html'
-# # the round is incremented by 1 every round, but the date could be incremented by 7 days, 30 days, or 365 days
-# # which actually doesn't work because it doesn't account for leap years, months not 30 days long and most importantly, THE USER CAN ONLY ACTUALLY PLAY ON WEEKDAYS NOT WEEKENDS OR HOLIDAYS
-# # get should be used at the beginning of the first round.  Here the request.session variables should be set
-#     def get(self, request, game_id):
-#         game = get_game( game_id )
-#         increment = incrementer(game.game_type)
-#         days = game.current_round * increment
-#         start = game.current_date
-#         time = datetime.timedelta(days=increment)
-#         end = start + time
-#         search_start = end - datetime.timedelta(days=increment)
-#         stocks = Stock_history.objects.filter(date__range=[search_start, end])
-#         return render(request, self.template_name, {'stocks':stocks, 'game':game})
-
-
-# class UnfinishedGames( View ):
-#     template_name = 'game/find.html'
-
-#     def get(self, request):
-#         request.context_dict['games'] = Whole_Game.objects.filter(user=request.user, end_date=None)
-#         request.context_dict['starturl'] = "/game/{}/start"
-#         return render(request, self.template_name, request.context_dict)
-# >>>>>>> 6f29913cf78b51d9cb41c20c17d35838b8413deb
 
 class StatsView( View ):
     template_name = 'game/stats.html'
@@ -232,6 +170,7 @@ class StatsView( View ):
             return render(request, self.template_name, {'stocks':stocks})
         else:
             pass
+
 
 class Leaderboard(View):
     def get(self, request):
