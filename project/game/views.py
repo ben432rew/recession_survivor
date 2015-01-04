@@ -87,8 +87,6 @@ class Manage_add( View ):
     def post( self, request, game_id ):
         request.context_dict['game'] = get_game( game_id )
         form = Portfolio.create_holding( request.POST )
-
-        # logic here to make sure user can afford stocks
         if form.is_valid():
             form_data = form.cleaned_data
             form_data['date'] = str( request.context_dict['game'].current_date )
@@ -104,7 +102,6 @@ class Manage_add( View ):
 
         else:
             request.context_dict[ 'form' ] = form
-
             return render( request, 'game/manage.html', request.context_dict )
 
 
@@ -186,13 +183,14 @@ class Leaderboard(View):
 
 class EndGame( View ):
     def get(self, request, game_id):
-#first, sell all the shares in the portfolio
         game = get_game( game_id )
-        for stock in game.portfolio.stocks:
-            price = game.portfolio.remove_holding( stock.symbol, stock.amount )
+        game.current_date += datetime.timedelta(days=incrementer(game.game_type))
+        game.current_date = game.change_date(game.current_date)
+        game.end_date = game.current_date
+        for symbol,values in game.portfolio.stocks.items():
+            price = game.portfolio.remove_holding( symbol, values["shares"] )
             game.balance += price
         game.final_score = game.balance
-        game.end_date = datetime.date.today()
         game.save()
         request.context_dict["game"] = game
         return render (request, 'game/endgame.html', request.context_dict)
