@@ -194,6 +194,5 @@ class EndGame( View ):
         game.final_score = game.balance
         game.end_date = datetime.date.today()
         game.save()
-#then display final score and other stuff
         request.context_dict["game"] = game
         return render (request, 'game/endgame.html', request.context_dict)
