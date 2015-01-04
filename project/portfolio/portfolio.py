@@ -28,7 +28,7 @@ class Portfolio:
             self.current_date = self.check_date( arg2 )
         else:
             # as soon as check date works this should be set today.
-            self.current_date = check_date( '2014-12-30' ) # datetime.strftime( datetime.today() ,"%Y-%m-%d")
+            self.current_date =  datetime.strftime( datetime.today() ,"%Y-%m-%d")
 
         ## get portfolio based on ID or slug(title)
         arg1_type = type( arg1 )
@@ -149,9 +149,11 @@ class Portfolio:
     def check_date( self, date_in ):
         ''' issue #125 '''
         date_in = datetime.strptime( date_in,"%Y-%m-%d")
-        if date_in.weekday(6):
+        if date_in.strftime("%A") == "Sunday":
             date_in -= datetime.timedelta(days=2)
             return date_in
-        elif date_in.weekday(5):
+        elif date_in.strftime("%A") == "Saturday":
             date_in -= datetime.timedelta(days=1)
+            return date_in
+        else:
             return date_in
