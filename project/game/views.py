@@ -22,7 +22,7 @@ def incrementer(time_span):
 def get_game( game_id ):
     game = Whole_Game.objects.get( id=game_id )
     setattr( game, 'portfolio', Portfolio( game.portfolio ) )
-    game.portfolio.chage_date( game.current_date )
+    game.portfolio.change_date( game.current_date )
     return game
 
 class CreateGame( View ):
@@ -135,7 +135,6 @@ class RoundView( View ):
         pprint("HERE YET?")     
         game.save()   
         return redirect( '/game/{}/manage'.format( game_id ) )
-
 
 class StatsView( View ):
     template_name = 'game/stats.html'

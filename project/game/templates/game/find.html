@@ -12,7 +12,11 @@
     <div class="panel-body">
     <!-- need an if statement here for when there's no saved games -->
         {% for game in games %}
-            <p> {{game.name}} <a href="/game/{{ game.id }}/start" class="btn btn-default ajax">Resume</a> </p>
+
+            <p> 
+                {{ game.name }} <a href="/game/{{ game.id }}/start" class="btn btn-default ajax">Resume</a>
+            </p>
+
         {% endfor %}
     </div>
 
