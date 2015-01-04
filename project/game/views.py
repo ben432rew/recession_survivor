@@ -130,7 +130,7 @@ class RoundView( View ):
         stocks = Stock_history.objects.all()
         print(stocks[0].date)
         print(game.current_date)
-        while len(Stock_history.objects.filter(date=game.current_date)) != 0:
+        while len(Stock_history.objects.first(date=game.current_date)) == None:
             pprint('IN DA LOOOOOOP')
             game.current_date += datetime.timedelta(days=1)
         pprint("HERE YET?")     
