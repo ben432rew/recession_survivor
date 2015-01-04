@@ -45,8 +45,6 @@ class CreateGame( View ):
 
             portfolio = Portfolio.create( portfolio_data )
 
-            form_data['current_round'] = 0
-
             form_data['portfolio'] = portfolio.id
 
             game = Whole_Game.objects.create( **form_data )
@@ -121,17 +119,19 @@ class Manage_remove( View ):
 
 
 class RoundView( View ):
-    def get(self, request):
+    def get(self, request, game_id):
         game = get_game( game_id )
         if game.total_rounds == game.current_round:
             return redirect( '/game/endgame')
         game.current_round += 1
         game.current_date += datetime.timedelta(days=incrementer(game.game_type))
+        pprint("WE'RE GETTING HERE")
 #Just in case the current date lands on a weekend or holiday, here we check if 
 #current date has stocks from that day, if not, increment by another day
         while len(Stock_history.objects.filter(date=game.current_date)) == 0:
             game.current_date += datetime.timedelta(days=1)
-        game.save()        
+        pprint("BUT NOT HERE")     
+        game.save()   
         return redirect( '/game/{}/manage'.format( game_id ) )
 
 
