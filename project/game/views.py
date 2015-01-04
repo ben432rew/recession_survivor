@@ -173,5 +173,6 @@ class StatsView( View ):
 
 class EndGame( View ):
     template_name = 'game/endgame.html'
-    #get all the stuff to show
-    return render (request, self.template_name, request.context_dict)
+    def get(self, request):
+#get all the stuff to show at the end of the game
+        return render (request, self.template_name, request.context_dict)
