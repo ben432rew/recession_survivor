@@ -153,7 +153,7 @@ class RoundView( View ):
 
 class StatsView( View ):
     template_name = 'game/stats.html'
-    
+
     def get(self, request, game_id ):
         game = get_game( game_id )
         if request.user.is_anonymous():
@@ -162,6 +162,7 @@ class StatsView( View ):
         search_start = game.current_date - datetime.timedelta(days=7)
         stocks = Stock_history.objects.filter(date__range=[start, game.current_date])
         return render(request, self.template_name, {'stocks':stocks, 'game':game})
+
 
 class Leaderboard(View):
     
