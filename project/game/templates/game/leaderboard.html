@@ -1,0 +1,31 @@
+{% extends base_template|default:"ui/base.html" %}
+
+{% block title %}Game - {% endblock %}
+
+{% block content %}
+{%  load ui.bootstrap %}
+
+<div class="row" id="main">		
+        <div class="col-md-12">		
+            <div class="panel panel-default">		
+                <div class="panel-heading panel-title">		
+                    High Scores:		
+                </div>		
+                <div class="panel-body">
+                	<div class="list-group">                		
+                    {% for game in highscores %}		
+                        <p class="list-group-item active"> Username: {{game.user}} </p>		
+                        <p> Final Score: {{game.final_score}} </p>		
+                        <p> Game Name: {{game.name}} </p>		
+                        <p> Game Type: {{game.game_type}} </p>		
+                        <p> Total Rounds: {{game.total_rounds}} </p>		
+                        <p> Start Date: {{game.start_date}} </p>		
+                        <p> End Date: {{game.end_date}} </p>
+                        <br>		
+                    {% endfor %}
+                    </div>		
+                </div>		
+            </div>		
+        </div>
+
+{% endblock %}
