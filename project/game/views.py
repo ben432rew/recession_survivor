@@ -158,34 +158,11 @@ class StatsView( View ):
         game = get_game( game_id )
         if request.user.is_anonymous():
             return redirect('/')
-        if game.game_type == 'weekly':
-            days = game.current_round*7
-            start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-            time = datetime.timedelta(days=days)
-            end = start + time
-            search_start = end - datetime.timedelta(days=7)
-            stocks = Stock_history.objects.filter(date__range=[search_start, end])
-            game = Whole_Game.objects.get(id=request.session['game_id'])
-            return render(request, self.template_name, {'stocks':stocks, 'game':game})
-        elif game.game_type == 'monthly':
-            days = game.current_round*31
-            start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-            time = datetime.timedelta(days=days)
-            end = start + time
-            search_start = end - datetime.timedelta(days=31)
-            stocks = Stock.objects.filter(date__range=[search_start, end])
-            return render(request, self.template_name, {'stocks':stocks})
-        elif game.game_type == 'yearly':
-            days = game.current_round*365
-            start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-            time = datetime.timedelta(days=days)
-            end = start + time
-            search_start = end - datetime.timedelta(days=365)
-            stocks = Stock.objects.filter(date__range=[search_start, end])
-            return render(request, self.template_name, {'stocks':stocks})
-        else:
-            pass
-
+        start = game.current_date - datetime.timedelta(days=incrementer(game.game_type))
+        search_start = game.current_date - datetime.timedelta(days=7)
+        stocks = Stock_history.objects.filter(date__range=[start, game.current_date])
+        game = Whole_Game.objects.get(id=request.session['game_id'])
+        return render(request, self.template_name, {'stocks':stocks, 'game':game})
 
 class Leaderboard(View):
     
