@@ -1,9 +1,12 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from game.views import *
+from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
+
 
 urlpatterns = patterns('',
-    url( r'^$', CreateGame.as_view(), name='creategame' ),
+    url( r'^$', CreateGame.as_view(), name='create_game' ),
     url( r'^(?P<game_id>[\d]+)/start$', Start.as_view(), name='start' ),
     url( r'^(?P<game_id>[\d]+)/manage$', Manage.as_view(), name='manage' ),
     url( r'^(?P<game_id>[\d]+)/manage/add$', Manage_add.as_view(), name='manage_add' ),
