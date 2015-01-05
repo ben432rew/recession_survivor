@@ -161,7 +161,6 @@ class StatsView( View ):
         start = game.current_date - datetime.timedelta(days=incrementer(game.game_type))
         search_start = game.current_date - datetime.timedelta(days=7)
         stocks = Stock_history.objects.filter(date__range=[start, game.current_date])
-        game = Whole_Game.objects.get(id=request.session['game_id'])
         return render(request, self.template_name, {'stocks':stocks, 'game':game})
 
 class Leaderboard(View):
