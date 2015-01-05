@@ -166,7 +166,7 @@ class Portfolio:
         Enhancement: check for US bank holidays, this may be best done with a
             imported tuple of past and future holidays
         '''
-        Hold on to type of past date for later
+        # Hold on to type of past date for later
         date_str = isinstance( date, str )
 
         # Check if the passed date is a string, convert it into a datetime object
