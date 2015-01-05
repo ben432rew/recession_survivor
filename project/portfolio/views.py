@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from portfolio.portfolio import Portfolio
 from portfolio.models import Stocks_Tracked
 from datetime import datetime
-from django.contrib.auth.decorators import login_required
 
 ## nothing about game belongs in this file
 class Display_all( View ):

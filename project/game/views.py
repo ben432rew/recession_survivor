@@ -154,11 +154,12 @@ class RoundView( View ):
 class StatsView( View ):
     template_name = 'game/stats.html'
     
-    def get(self, request):
+    def get(self, request, game_id ):
+        game = get_game( game_id )
         if request.user.is_anonymous():
             return redirect('/')
-        if request.session['game_type'] == 'weekly':
-            days = request.session['round']*7
+        if game.game_type == 'weekly':
+            days = game.current_round*7
             start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
             time = datetime.timedelta(days=days)
             end = start + time
@@ -166,24 +167,20 @@ class StatsView( View ):
             stocks = Stock_history.objects.filter(date__range=[search_start, end])
             game = Whole_Game.objects.get(id=request.session['game_id'])
             return render(request, self.template_name, {'stocks':stocks, 'game':game})
-        elif request.session['game_type'] == 'monthly':
-            days = request.session['round']*31
+        elif game.game_type == 'monthly':
+            days = game.current_round*31
             start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
             time = datetime.timedelta(days=days)
             end = start + time
             search_start = end - datetime.timedelta(days=31)
-            request.session['search_start'] = search_start
-            request.session['current_date'] = end
             stocks = Stock.objects.filter(date__range=[search_start, end])
             return render(request, self.template_name, {'stocks':stocks})
-        elif request.session['game_type'] == 'yearly':
-            days = request.session['round']*365
+        elif game.game_type == 'yearly':
+            days = game.current_round*365
             start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
             time = datetime.timedelta(days=days)
             end = start + time
             search_start = end - datetime.timedelta(days=365)
-            request.session['search_start'] = search_start
-            request.session['current_date'] = end
             stocks = Stock.objects.filter(date__range=[search_start, end])
             return render(request, self.template_name, {'stocks':stocks})
         else:
