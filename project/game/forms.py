@@ -46,7 +46,7 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 class GameCreateForm( ModelForm ):
-    balance = forms.DecimalField(initial=10000)
+    start_balance = forms.DecimalField(initial=10000)
     total_rounds = forms.IntegerField(initial=12)
     current_date = forms.CharField( widget=forms.DateInput(attrs={'type': 'date'}))
     
@@ -67,7 +67,7 @@ class GameCreateForm( ModelForm ):
         data = self.cleaned_data
         val_round(data['total_rounds'])
         val_date(data['current_date'])
-        val_bal(data['balance'])
+        val_bal(data['start_balance'])
         date_far_enough(data)
 
         return self.cleaned_data
