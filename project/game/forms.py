@@ -45,7 +45,6 @@ def val_date(date):
 class DateInput(forms.DateInput):
     input_type = 'date'
 
-# RegexValidator
 class GameCreateForm( ModelForm ):
     balance = forms.DecimalField(initial=10000)
     total_rounds = forms.IntegerField(initial=12)
