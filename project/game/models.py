@@ -17,6 +17,7 @@ class Stock(models.Model):
 class Whole_Game(models.Model):
     game_type = models.CharField(max_length=30, choices=game_type_choices)
     name = models.CharField(max_length=30)
+    start_balance = models.FloatField(default=10000)
     balance = models.FloatField(default=10000)
     final_score = models.FloatField(default=0)
     start_date = models.DateField(auto_now_add=True)

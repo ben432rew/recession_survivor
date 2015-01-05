@@ -17,7 +17,7 @@
 		<form action="/game/{{ game.id }}/manage/add" method="POST">
 			{% csrf_token %}
 
-			{% boot_form_fields game.portfolio.create_holding %}
+			{% boot_form_fields form %}
 
 			<button class="btn btn-default">
 				<span class="glyphicon glyphicon-share-alt"></span>
@@ -29,7 +29,7 @@
 	<ul class="list-group">
 	{% for stock, value in game.portfolio.stocks.items %} 
 		<li class="list-group-item">
-			{{ value.shares }} shares of {{ value.name }} @ ${{ value.close }} Worth {{ value.current_value }}
+			<b>{{ value.shares }}</b> shares of <i>{{ value.name }}</i> @ <b>$ {{ value.close }}</b> Worth <b>$ {{ value.current_value }}</b>
 
 			<form action="/game/{{ game.id }}/manage/remove" method="POST" class="form-inline">
 				{%csrf_token%}
@@ -52,11 +52,17 @@
 	</ul>
 
 	<div class="panel-footer">
-		Current Cash: ${{ game.balance }}, Portfolio value: $ {{ game.portfolio.value }}  Game Round: {{ game.current_round }} of {{ game.total_rounds}}
-		<a class="btn btn-sm btn-default pull-right ajax" href="/game/{{ game.id }}/round" >
-			<span class="glyphicon glyphicon-play"></span>
-			All finished?  Next Round!
-		</a>
+		<div class="pull-left">
+			Current Cash: <b>$ {{ game.balance|floatformat:2 }}</b>, Portfolio value: <b>$ {{ game.portfolio.value|floatformat:2 }}</b>
+		</div>
+		&nbsp;
+		<div class="pull-right">
+			Game Round: {{ game.current_round }} of {{ game.total_rounds}}
+			<a class="btn btn-xs btn-default ajax" href="/game/{{ game.id }}/round" >
+				<span class="glyphicon glyphicon-play"></span>
+				All finished?  Next Round!
+			</a>
+		</div>
 	</div>
 
 </div>

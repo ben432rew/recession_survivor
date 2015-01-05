@@ -1,6 +1,8 @@
 from django.views.generic import View
 from django.utils.text import slugify
 from django.shortcuts import render, redirect
+from django.forms.util import ErrorList
+
 from game.forms import GameCreateForm
 from game.models import *
 
@@ -40,6 +42,7 @@ class CreateGame( View ):
         if form.is_valid():
             form_data = form.cleaned_data
             form_data['user'] = User.objects.get( id=request.user.id )
+            form_data['balance'] = form_data['start_balance']
 
             portfolio_data = {
                 'title': "game_{}".format( form_data['name'] ),
@@ -83,6 +86,7 @@ class Manage( View ):
     
     def get( self, request, game_id ):
         request.context_dict['game'] = get_game( game_id )
+        request.context_dict['form'] = Portfolio.create_holding()
 
         return render( request, 'game/manage.html', request.context_dict )
 
@@ -91,24 +95,24 @@ class Manage_add( View ):
     def post( self, request, game_id ):
         request.context_dict['game'] = get_game( game_id )
         form = Portfolio.create_holding( request.POST )
-
-        # logic here to make sure user can afford stocks
+        request.context_dict[ 'form' ] = form
         if form.is_valid():
             form_data = form.cleaned_data
             form_data['date'] = str( request.context_dict['game'].current_date )
 
             form_data['price'] = request.context_dict['game'].portfolio.stock_by_date( form_data['symbol'] ).close
+            if form_data['price'] * form_data["shares"] <= request.context_dict["game"].balance:
+                results = request.context_dict['game'].portfolio.add_holding( form_data )
 
-            results = request.context_dict['game'].portfolio.add_holding( form_data )
+                request.context_dict['game'].balance -= results
+                request.context_dict['game'].save( update_fields=["balance"] )
 
-            request.context_dict['game'].balance -= results
-            request.context_dict['game'].save( update_fields=["balance"] )
-
-            return redirect( '/game/{}/manage'.format( game_id ) )
-
+                return redirect( '/game/{}/manage'.format( game_id ) )
+            else:
+                errors = request.context_dict[ 'form' ]._errors.setdefault("shares", ErrorList())
+                errors.append(u"You cannot afford that")
+                return render( request, 'game/manage.html', request.context_dict ) 
         else:
-            request.context_dict[ 'form' ] = form
-
             return render( request, 'game/manage.html', request.context_dict )
 
 
@@ -192,13 +196,14 @@ class Leaderboard(View):
 
 class EndGame( View ):
     def get(self, request, game_id):
-#first, sell all the shares in the portfolio
         game = get_game( game_id )
-        for stock in game.portfolio.stocks:
-            price = game.portfolio.remove_holding( stock.symbol, stock.amount )
+        game.current_date += datetime.timedelta(days=incrementer(game.game_type))
+        game.current_date = game.change_date(game.current_date)
+        game.end_date = game.current_date
+        for symbol,values in game.portfolio.stocks.items():
+            price = game.portfolio.remove_holding( symbol, values["shares"] )
             game.balance += price
         game.final_score = game.balance
-        game.end_date = datetime.date.today()
         game.save()
         request.context_dict["game"] = game
         return render (request, 'game/endgame.html', request.context_dict)
