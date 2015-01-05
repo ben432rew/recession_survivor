@@ -167,21 +167,22 @@ class Portfolio:
             imported tuple of past and future holidays
         '''
         # Hold on to type of past date for later
-        date_str = isinstance( date, str )
+        # date_str = isinstance( date, str )
 
-        # Check if the passed date is a string, convert it into a datetime object
-        if date_str:
-            date = datetime.datetime.strptime( date, "%Y-%m-%d" ).date()
+        # # Check if the passed date is a string, convert it into a datetime object
+        # if date_str:
+        #     date = datetime.datetime.strptime( date, "%Y-%m-%d" ).date()
 
-        if date.strftime("%A") == "Sunday":
-            date -= datetime.timedelta(days=2)
-            return date
-        elif date.strftime("%A") == "Saturday":
-            date -= datetime.timedelta(days=1)
+        # if date.strftime("%A") == "Sunday":
+        #     date -= datetime.timedelta(days=2)
+        #     return date
+        # elif date.strftime("%A") == "Saturday":
+        #     date -= datetime.timedelta(days=1)
 
-        # Check of passed date type was a string, and return the same type of object that was passed
-        if date_str:
-            date = str( date )
+        # # Check of passed date type was a string, and return the same type of object that was passed
+        # if date_str:
+        #     date = str( date )
+        print (date)
 
         return date
 
