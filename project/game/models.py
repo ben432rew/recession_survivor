@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from portfolio.models import Portfolio
 from django.db import models
+import datetime
 
 game_type_choices = (
     ('weekly', 'Weekly' ),
@@ -37,6 +38,9 @@ class Whole_Game(models.Model):
         self.current_date = self.portfolio.current_date
 
         return date
+
+    def current_date_by_string( self ):
+        return str( self.current_date )
 
 class Transaction(models.Model):
     symbol = models.CharField(max_length=50)

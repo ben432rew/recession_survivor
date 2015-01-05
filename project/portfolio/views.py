@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from portfolio.portfolio import Portfolio
 from portfolio.models import Stocks_Tracked
 from datetime import datetime
+import json
+from django.http import JsonResponse
 
 ## nothing about game belongs in this file
 class Display_all( View ):
@@ -112,3 +114,14 @@ class Tracked( View ):
         request.context_dict['tracked'] = Stocks_Tracked.objects.all()
         
         return render( request, 'portfolio/tracked.html', request.context_dict )
+
+class Ticker( View ):
+    def get( self, request, date ):
+        stocks = Portfolio.ticker( date )
+        data = []
+        for stock in stocks:
+            data.append({
+                'symbol': stock.symbol,
+                'close': stock.close
+            })
+        return JsonResponse( data, safe=False )

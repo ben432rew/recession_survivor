@@ -189,6 +189,12 @@ class Portfolio:
         if not date:
             date = self.current_date
 
-        print('stock_by_date',date)
         results = models.Stock_history.objects.filter( symbol=symbol, date=date )[0]
+        return results
+
+    @classmethod
+    def ticker( self, date ):
+        date = self.check_date( date )
+        results = models.Stock_history.objects.filter( date=date )
+        print( results )
         return results
