@@ -3,10 +3,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from portfolio.portfolio import Portfolio
 from portfolio.models import Stocks_Tracked, Stock_history
-from datetime import datetime
-import json
+
 from django.http import JsonResponse
 import datetime
+
 
 ## nothing about game belongs in this file
 class Display_all( View ):
@@ -130,12 +130,12 @@ class Ticker( View ):
         data = []
         for stock in stocks:
             yesterday = stock.date - datetime.timedelta(days=1)
-            print( 'yesterday', yesterday )
+            # print( 'yesterday', yesterday )
             try:
                 yesterday = Stock_history.objects.get( symbol=stock.symbol, date=yesterday )
             except:
                 continue
-            print( 'price',yesterday.close )
+            # print( 'price',yesterday.close )
             change = yesterday.close - stock.close
             data.append({
                 'symbol': stock.symbol,

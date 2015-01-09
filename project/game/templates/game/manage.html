@@ -67,7 +67,11 @@
 
 </div>
 <script type="text/javascript">
-	$.scope.ticker.splice(0)
+
+$( document ).ready( function(){
+	//$.scope.ticker.splice(0)
 	uiTicker( '{{ game.current_date_by_string }}' )
+} );
+
 </script>
 {% endblock %}

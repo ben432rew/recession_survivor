@@ -20,10 +20,15 @@
 	<script src="{% static "js/repeat.js" %}" defer></script>
 	<script type="text/javascript">
 		var uiTicker = function( date ){
+
 			$.get( '/portfolio/ticker/' + date, function( data ){
 				$.scope.ticker.splice(0)
 				data.forEach( function( key, value ){
-					$.scope.ticker.push( key )
+					key['change'] = Number(key['change']).toFixed(2);
+					key['color'] = 'black';
+					if( key['change'] < 0 ) key['color'] = 'red';
+					if( key['change'] > 0 ) key['color'] = 'green';
+					$.scope.ticker.push( key );
 				} );
 			} );
 		};
@@ -38,7 +43,9 @@
 			<marquee>
 				{% verbatim %}
 				<li jq-repeat="ticker" style="display: inline-block">
-					{{ symbol }}: {{ close }} {{ change }} -&nbsp;&nbsp;-
+					<font color="{{ color }}">
+						<b>{{ symbol }}</b>: {{ close }} {{ change }}&nbsp;&nbsp;
+					</font>
 				</li>
 				{% endverbatim %}
 			</marquee>
@@ -120,6 +127,7 @@
 							{% if game %}
 							<li><a href = "/game/{{game.id}}/round">Next Round</a></li>
 							<li><a href = "/game/{{game.id}}/manage">Manage Current Portfolio</a></li>
+							<li><a href = "/game/{{game.id}}/round/stats">This week's stats</a></li>
 							{% endif %}
 						</ul>
 					</div>

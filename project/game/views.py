@@ -154,41 +154,15 @@ class RoundView( View ):
 
 class StatsView( View ):
     template_name = 'game/stats.html'
-    
-    def get(self, request):
+
+    def get(self, request, game_id ):
+        game = get_game( game_id )
         if request.user.is_anonymous():
             return redirect('/')
-        if request.session['game_type'] == 'weekly':
-            days = request.session['round']*7
-            start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-            time = datetime.timedelta(days=days)
-            end = start + time
-            search_start = end - datetime.timedelta(days=7)
-            stocks = Stock_history.objects.filter(date__range=[search_start, end])
-            game = Whole_Game.objects.get(id=request.session['game_id'])
-            return render(request, self.template_name, {'stocks':stocks, 'game':game})
-        elif request.session['game_type'] == 'monthly':
-            days = request.session['round']*31
-            start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-            time = datetime.timedelta(days=days)
-            end = start + time
-            search_start = end - datetime.timedelta(days=31)
-            request.session['search_start'] = search_start
-            request.session['current_date'] = end
-            stocks = Stock.objects.filter(date__range=[search_start, end])
-            return render(request, self.template_name, {'stocks':stocks})
-        elif request.session['game_type'] == 'yearly':
-            days = request.session['round']*365
-            start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
-            time = datetime.timedelta(days=days)
-            end = start + time
-            search_start = end - datetime.timedelta(days=365)
-            request.session['search_start'] = search_start
-            request.session['current_date'] = end
-            stocks = Stock.objects.filter(date__range=[search_start, end])
-            return render(request, self.template_name, {'stocks':stocks})
-        else:
-            pass
+        start = game.current_date - datetime.timedelta(days=incrementer(game.game_type))
+        search_start = game.current_date - datetime.timedelta(days=7)
+        stocks = Stock_history.objects.filter(date__range=[start, game.current_date])
+        return render(request, self.template_name, {'stocks':stocks, 'game':game})
 
 
 class Leaderboard(View):
@@ -197,9 +171,8 @@ class Leaderboard(View):
         if request.user.is_anonymous():
             return redirect( '/')
         else:
-            request.context_dict['games'] = Whole_Game.objects.filter(user=request.user)
             request.context_dict['highscores'] = Whole_Game.objects.all().order_by('final_score')[:9]
-            return render( request, 'game/profile.html', request.context_dict)
+            return render( request, 'game/leaderboard.html', request.context_dict)
 
 
 class EndGame( View ):
