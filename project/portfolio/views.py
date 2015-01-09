@@ -2,8 +2,11 @@ from django.views.generic import View
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from portfolio.portfolio import Portfolio
-from portfolio.models import Stocks_Tracked
-from datetime import datetime
+from portfolio.models import Stocks_Tracked, Stock_history
+
+from django.http import JsonResponse
+import datetime
+
 
 ## nothing about game belongs in this file
 class Display_all( View ):
@@ -120,3 +123,24 @@ class Tracked( View ):
         request.context_dict['tracked'] = Stocks_Tracked.objects.all()
         
         return render( request, 'portfolio/tracked.html', request.context_dict )
+
+class Ticker( View ):
+    def get( self, request, date ):
+        stocks = Portfolio.ticker( date )
+        data = []
+        for stock in stocks:
+            yesterday = stock.date - datetime.timedelta(days=1)
+            # print( 'yesterday', yesterday )
+            try:
+                yesterday = Stock_history.objects.get( symbol=stock.symbol, date=yesterday )
+            except:
+                continue
+            # print( 'price',yesterday.close )
+            change = yesterday.close - stock.close
+            data.append({
+                'symbol': stock.symbol,
+                'close': stock.close,
+                'change': change
+            })
+
+        return JsonResponse( data, safe=False )

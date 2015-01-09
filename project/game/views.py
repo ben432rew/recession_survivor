@@ -91,6 +91,7 @@ class Manage( View ):
         request.context_dict['game'] = get_game( game_id )
         request.context_dict['form'] = Portfolio.create_holding()
 
+        print( request.context_dict['game'] )
         return render( request, 'game/manage.html', request.context_dict )
 
 

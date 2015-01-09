@@ -16,39 +16,23 @@
 	<script src="{% static "js/bootstrap.min.js" %}" defer></script>
 	<script src="{% static "js/django_ajax.js" %}" defer></script>
 	<script src="{% static "js/spa.js" %}" defer></script>
-
+	<script src="{% static "js/mustache.min.js" %}" defer></script>
+	<script src="{% static "js/repeat.js" %}" defer></script>
 </head>
 <body>
 	<div class="container">
 
 		<header>
 			<h1 class='text-center'>Historical Trader</h1>
-			<marquee>
-				AAPL +1.98
-				GILD +2.50
-				XOM -.57
-				GPRO +2.82
-				AMZN +6.06
-				FB +0.01
-				RAD +0.15
-				PBR -0.20
-				GE -0.06
-				ABX +0.27
-				VALE +0.08
-				JCP 0.00
-				F +0.15
-				T +0.21
-				FCX +0.61
-				HAL +0.04
-				TLM 0.00
-				PFE +0.23
-				AUY +0.14
-				S +0.15
-				RIG +0.10
-				CHK -0.12
-				BTU +0.09
-				NBR +0.32
-			</marquee>
+			<div style="overflow:hidden; height:1.5em;">
+				{% verbatim %}
+				<li jq-repeat="ticker" style="display: inline-block">
+					<font color="{{ color }}">
+						<b>{{ symbol }}</b>: {{ close }} {{ change }}&nbsp;&nbsp;
+					</font>
+				</li>
+				{% endverbatim %}
+			</div>
 		</header>
 
 		{% if user.is_authenticated %}
@@ -137,5 +121,30 @@
 		</div>
 		
 	</div>
+	<script type="text/javascript">
+
+		var uiTickerLooper = function(){
+			console.log('y is running')
+			return setInterval(function(){
+					$.scope.ticker.loop()
+			}, 1000);
+		}
+
+		var uiTicker = function( date ){
+			$.get( '/portfolio/ticker/' + date, function( data ){
+				$.scope.ticker.splice(0)
+				clearInterval( uiTickerLooper )
+				data.forEach( function( key, value ){
+					key['change'] = Number(key['change']).toFixed(2);
+					key['color'] = 'black';
+					if( key['change'] < 0 ) key['color'] = 'red';
+					if( key['change'] > 0 ) key['color'] = 'green';
+					$.scope.ticker.push( key );
+					
+				} );
+				uiTickerLooper()
+			} );
+		};
+	</script>
 </body>
 </html>
