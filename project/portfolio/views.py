@@ -2,29 +2,27 @@ from django.views.generic import View
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from portfolio.portfolio import Portfolio
-from portfolio.models import Stocks_Tracked
+from portfolio.models import Stocks_Tracked, Stock_history
 from datetime import datetime
 import json
 from django.http import JsonResponse
+import datetime
 
 ## nothing about game belongs in this file
 class Display_all( View ):
     def get( self, request ):
         if request.user.is_anonymous():
-
-            return redirect( '/' )
-        
+            return redirect('/')
         user_id = request.GET.get( 'user_id', request.user.id )
         request.context_dict[ 'portfolios' ] = Portfolio.by_user_id( user_id )
         
         return render( request, 'portfolio/display_all.html', request.context_dict )
 
 class Create( View ):
+
     def get( self, request ):
         if request.user.is_anonymous():
-            
-            return redirect( '/' )
-
+            return redirect('/')
         request.context_dict[ 'form' ] = Portfolio.create_form()
         
         return render( request, 'portfolio/create.html', request.context_dict )
@@ -46,6 +44,8 @@ class Create( View ):
 
 class Manage( View ):
     def get( self, request, slug ):
+        if request.user.is_anonymous():
+            return redirect('/')
         date = request.POST.get( 'date' , '2014-12-30' ) # needs to be set to today if blank
         request.context_dict[ 'portfolio' ] = Portfolio( slug, date )
 
@@ -53,7 +53,10 @@ class Manage( View ):
 
 # needs to be converted to portfolio.py 
 class Holding_add( View ):
+    
     def get( self, request, slug ):
+        if request.user.is_anonymous():
+            return redirect('/')
         request.context_dict[ 'portfolio' ] = Portfolio( slug )
         request.context_dict[ 'form' ] = Portfolio.create_holding()
         
@@ -89,7 +92,10 @@ class Holdin_remove( View ):
 
 # needs to be converted to portfolio.py and template created
 class Edit( View ):
+    
     def get( self, request, slug ):
+        if request.user.is_anonymous():
+            return redirect('/')
         request[ 'portfolio' ] = Portfolio.objects.get( slug=slug )
         request[ 'form' ] = portfolio_form( request[ 'portfolio' ] )
         
@@ -110,7 +116,10 @@ class Edit( View ):
         return render( request, 'portfolio/create.html', request.context_dict )
 
 class Tracked( View ):
+    
     def get( self, request ):
+        if request.user.is_anonymous():
+            return redirect('/')
         request.context_dict['tracked'] = Stocks_Tracked.objects.all()
         
         return render( request, 'portfolio/tracked.html', request.context_dict )
@@ -120,8 +129,18 @@ class Ticker( View ):
         stocks = Portfolio.ticker( date )
         data = []
         for stock in stocks:
+            yesterday = stock.date - datetime.timedelta(days=1)
+            print( 'yesterday', yesterday )
+            try:
+                yesterday = Stock_history.objects.get( symbol=stock.symbol, date=yesterday )
+            except:
+                continue
+            print( 'price',yesterday.close )
+            change = yesterday.close - stock.close
             data.append({
                 'symbol': stock.symbol,
-                'close': stock.close
+                'close': stock.close,
+                'change': change
             })
+
         return JsonResponse( data, safe=False )

@@ -67,9 +67,7 @@
 
 </div>
 <script type="text/javascript">
-	uiTicker( '{{ game.current_date_by_string }}')
+	$.scope.ticker.splice(0)
+	uiTicker( '{{ game.current_date_by_string }}' )
 </script>
-{% endblock %}
-
-{% block spa %}
 {% endblock %}

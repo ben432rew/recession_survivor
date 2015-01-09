@@ -54,7 +54,7 @@ class Portfolio:
 
             # dont let untracked holdings kill the script... should something deferent here
             try:
-                stock_hist = models.Stock_history.objects.filter( symbol=hold.symbol )[0]
+                stock_hist = models.Stock_history.objects.filter( symbol=hold.symbol, date=self.current_date )[0]
             except:
                 continue
 
@@ -196,5 +196,6 @@ class Portfolio:
     def ticker( self, date ):
         date = self.check_date( date )
         results = models.Stock_history.objects.filter( date=date )
-        print( results )
+
+        print( len( results ) )
         return results

@@ -21,6 +21,7 @@
 	<script type="text/javascript">
 		var uiTicker = function( date ){
 			$.get( '/portfolio/ticker/' + date, function( data ){
+				$.scope.ticker.splice(0)
 				data.forEach( function( key, value ){
 					$.scope.ticker.push( key )
 				} );
@@ -37,7 +38,7 @@
 			<marquee>
 				{% verbatim %}
 				<li jq-repeat="ticker" style="display: inline-block">
-					{{ symbol }}: {{ close }}&nbsp;&nbsp;
+					{{ symbol }}: {{ close }} {{ change }} -&nbsp;&nbsp;-
 				</li>
 				{% endverbatim %}
 			</marquee>

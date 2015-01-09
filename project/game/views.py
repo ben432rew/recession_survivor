@@ -30,9 +30,10 @@ def get_game( game_id ):
     return game
 
 class CreateGame( View ):
+    
     def get( self, request ):
         if request.user.is_anonymous():
-            return redirect( '/')        
+            return redirect('/')
         request.context_dict['form'] = GameCreateForm()
 
         return render( request, 'game/index.html', request.context_dict )
@@ -62,16 +63,20 @@ class CreateGame( View ):
 
 
 class UnfinishedGames( View ):
+    
     def get(self, request):
         if request.user.is_anonymous():
-            return redirect( '/')        
+            return redirect( '/')
         request.context_dict['games'] = Whole_Game.objects.filter(user=request.user, end_date=None)
         request.context_dict['starturl'] = "/game/{}/start"
         return render(request, 'game/find.html', request.context_dict)
 
 
 class Start( View ):
+    
     def get( self, request, game_id ):
+        if request.user.is_anonymous():
+            return redirect('/')
         request.session.set_expiry(300)
         game = get_game( game_id )
         request.session['game_id'] = game_id
@@ -79,10 +84,14 @@ class Start( View ):
 
 
 class Manage( View ):
+    
     def get( self, request, game_id ):
+        if request.user.is_anonymous():
+            return redirect('/')
         request.context_dict['game'] = get_game( game_id )
         request.context_dict['form'] = Portfolio.create_holding()
 
+        print( request.context_dict['game'] )
         return render( request, 'game/manage.html', request.context_dict )
 
 
@@ -129,7 +138,10 @@ class Manage_remove( View ):
 
 
 class RoundView( View ):
+    
     def get(self, request, game_id):
+        if request.user.is_anonymous():
+            return redirect('/')
         game = get_game( game_id )
         if game.total_rounds == game.current_round:
             return redirect( "/game/" + game_id + "/endgame")
@@ -142,8 +154,10 @@ class RoundView( View ):
 
 class StatsView( View ):
     template_name = 'game/stats.html'
-
+    
     def get(self, request):
+        if request.user.is_anonymous():
+            return redirect('/')
         if request.session['game_type'] == 'weekly':
             days = request.session['round']*7
             start = datetime.datetime.strptime(request.session['start_date'],"%Y-%m-%d")
@@ -178,6 +192,7 @@ class StatsView( View ):
 
 
 class Leaderboard(View):
+    
     def get(self, request):
         if request.user.is_anonymous():
             return redirect( '/')
@@ -189,6 +204,8 @@ class Leaderboard(View):
 
 class EndGame( View ):
     def get(self, request, game_id):
+        if request.user.is_anonymous():
+            return redirect('/')
         game = get_game( game_id )
         game.current_date += datetime.timedelta(days=incrementer(game.game_type))
         game.current_date = game.change_date(game.current_date)
