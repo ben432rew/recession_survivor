@@ -125,49 +125,48 @@
 	</div>
 	<script type="text/javascript">
 
-	/*var uiTickerLooper = setInterval( function(){
-			console.log( 'ticker Interval')
-			$.scope.ticker.loop()
-		}, 1000 );*/
+	var ticker = {
+		isOnLoop: false,
+		loop: function loop( count ){
+			var $base = $( '.jq-repeat-ticker[jq-repeat-index=0]' );
+
+			if( $base.width() < parseInt( $base.css( 'margin-left' ) )*-1 ){
+				console.log('ho!')
+				$.scope.ticker.loop();
+				return loop()
+			}
 
 
-	function uiTickerLooper( count ){
+			var count = count || 0
+			return setTimeout( function(){
+				console.log('wtf')
+				$('.jq-repeat-ticker[jq-repeat-index=0]').css('margin-left', '-' + ++count + 'px');
+				loop( count )
+			}, 20 )
 
-		var $base = $( '.jq-repeat-ticker[jq-repeat-index=0]' );
+		},
+		uiTicker: function( date ){
+			$.get( '/portfolio/ticker/' + date, function( data ){
 
-		if( $base.width() < parseInt( $base.css( 'margin-left' ) )*-1 ){
-			$.scope.ticker.loop();
-			return uiTickerLooper()
-		}
-
-		var count = count || 0
-		return setTimeout( function(){
-			$('.jq-repeat-ticker[jq-repeat-index=0]').css('margin-left', '-' + ++count + 'px');
-			uiTickerLooper( count )
-		}, 20 )
-
-	};
-
-
-	var uiTicker = function( date ){
-
-		$.get( '/portfolio/ticker/' + date, function( data ){
-
-			console.log( uiTickerLooper )
-			//if( uiTickerLooper ) clearInterval( uiTickerLooper );
-			
-			$.scope.ticker.splice(0);
-			
-			data.forEach( function( key, value ){
-				key['change'] = Number(key['change']).toFixed(2);
-				key['color'] = 'black';
-				if( key['change'] < 0 ) key['color'] = 'red';
-				if( key['change'] > 0 ) key['color'] = 'green';
-				$.scope.ticker.push( key );
+				// console.log( uiTickerLooper )
+				//if( uiTickerLooper ) clearInterval( uiTickerLooper );
+				
+				$.scope.ticker.splice( 0, $.scope.ticker.length );
+				
+				data.forEach( function( key, value ){
+					key['change'] = Number(key['change']).toFixed(2);
+					key['color'] = 'black';
+					if( key['change'] < 0 ) key['color'] = 'red';
+					if( key['change'] > 0 ) key['color'] = 'green';
+					$.scope.ticker.push( key );
+				} );
+				console.log(ticker)
+				
+				if( !ticker.isOnLoop ) ticker.loop();
+				ticker.isOnLoop = true
 			} );
-			uiTickerLooper()
-		} );
-	};
+		}
+	}
 	</script>
 </body>
 </html>
