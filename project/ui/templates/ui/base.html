@@ -107,13 +107,13 @@
 
 					<div class="panel-body">
 						<ul>
-<!-- 							<li><a href = "/game/round/stats">Current Round Statistics</a></li>
- -->							<li><a href = "/game/find">Resume a game</a></li>
+							<!--<li><a href = "/game/round/stats">Current Round Statistics</a></li>-->
+							<li><a href = "/game/find">Resume a game</a></li>
 							<li><a href = "/game/leaderboard">High Scores</a></li>
 							{% if game %}
-							<li><a href = "/game/{{game.id}}/round">Next Round</a></li>
-							<li><a href = "/game/{{game.id}}/manage">Manage Current Portfolio</a></li>
-							<li><a href = "/game/{{game.id}}/round/stats">This week's stats</a></li>
+								<li><a href = "/game/{{game.id}}/round">Next Round</a></li>
+								<li><a href = "/game/{{game.id}}/manage">Manage Current Portfolio</a></li>
+								<li><a href = "/game/{{game.id}}/round/stats">This week's stats</a></li>
 							{% endif %}
 						</ul>
 					</div>
@@ -129,19 +129,16 @@
 		isOnLoop: false,
 		loop: function loop( count ){
 			var $base = $( '.jq-repeat-ticker[jq-repeat-index=0]' );
+			var count = count || 0;
 
 			if( $base.width() < parseInt( $base.css( 'margin-left' ) )*-1 ){
-				console.log('ho!')
 				$.scope.ticker.loop();
-				return loop()
+				return loop();
 			}
 
-
-			var count = count || 0
 			return setTimeout( function(){
-				console.log('wtf')
 				$('.jq-repeat-ticker[jq-repeat-index=0]').css('margin-left', '-' + ++count + 'px');
-				loop( count )
+				loop( count );
 			}, 20 )
 
 		},
@@ -154,16 +151,16 @@
 				$.scope.ticker.splice( 0, $.scope.ticker.length );
 				
 				data.forEach( function( key, value ){
+					$('[value="' + key.symbol + '"]').append( ' @ $' + key.close );
 					key['change'] = Number(key['change']).toFixed(2);
 					key['color'] = 'black';
 					if( key['change'] < 0 ) key['color'] = 'red';
 					if( key['change'] > 0 ) key['color'] = 'green';
 					$.scope.ticker.push( key );
 				} );
-				console.log(ticker)
-				
+
 				if( !ticker.isOnLoop ) ticker.loop();
-				ticker.isOnLoop = true
+				ticker.isOnLoop = true;
 			} );
 		}
 	}
