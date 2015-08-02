@@ -148,7 +148,8 @@
 				$.scope.ticker.splice( 0, $.scope.ticker.length );
 				
 				data.forEach( function( key ){
-					$( '[value="' + key.symbol + '"]' ).append( ' @ $<span class="price">' + key.close + "</span>" );
+					if( key.close )
+					$( '[value="' + key.symbol + '"]' ).append( ' @ $<span class="price">' etish+ key.close + "</span>" );
 					key['change'] = Number( key['change'] ).toFixed( 2 );
 					key['color'] = 'black';
 					if( key['change'] < 0 ) key['color'] = 'red';
@@ -161,9 +162,9 @@
 			} );
 		}
 	}
-	$('#id_symbol').on('change',function(){
+/*	$('#id_symbol').on('change',function(){
 		var price = Number( $(this).find(":selected span").text() );
-	} );
+	} );*/
 	</script>
 </body>
 </html>
