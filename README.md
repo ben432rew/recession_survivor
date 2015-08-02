@@ -1,5 +1,9 @@
 Historical Trader
 ==================
+
+[ Check it out at ](http://ht.wmanlty.info)
+
+
 ##The Game:
 Once a user signs up, they are able to start a game.
 
