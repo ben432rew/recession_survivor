@@ -1,7 +1,7 @@
 Historical Trader
 ==================
 
-[Try it out](http://ht.wmanlty.info)
+[Try it out](http://ht.wmantly.info)
 
 
 ##The Game:
